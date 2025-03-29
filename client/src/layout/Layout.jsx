@@ -12,10 +12,18 @@ const Layout = () => {
         switch (pathname) {
             case '/':
                 return 'Karty pacientů';
-            case '/calendar':
-                return 'Kalendář';
-            case '/messages':
-                return 'Zprávy';
+            case '/add-patient':
+                return 'Přidat pacienta';
+            case '/blood-samples':
+                return 'Odběry';
+            case '/reservations':
+                return 'Rezervace';
+            case '/appointments':
+                return 'Dnešní schůzky';
+            case '/help':
+                return 'Pomoc';
+            case '/settings':
+                return 'Nastavení';
             default:
                 return '';
         }
@@ -37,7 +45,7 @@ const Layout = () => {
                         marginTop: '72px',
                     }}
                 >
-                    <div className="m-1 p-3 bg-white rounded">
+                    <div className="m-1 p-3 bg-white rounded border">
                         <Outlet />
                     </div>
                 </Container>

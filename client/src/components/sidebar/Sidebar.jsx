@@ -37,17 +37,6 @@ const Sidebar = () => {
                 <Nav className="flex-column p-3">
                     <Nav.Link
                         as={Link}
-                        to="/bloodSamples"
-                        className={`d-flex align-items-center ${
-                            isActive('/bloodSamples')
-                                ? 'text-primary active'
-                                : 'text-secondary'
-                        }`}
-                    >
-                        <BsGrid className="me-2" /> Odběry
-                    </Nav.Link>
-                    <Nav.Link
-                        as={Link}
                         to="/"
                         className={`d-flex align-items-center ${
                             isActive('/')
@@ -56,6 +45,17 @@ const Sidebar = () => {
                         }`}
                     >
                         <BsPeople className="me-2" /> Karty pacientů
+                    </Nav.Link>
+                    <Nav.Link
+                        as={Link}
+                        to="/blood-samples"
+                        className={`d-flex align-items-center ${
+                            isActive('/bloodSamples')
+                                ? 'text-primary active'
+                                : 'text-secondary'
+                        }`}
+                    >
+                        <BsGrid className="me-2" /> Odběry
                     </Nav.Link>
                     <Nav.Link
                         as={Link}

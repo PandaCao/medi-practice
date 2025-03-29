@@ -5,12 +5,18 @@ import { BsSearch, BsSliders } from 'react-icons/bs';
 import PatientList from '../components/patients/PatientList';
 import Button from 'react-bootstrap/Button';
 import { Container, Row, Col } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
 
-const Patients = () => {
+const PatientsPage = () => {
     const [searchQuery, setSearchQuery] = useState('');
+    const navigate = useNavigate();
 
     const handleSearch = (e) => {
         setSearchQuery(e.target.value);
+    };
+
+    const handleAddPatient = () => {
+        navigate('/add-patient');
     };
 
     return (
@@ -36,7 +42,9 @@ const Patients = () => {
                         md={6}
                         className="d-flex justify-content-md-end gap-2"
                     >
-                        <Button variant="primary">+ Přidat Pacienta</Button>
+                        <Button variant="primary" onClick={handleAddPatient}>
+                            + Přidat Pacienta
+                        </Button>
                         <Button
                             variant="light"
                             className="d-flex align-items-center"
@@ -51,4 +59,4 @@ const Patients = () => {
     );
 };
 
-export default Patients;
+export default PatientsPage;

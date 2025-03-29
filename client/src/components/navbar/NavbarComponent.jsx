@@ -1,8 +1,16 @@
 import React from 'react';
-import { Navbar, Image, Stack } from 'react-bootstrap';
-import { BsBell } from 'react-icons/bs';
+import { Navbar, Image, Stack, Button } from 'react-bootstrap';
+import { BsBell, BsArrowLeft } from 'react-icons/bs';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 const NavbarComponent = ({ pageTitle }) => {
+    const navigate = useNavigate();
+    const location = useLocation();
+
+    const handleBack = () => {
+        navigate(-1);
+    };
+
     return (
         <Navbar
             bg="white"
@@ -16,7 +24,16 @@ const NavbarComponent = ({ pageTitle }) => {
                 padding: '16px',
             }}
         >
-            <Navbar.Brand>
+            <Navbar.Brand className="d-flex align-items-center">
+                {location.pathname !== '/' && (
+                    <Button
+                        variant="link"
+                        className="text-dark p-0 me-3"
+                        onClick={handleBack}
+                    >
+                        <BsArrowLeft size={24} />
+                    </Button>
+                )}
                 <h4 className="mb-0">{pageTitle}</h4>
             </Navbar.Brand>
             <Navbar.Toggle />
