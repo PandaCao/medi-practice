@@ -44,9 +44,6 @@ const PatientList = ({ searchQuery }) => {
                                 {patient.contactType === 'phone' && (
                                     <BsTelephone />
                                 )}
-                                {patient.contactType === 'chat' && (
-                                    <BsChatLeft />
-                                )}
                             </td>
                             <td>
                                 <Button variant="link" className="p-0">

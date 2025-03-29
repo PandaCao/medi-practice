@@ -11,7 +11,7 @@ export const patients = [
         name: 'Černá Martina',
         personalId: '925514/3478',
         insurance: 'Česká průmyslová zdravotní pojišťovna',
-        contactType: 'chat',
+        contactType: 'email',
     },
     {
         registrationDate: '02/03/2023',
@@ -39,14 +39,14 @@ export const patients = [
         name: 'Vlasatá Anna',
         personalId: '995619/6582',
         insurance: 'RBP, zdravotní pojišťovna',
-        contactType: 'chat',
+        contactType: 'email',
     },
     {
         registrationDate: '02/04/2023',
         name: 'Král Ludvík',
         personalId: '730211/2873',
         insurance: 'RBP, zdravotní pojišťovna',
-        contactType: 'chat',
+        contactType: 'email',
     },
     {
         registrationDate: '02/04/2023',
@@ -74,7 +74,7 @@ export const patients = [
         name: 'Dvořáková Eva',
         personalId: '946218/3369',
         insurance: 'Všeobecná zdravotní pojišťovna',
-        contactType: 'chat',
+        contactType: 'email',
     },
     {
         registrationDate: '01/06/2023',
@@ -95,7 +95,7 @@ export const patients = [
         name: 'Veselý Jiří',
         personalId: '871225/6647',
         insurance: 'Vojenská zdravotní pojišťovna',
-        contactType: 'chat',
+        contactType: 'email',
     },
     {
         registrationDate: '15/06/2023',

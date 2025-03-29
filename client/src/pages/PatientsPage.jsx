@@ -45,12 +45,6 @@ const PatientsPage = () => {
                         <Button variant="primary" onClick={handleAddPatient}>
                             + Přidat Pacienta
                         </Button>
-                        <Button
-                            variant="light"
-                            className="d-flex align-items-center"
-                        >
-                            <BsSliders className="me-2" /> Filtr
-                        </Button>
                     </Col>
                 </Row>
             </Container>
