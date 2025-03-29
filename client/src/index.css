@@ -5,9 +5,98 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: #f8f9fa;
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+.patient-list table {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.patient-list th {
+  color: #6c757d;
+  font-size: 0.875rem;
+  font-weight: 500;
+  border-bottom-width: 1px;
+  padding: 1rem;
+}
+
+.patient-list td {
+  vertical-align: middle;
+  padding: 1rem;
+}
+
+.patient-list tr:hover {
+  background-color: #f8f9fa;
+}
+
+.pagination-controls .btn-link {
+  color: #6c757d;
+  text-decoration: none;
+  padding: 0.25rem 0.5rem;
+}
+
+.pagination-controls .btn-primary {
+  padding: 0.25rem 0.5rem;
+  min-width: 32px;
+}
+
+.page-info {
+  color: #6c757d;
+  font-size: 0.875rem;
+}
+
+.btn-light {
+  background-color: #f8f9fa;
+  border-color: #f8f9fa;
+}
+
+.search-wrapper {
+    width: 400px;
+    margin-right: 1rem;
+}
+
+.search-wrapper .form-control.search-input {
+    height: 38px;
+    font-size: 0.875rem;
+}
+
+.search-wrapper .input-group-text.search-icon {
+    height: 38px;
+    display: flex;
+    align-items: center;
+}
+
+.search-wrapper .form-control.search-input:focus {
+    box-shadow: none;
+    background-color: #f8f9fa !important;
+}
+
+/* Styly pro tlačítka */
+.btn.btn-sm.action-btn {
+    font-size: 0.875rem;
+    padding: 0.5rem 1rem;
+    height: 38px;
+    display: inline-flex;
+    align-items: center;
+    white-space: nowrap;
+}
+
+.btn-sm.action-btn.btn-light {
+    background-color: #f8f9fa;
+    border: none;
+}
+
+.action-btn .me-1 {
+    margin-right: 4px;
+}
+
+.search-wrapper .form-control:focus {
+    box-shadow: none;
 }

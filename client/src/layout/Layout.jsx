@@ -1,17 +1,49 @@
-import React from "react";
-import Container from "react-bootstrap/Container";
-import { Outlet } from "react-router-dom";
+import React from 'react';
+import { Container } from 'react-bootstrap';
+import { Outlet, useLocation } from 'react-router-dom';
+import Sidebar from '../components/sidebar/Sidebar';
+import NavbarComponent from '../components/navbar/NavbarComponent';
 
-const Layout = ({ setBooks }) => {
-  return (
-    <div className="min-vh-100 d-flex flex-column">
-      <main className="flex-grow-1">
-        <Container className="py-4">
-          <Outlet />
-        </Container>
-      </main>
-    </div>
-  );
+const Layout = () => {
+    const location = useLocation();
+
+    // Funkce pro získání názvu stránky podle cesty
+    const getPageTitle = (pathname) => {
+        switch (pathname) {
+            case '/':
+                return 'Karty pacientů';
+            case '/calendar':
+                return 'Kalendář';
+            case '/messages':
+                return 'Zprávy';
+            default:
+                return '';
+        }
+    };
+
+    return (
+        <div className="min-vh-100 d-flex bg-light">
+            <Sidebar />
+            <div className="flex-grow-1 d-flex flex-column">
+                <header>
+                    <NavbarComponent
+                        pageTitle={getPageTitle(location.pathname)}
+                    />
+                </header>
+                <Container
+                    fluid
+                    className="p-3 flex-grow-1"
+                    style={{
+                        marginTop: '72px',
+                    }}
+                >
+                    <div className="m-1 p-3 bg-white rounded">
+                        <Outlet />
+                    </div>
+                </Container>
+            </div>
+        </div>
+    );
 };
 
 export default Layout;
