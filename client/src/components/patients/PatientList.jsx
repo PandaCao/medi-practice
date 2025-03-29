@@ -1,11 +1,6 @@
 import React from 'react';
 import { Table, Button, Stack } from 'react-bootstrap';
-import {
-    BsThreeDotsVertical,
-    BsEnvelope,
-    BsTelephone,
-    BsChatLeft,
-} from 'react-icons/bs';
+import { BsThreeDotsVertical, BsEnvelope, BsTelephone } from 'react-icons/bs';
 import { patients } from '../../data/patients';
 
 const PatientList = ({ searchQuery }) => {

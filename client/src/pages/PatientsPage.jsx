@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
-import { BsSearch, BsSliders } from 'react-icons/bs';
+import { BsSearch } from 'react-icons/bs';
 import PatientList from '../components/patients/PatientList';
 import Button from 'react-bootstrap/Button';
 import { Container, Row, Col } from 'react-bootstrap';
