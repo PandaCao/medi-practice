@@ -40,14 +40,14 @@ export async function getPatientsFromDB({ search = '', page, pageSize }) {
             ({ data, error } = await supabaseClient
                 .from(PATIENT_TABLE)
                 .select('*')
-                .order('surname', { ascending: true }));
+                .order('first_name', { ascending: true }));
         } else {
             console.log('Filtering patients');
             const words = search.trim().split(/\s+/).filter(Boolean);
 
             const searchQuery = words
                 .map(word =>
-                    ['surname', 'name', 'rc']
+                    ['last_name', 'first_name', 'birth_number']
                         .map(field => `${field}.ilike.%${word}%`)
                         .join(',')
                 )
@@ -57,7 +57,7 @@ export async function getPatientsFromDB({ search = '', page, pageSize }) {
                 .from(PATIENT_TABLE)
                 .select('*')
                 .or(searchQuery)
-                .order('surname', { ascending: true }));
+                .order('last_name', { ascending: true }));
         }
 
         if (error) throw error;
