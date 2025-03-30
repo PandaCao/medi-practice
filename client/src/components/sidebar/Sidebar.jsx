@@ -5,7 +5,7 @@ import { routes } from '../../config/routes';
 import logo from '../../assets/logo.svg';
 import './Sidebar.css';
 
-const Sidebar = () => {
+const Sidebar = ({ isOpen, onClose }) => {
     const location = useLocation();
     const sidebarRoutes = routes.filter((route) => route.showInSidebar);
     const topRoutes = sidebarRoutes.filter((route) => route.position === 'top');
@@ -30,32 +30,41 @@ const Sidebar = () => {
         ));
 
     return (
-        <div
-            className="sidebar bg-white border-end d-flex flex-column"
-            style={{ width: '250px', height: '100vh' }}
-        >
+        <>
+            {/* Overlay pro mobilní zařízení */}
             <div
-                className="border-bottom"
-                style={{ height: '72px', padding: '16px' }}
+                className={`sidebar-overlay ${isOpen ? 'show' : ''}`}
+                onClick={onClose}
+            />
+            <div
+                className={`sidebar bg-white border-end d-flex flex-column ${
+                    isOpen ? 'show' : ''
+                }`}
+                style={{ width: '250px', height: '100vh' }}
             >
-                <Image
-                    src={logo}
-                    alt="MediPractise"
-                    fluid
-                    style={{ height: '40px' }}
-                />
-            </div>
+                <div
+                    className="border-bottom"
+                    style={{ height: '72px', padding: '16px' }}
+                >
+                    <Image
+                        src={logo}
+                        alt="MediPractise"
+                        fluid
+                        style={{ height: '40px' }}
+                    />
+                </div>
 
-            <div className="d-flex flex-column flex-grow-1">
-                <Nav className="flex-column p-3">
-                    {renderNavLinks(topRoutes)}
-                </Nav>
+                <div className="d-flex flex-column flex-grow-1">
+                    <Nav className="flex-column p-3">
+                        {renderNavLinks(topRoutes)}
+                    </Nav>
 
-                <Nav className="flex-column p-3 mt-auto">
-                    {renderNavLinks(bottomRoutes)}
-                </Nav>
+                    <Nav className="flex-column p-3 mt-auto">
+                        {renderNavLinks(bottomRoutes)}
+                    </Nav>
+                </div>
             </div>
-        </div>
+        </>
     );
 };
 

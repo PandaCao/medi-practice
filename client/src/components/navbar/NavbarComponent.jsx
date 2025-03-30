@@ -1,10 +1,10 @@
 import React from 'react';
 import { Navbar, Image, Stack, Button } from 'react-bootstrap';
-import { BsBell, BsArrowLeft } from 'react-icons/bs';
+import { BsBell, BsArrowLeft, BsList } from 'react-icons/bs';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { getRouteByPath } from '../../config/routes';
 
-const NavbarComponent = () => {
+const NavbarComponent = ({ toggleSidebar }) => {
     const navigate = useNavigate();
     const location = useLocation();
     const currentRoute = getRouteByPath(location.pathname);
@@ -20,12 +20,19 @@ const NavbarComponent = () => {
             style={{
                 position: 'fixed',
                 right: 0,
-                left: '250px',
+                left: 0,
                 zIndex: 1020,
                 height: '72px',
                 padding: '16px',
             }}
         >
+            <Button
+                variant="link"
+                className="d-lg-none text-dark p-0 me-3"
+                onClick={toggleSidebar}
+            >
+                <BsList size={24} />
+            </Button>
             <Navbar.Brand className="d-flex align-items-center">
                 {currentRoute && !currentRoute.isMainRoute && (
                     <Button

@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Container } from 'react-bootstrap';
 import { Outlet, useLocation } from 'react-router-dom';
 import Sidebar from '../components/sidebar/Sidebar';
 import NavbarComponent from '../components/navbar/NavbarComponent';
 
 const Layout = () => {
+    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const location = useLocation();
 
     // Funkce pro získání názvu stránky podle cesty
@@ -29,13 +30,26 @@ const Layout = () => {
         }
     };
 
+    // Zavře sidebar při změně cesty na mobilních zařízeních
+    useEffect(() => {
+        setIsSidebarOpen(false);
+    }, [location.pathname]);
+
+    const toggleSidebar = () => {
+        setIsSidebarOpen(!isSidebarOpen);
+    };
+
     return (
         <div className="min-vh-100 d-flex bg-light">
-            <Sidebar />
+            <Sidebar
+                isOpen={isSidebarOpen}
+                onClose={() => setIsSidebarOpen(false)}
+            />
             <div className="flex-grow-1 d-flex flex-column">
                 <header>
                     <NavbarComponent
                         pageTitle={getPageTitle(location.pathname)}
+                        toggleSidebar={toggleSidebar}
                     />
                 </header>
                 <Container
