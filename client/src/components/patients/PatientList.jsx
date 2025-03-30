@@ -1,6 +1,12 @@
 import React from 'react';
 import { Table, Button, Stack, Spinner } from 'react-bootstrap';
-import { BsThreeDotsVertical, BsEnvelope, BsTelephone } from 'react-icons/bs';
+import {
+    BsThreeDotsVertical,
+    BsEnvelope,
+    BsTelephone,
+    BsPeople,
+} from 'react-icons/bs';
+import { useNavigate } from 'react-router-dom';
 
 const PatientList = ({
     patients,
@@ -9,12 +15,32 @@ const PatientList = ({
     onPageChange,
     isLoading,
 }) => {
+    const navigate = useNavigate();
+
     if (isLoading && patients.length === 0) {
         return (
             <div className="text-center p-5">
                 <Spinner animation="border" role="status">
                     <span className="visually-hidden">Načítání...</span>
                 </Spinner>
+            </div>
+        );
+    }
+
+    if (!isLoading && patients.length === 0) {
+        return (
+            <div className="text-center p-5">
+                <BsPeople size={48} className="text-muted mb-3" />
+                <h4 className="text-muted">Zatím zde nejsou žádní pacienti</h4>
+                <p className="text-muted mb-4">
+                    Začněte přidáním prvního pacienta do systému
+                </p>
+                <Button
+                    variant="primary"
+                    onClick={() => navigate('/add-patient')}
+                >
+                    + Přidat prvního pacienta
+                </Button>
             </div>
         );
     }
