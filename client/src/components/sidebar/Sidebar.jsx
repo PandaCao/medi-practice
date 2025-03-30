@@ -1,5 +1,5 @@
 import React from 'react';
-import { Nav, Stack, Image } from 'react-bootstrap';
+import { Nav, Image } from 'react-bootstrap';
 import { Link, useLocation } from 'react-router-dom';
 import { routes } from '../../config/routes';
 import logo from '../../assets/logo.svg';
