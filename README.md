@@ -31,48 +31,42 @@ The goal of MediPractise is to simplify, clarify, and accelerate the complete or
     npm run test
 ```
 
-## REST API - NOT YET IMPLEMENTED
-📌 **Swagger Documentation:** Open your browser and go to [http://localhost:8080/api](http://localhost:8080/api)
-
-**I personally use Postman for sending requests but below are some request examples:**
+## REST API
+📌 **Swagger Documentation:** Open your browser and go to [http://localhost:8080/api](http://localhost:8080/api) - NOT YET IMPLEMENTED
 
 ### Some examples of requests
 
-`GET /api/v1/customers`
+`GET /api/v1/patientCards/list`
 
-    curl -X GET --location "http://localhost:8080/api/v1/customers"
+    curl -X GET --location "http://localhost:3000/api/v1/patientCards/list"
 
-`GET /api/v1/customers/:uuid`
+`POST /api/v1/patientCards/add`
 
-    curl -X GET --location "http://localhost:8080/api/v1/customers/:uuid"
-
-`POST /api/v1/customers/`
-
-    curl -X POST --location "http://localhost:8080/api/v1/customers/create" \
+    curl -X POST --location "http://localhost:3000/api/v1/patientCards/add" \
     -H "Content-Type: application/json" \
     -d '{
-    "firstName": "Xiao",
-    "lastName": "Pang",
-    "email": "xiaopang@gmail.com",
-    "phone": "123456789"
-    }'
-
-`PATCH /api/v1/customers/:uuid`
-
-    curl -X PATCH --location "http://localhost:8080/api/v1/customers/update/:uuid" \
-    -H "Content-Type: application/json" \
-    -d '{
-    "firstName": "Xiao",
-    "lastName": "Pang",
-    "email": "xiaopang@gmail.com",
-    "phone": "123456789"
+    "first_name": "Xiao",
+    "last_name": "Pang",
+    "date_of_birth": "2000-01-01",
+    "birth_number": "012345/6789",
+    "sex": "male",
+    "insurance_id": "111",
+    "contact_info": {
+        "contact_person": "",
+        "contact_phone": "",
+        "contact_email": ""
+    },
+    "address": {
+        "address_street": "",
+        "address_city": "",
+        "address_zip_code": ""
+    },
+    "medical_record": ""
     }'
 
 ### Endpoints - NOT YET IMPLEMENTED
 
-| Method  | URL                           | Description                         |
-|---------|-------------------------------|-------------------------------------|
-| `GET`   | `/api/v1/customers`           | Retrieve all customers.             |
-| `GET`   | `/api/v1/customers/{uuid}`    | Retrieve the customer by uuid.      |
-| `POST`  | `/api/v1/customers/{uuid}`    | Create new customer                 |
-| `PATCH` | `/api/v1/customers/{uuid}`    | Update customer by uuid.            |
+| Method  | URL                         | Description                    |
+|---------|-----------------------------|--------------------------------|
+| `GET`   | `/api/v1/patientCards/list` | Retrieve all patient cards.    |
+| `POST`  | `/api/v1/patientCards/add`  | Create new patient card        |
