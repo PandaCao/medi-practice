@@ -2,10 +2,12 @@ import React from 'react';
 import { Navbar, Image, Stack, Button } from 'react-bootstrap';
 import { BsBell, BsArrowLeft } from 'react-icons/bs';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { getRouteByPath } from '../../config/routes';
 
-const NavbarComponent = ({ pageTitle }) => {
+const NavbarComponent = () => {
     const navigate = useNavigate();
     const location = useLocation();
+    const currentRoute = getRouteByPath(location.pathname);
 
     const handleBack = () => {
         navigate(-1);
@@ -25,7 +27,7 @@ const NavbarComponent = ({ pageTitle }) => {
             }}
         >
             <Navbar.Brand className="d-flex align-items-center">
-                {location.pathname !== '/' && (
+                {currentRoute && !currentRoute.isMainRoute && (
                     <Button
                         variant="link"
                         className="text-dark p-0 me-3"
@@ -34,7 +36,7 @@ const NavbarComponent = ({ pageTitle }) => {
                         <BsArrowLeft size={24} />
                     </Button>
                 )}
-                <h4 className="mb-0">{pageTitle}</h4>
+                <h4 className="mb-0">{currentRoute?.name}</h4>
             </Navbar.Brand>
             <Navbar.Toggle />
             <Navbar.Collapse className="justify-content-end">

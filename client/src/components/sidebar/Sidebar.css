@@ -1,0 +1,20 @@
+.sidebar-nav-link {
+    color: #6c757d !important;
+    padding: 0.5rem 1rem;
+    border-radius: 0.375rem;
+    margin-bottom: 0.25rem;
+}
+
+.sidebar-nav-link:hover {
+    background-color: #f8f9fa;
+    color: #0d6efd !important;
+}
+
+.sidebar-nav-link.active {
+    background-color: #e7f1ff;
+    color: #0d6efd !important;
+}
+
+.sidebar-nav-link.active:hover {
+    background-color: #e7f1ff;
+}

@@ -1,26 +1,39 @@
 import React from 'react';
 import { Nav, Stack, Image } from 'react-bootstrap';
 import { Link, useLocation } from 'react-router-dom';
-import {
-    BsGrid,
-    BsPeople,
-    BsCalendar,
-    BsCalendarCheck,
-    BsQuestionCircle,
-    BsGear,
-} from 'react-icons/bs';
-import './css/Sidebar.css';
+import { routes } from '../../config/routes';
 import logo from '../../assets/logo.svg';
+import './Sidebar.css';
 
 const Sidebar = () => {
     const location = useLocation();
+    const sidebarRoutes = routes.filter((route) => route.showInSidebar);
+    const topRoutes = sidebarRoutes.filter((route) => route.position === 'top');
+    const bottomRoutes = sidebarRoutes.filter(
+        (route) => route.position === 'bottom',
+    );
 
-    const isActive = (path) => {
-        return location.pathname === path;
-    };
+    const isActive = (path) => location.pathname === path;
+
+    const renderNavLinks = (routes) =>
+        routes.map((route) => (
+            <Nav.Link
+                key={route.path}
+                as={Link}
+                to={route.path}
+                className={`sidebar-nav-link d-flex align-items-center ${
+                    isActive(route.path) ? 'active' : ''
+                }`}
+            >
+                <route.icon className="me-2" /> {route.name}
+            </Nav.Link>
+        ));
 
     return (
-        <div className="sidebar bg-white border-end">
+        <div
+            className="sidebar bg-white border-end d-flex flex-column"
+            style={{ width: '250px', height: '100vh' }}
+        >
             <div
                 className="border-bottom"
                 style={{ height: '72px', padding: '16px' }}
@@ -33,79 +46,15 @@ const Sidebar = () => {
                 />
             </div>
 
-            <Stack className="flex-grow-1">
+            <div className="d-flex flex-column flex-grow-1">
                 <Nav className="flex-column p-3">
-                    <Nav.Link
-                        as={Link}
-                        to="/"
-                        className={`d-flex align-items-center ${
-                            isActive('/')
-                                ? 'text-primary active'
-                                : 'text-secondary'
-                        }`}
-                    >
-                        <BsPeople className="me-2" /> Karty pacientů
-                    </Nav.Link>
-                    <Nav.Link
-                        as={Link}
-                        to="/blood-samples"
-                        className={`d-flex align-items-center ${
-                            isActive('/bloodSamples')
-                                ? 'text-primary active'
-                                : 'text-secondary'
-                        }`}
-                    >
-                        <BsGrid className="me-2" /> Odběry
-                    </Nav.Link>
-                    <Nav.Link
-                        as={Link}
-                        to="/reservations"
-                        className={`d-flex align-items-center ${
-                            isActive('/reservations')
-                                ? 'text-primary active'
-                                : 'text-secondary'
-                        }`}
-                    >
-                        <BsCalendar className="me-2" /> Rezervační systém
-                    </Nav.Link>
-                    <Nav.Link
-                        as={Link}
-                        to="/appointments"
-                        className={`d-flex align-items-center ${
-                            isActive('/appointments')
-                                ? 'text-primary active'
-                                : 'text-secondary'
-                        }`}
-                    >
-                        <BsCalendarCheck className="me-2" /> Dnešní schůzky
-                    </Nav.Link>
+                    {renderNavLinks(topRoutes)}
                 </Nav>
 
                 <Nav className="flex-column p-3 mt-auto">
-                    <Nav.Link
-                        as={Link}
-                        to="/help"
-                        className={`d-flex align-items-center ${
-                            isActive('/help')
-                                ? 'text-primary active'
-                                : 'text-secondary'
-                        }`}
-                    >
-                        <BsQuestionCircle className="me-2" /> Pomoc
-                    </Nav.Link>
-                    <Nav.Link
-                        as={Link}
-                        to="/settings"
-                        className={`d-flex align-items-center ${
-                            isActive('/settings')
-                                ? 'text-primary active'
-                                : 'text-secondary'
-                        }`}
-                    >
-                        <BsGear className="me-2" /> Nastavení
-                    </Nav.Link>
+                    {renderNavLinks(bottomRoutes)}
                 </Nav>
-            </Stack>
+            </div>
         </div>
     );
 };
