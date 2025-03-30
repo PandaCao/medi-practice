@@ -1,16 +1,23 @@
 import React from 'react';
-import { Table, Button, Stack } from 'react-bootstrap';
+import { Table, Button, Stack, Spinner } from 'react-bootstrap';
 import { BsThreeDotsVertical, BsEnvelope, BsTelephone } from 'react-icons/bs';
-import { patients } from '../../data/patients';
 
-const PatientList = ({ searchQuery }) => {
-    const filteredPatients = patients.filter((patient) => {
-        const searchLower = searchQuery.toLowerCase();
+const PatientList = ({
+    patients,
+    totalPages,
+    currentPage,
+    onPageChange,
+    isLoading,
+}) => {
+    if (isLoading && patients.length === 0) {
         return (
-            patient.name.toLowerCase().includes(searchLower) ||
-            patient.personalId.toLowerCase().includes(searchLower)
+            <div className="text-center p-5">
+                <Spinner animation="border" role="status">
+                    <span className="visually-hidden">Načítání...</span>
+                </Spinner>
+            </div>
         );
-    });
+    }
 
     return (
         <div>
@@ -26,8 +33,8 @@ const PatientList = ({ searchQuery }) => {
                     </tr>
                 </thead>
                 <tbody>
-                    {filteredPatients.map((patient, index) => (
-                        <tr key={index}>
+                    {patients.map((patient, index) => (
+                        <tr key={patient.id || index}>
                             <td>{patient.registrationDate}</td>
                             <td>{patient.name}</td>
                             <td>{patient.personalId}</td>
@@ -50,35 +57,52 @@ const PatientList = ({ searchQuery }) => {
                 </tbody>
             </Table>
 
-            <Stack
-                direction="horizontal"
-                className="justify-content-between align-items-center mt-4"
-            >
-                <div className="pagination-controls">
-                    <Button variant="link" className="text-secondary">
-                        Předchozí
-                    </Button>
-                    {[1, 2, 3, 4, 5].map((page) => (
+            {totalPages > 1 && (
+                <Stack
+                    direction="horizontal"
+                    className="justify-content-between align-items-center mt-4"
+                >
+                    <div className="pagination-controls">
                         <Button
-                            key={page}
-                            variant={page === 2 ? 'primary' : 'link'}
-                            className={page !== 2 && 'text-secondary'}
+                            variant="link"
+                            className="text-secondary"
+                            onClick={() => onPageChange(currentPage - 1)}
+                            disabled={currentPage === 1 || isLoading}
                         >
-                            {page}
+                            Předchozí
                         </Button>
-                    ))}
-                    <Button variant="link" className="text-secondary">
-                        ...
-                    </Button>
-                    <Button variant="link" className="text-secondary">
-                        10
-                    </Button>
-                    <Button variant="link" className="text-secondary">
-                        Další
-                    </Button>
-                </div>
-                <small className="text-secondary">Stránka 2 z 34</small>
-            </Stack>
+                        {Array.from(
+                            { length: totalPages },
+                            (_, i) => i + 1,
+                        ).map((page) => (
+                            <Button
+                                key={page}
+                                variant={
+                                    page === currentPage ? 'primary' : 'link'
+                                }
+                                className={
+                                    page !== currentPage && 'text-secondary'
+                                }
+                                onClick={() => onPageChange(page)}
+                                disabled={isLoading}
+                            >
+                                {page}
+                            </Button>
+                        ))}
+                        <Button
+                            variant="link"
+                            className="text-secondary"
+                            onClick={() => onPageChange(currentPage + 1)}
+                            disabled={currentPage === totalPages || isLoading}
+                        >
+                            Další
+                        </Button>
+                    </div>
+                    <small className="text-secondary">
+                        Stránka {currentPage} z {totalPages}
+                    </small>
+                </Stack>
+            )}
         </div>
     );
 };
