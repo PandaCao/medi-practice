@@ -120,6 +120,21 @@ code {
         border-width: 1px;
         font-size: 0.875rem;
     }
+
+    .card .btn-outline-primary {
+        font-size: 0.75rem;
+        padding: 0.25rem 0.5rem;
+    }
+
+    .card .btn-outline-primary:hover {
+        background-color: #f8f9fa;
+        color: #0d6efd;
+    }
+
+    .card .contact-btn {
+        font-size: 0.75rem;
+        padding: 0.35rem 0.75rem;
+    }
 }
 
 /* Upravíme stávající tabulkové styly pro desktop */
@@ -129,4 +144,47 @@ code {
         border-radius: 8px;
         box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
     }
+}
+
+/* Styly pro kontakty */
+.text-muted.small {
+    font-size: 0.875rem;
+}
+
+/* Desktop tabulka */
+.table td .d-flex.gap-2 {
+    gap: 0.75rem !important;
+}
+
+.table td svg {
+    cursor: pointer;
+}
+
+/* Styly pro kontaktní tlačítka a ikony */
+.contact-btn {
+    transition: all 0.2s ease-in-out;
+}
+
+.contact-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.contact-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
+    transition: all 0.2s ease-in-out;
+}
+
+.contact-icon:hover {
+    background-color: #e7f1ff;
+    transform: translateY(-1px);
+}
+
+.contact-icon svg {
+    font-size: 1.1rem;
 }

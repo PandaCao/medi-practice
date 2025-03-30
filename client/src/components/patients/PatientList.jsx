@@ -1,10 +1,11 @@
 import React from 'react';
-import { Table, Button, Stack, Spinner, Card, Row, Col } from 'react-bootstrap';
+import { Table, Button, Stack, Spinner, Card } from 'react-bootstrap';
 import {
     BsThreeDotsVertical,
     BsEnvelope,
     BsTelephone,
     BsPeople,
+    BsExclamationCircle,
 } from 'react-icons/bs';
 import { useNavigate } from 'react-router-dom';
 
@@ -16,6 +17,15 @@ const PatientList = ({
     isLoading,
 }) => {
     const navigate = useNavigate();
+
+    // Přidáme nové funkce pro handling kontaktů
+    const handleEmail = (email) => {
+        window.location.href = `mailto:${email}`;
+    };
+
+    const handlePhone = (phone) => {
+        window.location.href = `tel:${phone}`;
+    };
 
     if (isLoading && patients.length === 0) {
         return (
@@ -60,17 +70,32 @@ const PatientList = ({
                     </Button>
                 </div>
                 <div className="text-muted mb-2">{patient.insurance}</div>
-                <div className="d-flex gap-2">
-                    {patient.contactType === 'email' ? (
-                        <Button variant="outline-primary" size="sm">
-                            <BsEnvelope className="me-1" /> Email
-                        </Button>
-                    ) : (
-                        <Button variant="outline-primary" size="sm">
-                            <BsTelephone className="me-1" /> Telefon
-                        </Button>
-                    )}
-                </div>
+                {(patient.phone || patient.email) && (
+                    <div className="d-flex gap-2 flex-wrap">
+                        {patient.phone && (
+                            <Button
+                                variant="outline-primary"
+                                size="sm"
+                                className="d-flex align-items-center contact-btn"
+                                onClick={() => handlePhone(patient.phone)}
+                            >
+                                <BsTelephone className="me-1" />
+                                {patient.phone}
+                            </Button>
+                        )}
+                        {patient.email && (
+                            <Button
+                                variant="outline-primary"
+                                size="sm"
+                                className="d-flex align-items-center contact-btn"
+                                onClick={() => handleEmail(patient.email)}
+                            >
+                                <BsEnvelope className="me-1" />
+                                {patient.email}
+                            </Button>
+                        )}
+                    </div>
+                )}
             </Card.Body>
         </Card>
     );
@@ -83,7 +108,7 @@ const PatientList = ({
                     <th>JMÉNO A PŘÍJMENÍ</th>
                     <th>RODNÉ ČÍSLO</th>
                     <th>POJIŠŤOVNA</th>
-                    <th>KONTAKT</th>
+                    <th>KONTAKTY</th>
                     <th></th>
                 </tr>
             </thead>
@@ -95,10 +120,35 @@ const PatientList = ({
                         <td>{patient.personalId}</td>
                         <td>{patient.insurance}</td>
                         <td>
-                            {patient.contactType === 'email' ? (
-                                <BsEnvelope />
+                            {!patient.phone && !patient.email ? (
+                                <span className="text-muted small">-</span>
                             ) : (
-                                <BsTelephone />
+                                <div className="d-flex gap-2">
+                                    {patient.phone && (
+                                        <Button
+                                            variant="link"
+                                            className="contact-icon p-0"
+                                            onClick={() =>
+                                                handlePhone(patient.phone)
+                                            }
+                                            title={patient.phone}
+                                        >
+                                            <BsTelephone className="text-primary" />
+                                        </Button>
+                                    )}
+                                    {patient.email && (
+                                        <Button
+                                            variant="link"
+                                            className="contact-icon p-0"
+                                            onClick={() =>
+                                                handleEmail(patient.email)
+                                            }
+                                            title={patient.email}
+                                        >
+                                            <BsEnvelope className="text-primary" />
+                                        </Button>
+                                    )}
+                                </div>
                             )}
                         </td>
                         <td className="text-end">
