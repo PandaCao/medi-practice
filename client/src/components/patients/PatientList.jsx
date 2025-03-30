@@ -5,7 +5,6 @@ import {
     BsEnvelope,
     BsTelephone,
     BsPeople,
-    BsExclamationCircle,
 } from 'react-icons/bs';
 import { useNavigate } from 'react-router-dom';
 
