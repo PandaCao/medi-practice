@@ -1,5 +1,5 @@
 import React from 'react';
-import { Table, Button, Stack, Spinner } from 'react-bootstrap';
+import { Table, Button, Stack, Spinner, Card, Row, Col } from 'react-bootstrap';
 import {
     BsThreeDotsVertical,
     BsEnvelope,
@@ -45,43 +45,80 @@ const PatientList = ({
         );
     }
 
+    const renderMobileCard = (patient) => (
+        <Card className="mb-3" key={patient.personalId}>
+            <Card.Body>
+                <div className="d-flex justify-content-between align-items-start mb-2">
+                    <div>
+                        <h5 className="mb-1">{patient.name}</h5>
+                        <div className="text-muted small">
+                            {patient.personalId}
+                        </div>
+                    </div>
+                    <Button variant="link" className="text-muted p-0">
+                        <BsThreeDotsVertical />
+                    </Button>
+                </div>
+                <div className="text-muted mb-2">{patient.insurance}</div>
+                <div className="d-flex gap-2">
+                    {patient.contactType === 'email' ? (
+                        <Button variant="outline-primary" size="sm">
+                            <BsEnvelope className="me-1" /> Email
+                        </Button>
+                    ) : (
+                        <Button variant="outline-primary" size="sm">
+                            <BsTelephone className="me-1" /> Telefon
+                        </Button>
+                    )}
+                </div>
+            </Card.Body>
+        </Card>
+    );
+
+    const renderDesktopTable = () => (
+        <Table hover responsive>
+            <thead>
+                <tr>
+                    <th>DATUM REGISTRACE</th>
+                    <th>JMÉNO A PŘÍJMENÍ</th>
+                    <th>RODNÉ ČÍSLO</th>
+                    <th>POJIŠŤOVNA</th>
+                    <th>KONTAKT</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {patients.map((patient) => (
+                    <tr key={patient.personalId}>
+                        <td>{patient.registrationDate}</td>
+                        <td>{patient.name}</td>
+                        <td>{patient.personalId}</td>
+                        <td>{patient.insurance}</td>
+                        <td>
+                            {patient.contactType === 'email' ? (
+                                <BsEnvelope />
+                            ) : (
+                                <BsTelephone />
+                            )}
+                        </td>
+                        <td className="text-end">
+                            <Button variant="link" className="text-muted p-0">
+                                <BsThreeDotsVertical />
+                            </Button>
+                        </td>
+                    </tr>
+                ))}
+            </tbody>
+        </Table>
+    );
+
     return (
         <div>
-            <Table hover responsive>
-                <thead>
-                    <tr>
-                        <th>DATUM REGISTRACE</th>
-                        <th>JMÉNO A PŘÍJMENÍ</th>
-                        <th>RODNÉ ČÍSLO</th>
-                        <th>POJIŠŤOVNA</th>
-                        <th>KONTAKT</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {patients.map((patient, index) => (
-                        <tr key={patient.id || index}>
-                            <td>{patient.registrationDate}</td>
-                            <td>{patient.name}</td>
-                            <td>{patient.personalId}</td>
-                            <td>{patient.insurance}</td>
-                            <td>
-                                {patient.contactType === 'email' && (
-                                    <BsEnvelope />
-                                )}
-                                {patient.contactType === 'phone' && (
-                                    <BsTelephone />
-                                )}
-                            </td>
-                            <td>
-                                <Button variant="link" className="p-0">
-                                    <BsThreeDotsVertical />
-                                </Button>
-                            </td>
-                        </tr>
-                    ))}
-                </tbody>
-            </Table>
+            {/* Desktop zobrazení */}
+            <div className="d-none d-lg-block">{renderDesktopTable()}</div>
+
+            {/* Mobilní zobrazení */}
+            <div className="d-lg-none">{patients.map(renderMobileCard)}</div>
 
             {totalPages > 1 && (
                 <Stack
