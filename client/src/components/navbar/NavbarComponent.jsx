@@ -3,8 +3,9 @@ import { Navbar, Image, Stack, Button } from 'react-bootstrap';
 import { BsBell, BsArrowLeft, BsList } from 'react-icons/bs';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { getRouteByPath } from '../../config/routes';
+import './Navbar.css';
 
-const NavbarComponent = ({ toggleSidebar }) => {
+const NavbarComponent = ({ pageTitle, toggleSidebar }) => {
     const navigate = useNavigate();
     const location = useLocation();
     const currentRoute = getRouteByPath(location.pathname);
@@ -16,11 +17,10 @@ const NavbarComponent = ({ toggleSidebar }) => {
     return (
         <Navbar
             bg="white"
-            className="border-bottom"
+            className="navbar-component border-bottom"
             style={{
                 position: 'fixed',
                 right: 0,
-                left: 0,
                 zIndex: 1020,
                 height: '72px',
                 padding: '16px',
@@ -43,7 +43,7 @@ const NavbarComponent = ({ toggleSidebar }) => {
                         <BsArrowLeft size={24} />
                     </Button>
                 )}
-                <h4 className="mb-0">{currentRoute?.name}</h4>
+                <h4 className="mb-0">{pageTitle}</h4>
             </Navbar.Brand>
             <Navbar.Toggle />
             <Navbar.Collapse className="justify-content-end">

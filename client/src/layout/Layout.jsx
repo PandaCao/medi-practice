@@ -8,23 +8,22 @@ const Layout = () => {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const location = useLocation();
 
-    // Funkce pro získání názvu stránky podle cesty
     const getPageTitle = (pathname) => {
         switch (pathname) {
             case '/':
                 return 'Karty pacientů';
-            case '/add-patient':
-                return 'Přidat pacienta';
             case '/blood-samples':
                 return 'Odběry';
             case '/reservations':
-                return 'Rezervace';
+                return 'Rezervační systém';
             case '/appointments':
                 return 'Dnešní schůzky';
             case '/help':
                 return 'Pomoc';
             case '/settings':
                 return 'Nastavení';
+            case '/add-patient':
+                return 'Přidat pacienta';
             default:
                 return '';
         }

@@ -1,0 +1,27 @@
+.navbar-component {
+    transition: left 0.3s ease-in-out;
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
+    z-index: 1020;
+    background-color: white;
+}
+
+@media (min-width: 992px) {
+    .navbar-component {
+        left: 250px; /* Šířka sidebaru */
+    }
+}
+
+@media (max-width: 991.98px) {
+    .navbar-component {
+        left: 0;
+        width: 100%;
+    }
+}
+
+/* Přidáme styl pro obsah pod navbarem */
+.content-wrapper {
+    margin-top: 72px; /* Výška navbaru */
+}
