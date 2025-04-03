@@ -9,6 +9,7 @@ import { useNavigate } from 'react-router-dom';
 import { useDebounce } from '../hooks/useDebounce';
 import Spinner from 'react-bootstrap/Spinner';
 import { patients as allPatients } from '../data/patients';
+import { ROUTES } from '../config/routes';
 
 const PatientsPage = () => {
     const [searchQuery, setSearchQuery] = useState('');
@@ -57,7 +58,7 @@ const PatientsPage = () => {
     };
 
     const handleAddPatient = () => {
-        navigate('/add-patient');
+        navigate(ROUTES.PATIENT_ADD);
     };
 
     return (

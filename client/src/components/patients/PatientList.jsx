@@ -7,6 +7,7 @@ import {
     BsPeople,
 } from 'react-icons/bs';
 import { useNavigate } from 'react-router-dom';
+import { ROUTES } from '../../config/routes';
 
 const PatientList = ({
     patients,
@@ -46,7 +47,7 @@ const PatientList = ({
                 </p>
                 <Button
                     variant="primary"
-                    onClick={() => navigate('/add-patient')}
+                    onClick={() => navigate(ROUTES.PATIENT_ADD)}
                 >
                     + Přidat prvního pacienta
                 </Button>
