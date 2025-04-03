@@ -14,9 +14,20 @@ import {
     BsGear,
 } from 'react-icons/bs';
 
+// Přidáme konstanty pro identifikaci cest
+export const ROUTES = {
+    PATIENTS: '/',
+    PATIENT_ADD: '/patient/add',
+    BLOOD_SAMPLES: '/blood-samples',
+    RESERVATIONS: '/reservations',
+    APPOINTMENTS: '/appointments',
+    HELP: '/help',
+    SETTINGS: '/settings',
+};
+
 export const routes = [
     {
-        path: '/',
+        path: ROUTES.PATIENTS,
         component: PatientsPage,
         name: 'Karty pacientů',
         icon: BsPeople,
@@ -25,14 +36,14 @@ export const routes = [
         position: 'top',
     },
     {
-        path: '/add-patient',
+        path: ROUTES.PATIENT_ADD,
         component: AddPatientPage,
         name: 'Přidat pacienta',
         showInSidebar: false,
         isMainRoute: false,
     },
     {
-        path: '/blood-samples',
+        path: ROUTES.BLOOD_SAMPLES,
         component: BloodSamplesPage,
         name: 'Odběry',
         icon: BsGrid,
@@ -41,7 +52,7 @@ export const routes = [
         position: 'top',
     },
     {
-        path: '/reservations',
+        path: ROUTES.RESERVATIONS,
         component: ReservationsPage,
         name: 'Rezervační systém',
         icon: BsCalendar,
@@ -50,7 +61,7 @@ export const routes = [
         position: 'top',
     },
     {
-        path: '/appointments',
+        path: ROUTES.APPOINTMENTS,
         component: AppointmentsPage,
         name: 'Dnešní schůzky',
         icon: BsClock,
@@ -59,7 +70,7 @@ export const routes = [
         position: 'top',
     },
     {
-        path: '/help',
+        path: ROUTES.HELP,
         component: HelpPage,
         name: 'Pomoc',
         icon: BsQuestionCircle,
@@ -68,7 +79,7 @@ export const routes = [
         position: 'bottom',
     },
     {
-        path: '/settings',
+        path: ROUTES.SETTINGS,
         component: SettingsPage,
         name: 'Nastavení',
         icon: BsGear,

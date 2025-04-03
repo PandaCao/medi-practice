@@ -3,30 +3,15 @@ import { Container } from 'react-bootstrap';
 import { Outlet, useLocation } from 'react-router-dom';
 import Sidebar from '../components/sidebar/Sidebar';
 import NavbarComponent from '../components/navbar/NavbarComponent';
+import { getRouteByPath } from '../config/routes';
 
 const Layout = () => {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const location = useLocation();
 
     const getPageTitle = (pathname) => {
-        switch (pathname) {
-            case '/':
-                return 'Karty pacientů';
-            case '/blood-samples':
-                return 'Odběry';
-            case '/reservations':
-                return 'Rezervační systém';
-            case '/appointments':
-                return 'Dnešní schůzky';
-            case '/help':
-                return 'Pomoc';
-            case '/settings':
-                return 'Nastavení';
-            case '/add-patient':
-                return 'Přidat pacienta';
-            default:
-                return '';
-        }
+        const route = getRouteByPath(pathname);
+        return route ? route.name : '';
     };
 
     // Zavře sidebar při změně cesty na mobilních zařízeních
