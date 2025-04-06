@@ -14,26 +14,26 @@ const PatientList = ({ totalPages, currentPage, onPageChange, isLoading }) => {
     const navigate = useNavigate();
     const [patientList, setPatientList] = useState([]);
 
-    // Přidáme useEffect pro aktualizaci a seřazení seznamu
     useEffect(() => {
-        // Vytvoříme kopii pole pacientů
         const sortedPatients = [...patients].sort((a, b) => {
-            // Převedeme datum z formátu DD/MM/YYYY na Date objekt pro porovnání
             const dateA = a.registrationDate.split('/').reverse().join('-');
             const dateB = b.registrationDate.split('/').reverse().join('-');
-            return new Date(dateB) - new Date(dateA); // Sestupné řazení (nejnovější první)
+            return new Date(dateB) - new Date(dateA);
         });
 
         setPatientList(sortedPatients);
-    }, [patients]); // Přidáme patients jako dependency
+    }, [patients]);
 
-    // Přidáme nové funkce pro handling kontaktů
     const handleEmail = (email) => {
         window.location.href = `mailto:${email}`;
     };
 
     const handlePhone = (phone) => {
         window.location.href = `tel:${phone}`;
+    };
+
+    const handlePatientClick = (patientId) => {
+        navigate(ROUTES.PATIENT_DETAIL.replace(':id', patientId));
     };
 
     if (isLoading && patientList.length === 0) {
@@ -69,10 +69,14 @@ const PatientList = ({ totalPages, currentPage, onPageChange, isLoading }) => {
             <Card.Body>
                 <div className="d-flex justify-content-between align-items-start mb-2">
                     <div>
-                        <h5 className="mb-1">{patient.name}</h5>
-                        <div className="text-muted small">
-                            {patient.personalId}
-                        </div>
+                        <h5
+                            className="mb-1"
+                            onClick={() => handlePatientClick(patient.id)}
+                            style={{ cursor: 'pointer' }}
+                        >
+                            {patient.name}
+                        </h5>
+                        <div className="text-muted small">{patient.personalId}</div>
                     </div>
                     <Button variant="link" className="text-muted p-0">
                         <BsThreeDotsVertical />
@@ -124,8 +128,18 @@ const PatientList = ({ totalPages, currentPage, onPageChange, isLoading }) => {
             <tbody>
                 {patientList.map((patient) => (
                     <tr key={patient.personalId}>
-                        <td>{patient.registrationDate}</td>
-                        <td>{patient.name}</td>
+                        <td
+                            style={{ cursor: 'pointer' }}
+                            onClick={() => handlePatientClick(patient.id)}
+                        >
+                            {patient.registrationDate}
+                        </td>
+                        <td
+                            style={{ cursor: 'pointer' }}
+                            onClick={() => handlePatientClick(patient.id)}
+                        >
+                            {patient.name}
+                        </td>
                         <td>{patient.personalId}</td>
                         <td>{patient.insurance}</td>
                         <td>
@@ -173,10 +187,7 @@ const PatientList = ({ totalPages, currentPage, onPageChange, isLoading }) => {
 
     return (
         <div>
-            {/* Desktop zobrazení */}
             <div className="d-none d-lg-block">{renderDesktopTable()}</div>
-
-            {/* Mobilní zobrazení */}
             <div className="d-lg-none">{patientList.map(renderMobileCard)}</div>
 
             {totalPages > 1 && (
@@ -193,24 +204,23 @@ const PatientList = ({ totalPages, currentPage, onPageChange, isLoading }) => {
                         >
                             Předchozí
                         </Button>
-                        {Array.from(
-                            { length: totalPages },
-                            (_, i) => i + 1,
-                        ).map((page) => (
-                            <Button
-                                key={page}
-                                variant={
-                                    page === currentPage ? 'primary' : 'link'
-                                }
-                                className={
-                                    page !== currentPage && 'text-secondary'
-                                }
-                                onClick={() => onPageChange(page)}
-                                disabled={isLoading}
-                            >
-                                {page}
-                            </Button>
-                        ))}
+                        {Array.from({ length: totalPages }, (_, i) => i + 1).map(
+                            (page) => (
+                                <Button
+                                    key={page}
+                                    variant={
+                                        page === currentPage ? 'primary' : 'link'
+                                    }
+                                    className={
+                                        page !== currentPage && 'text-secondary'
+                                    }
+                                    onClick={() => onPageChange(page)}
+                                    disabled={isLoading}
+                                >
+                                    {page}
+                                </Button>
+                            )
+                        )}
                         <Button
                             variant="link"
                             className="text-secondary"
