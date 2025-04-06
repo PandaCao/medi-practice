@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Table, Button, Stack, Spinner, Card } from 'react-bootstrap';
 import {
     BsThreeDotsVertical,
@@ -8,32 +8,35 @@ import {
 } from 'react-icons/bs';
 import { useNavigate } from 'react-router-dom';
 import { ROUTES } from '../../config/routes';
+import { patients } from '../../data/patients';
 
-const PatientList = ({
-    patients,
-    totalPages,
-    currentPage,
-    onPageChange,
-    isLoading,
-}) => {
+const PatientList = ({ totalPages, currentPage, onPageChange, isLoading }) => {
     const navigate = useNavigate();
+    const [patientList, setPatientList] = useState([]);
 
-    // Funkce pro odeslání e-mailu
+    useEffect(() => {
+        const sortedPatients = [...patients].sort((a, b) => {
+            const dateA = a.registrationDate.split('/').reverse().join('-');
+            const dateB = b.registrationDate.split('/').reverse().join('-');
+            return new Date(dateB) - new Date(dateA);
+        });
+
+        setPatientList(sortedPatients);
+    }, [patients]);
+
     const handleEmail = (email) => {
         window.location.href = `mailto:${email}`;
     };
 
-    // Funkce pro volání telefonu
     const handlePhone = (phone) => {
         window.location.href = `tel:${phone}`;
     };
 
-    // Funkce pro přechod na stránku detailu pacienta
     const handlePatientClick = (patientId) => {
         navigate(ROUTES.PATIENT_DETAIL.replace(':id', patientId));
     };
 
-    if (isLoading && patients.length === 0) {
+    if (isLoading && patientList.length === 0) {
         return (
             <div className="text-center p-5">
                 <Spinner animation="border" role="status">
@@ -43,7 +46,7 @@ const PatientList = ({
         );
     }
 
-    if (!isLoading && patients.length === 0) {
+    if (!isLoading && patientList.length === 0) {
         return (
             <div className="text-center p-5">
                 <BsPeople size={48} className="text-muted mb-3" />
@@ -61,7 +64,6 @@ const PatientList = ({
         );
     }
 
-    // Mobilní zobrazení
     const renderMobileCard = (patient) => (
         <Card className="mb-3" key={patient.personalId}>
             <Card.Body>
@@ -111,7 +113,6 @@ const PatientList = ({
         </Card>
     );
 
-    // Desktop zobrazení
     const renderDesktopTable = () => (
         <Table hover responsive>
             <thead>
@@ -125,7 +126,7 @@ const PatientList = ({
                 </tr>
             </thead>
             <tbody>
-                {patients.map((patient) => (
+                {patientList.map((patient) => (
                     <tr key={patient.personalId}>
                         <td
                             style={{ cursor: 'pointer' }}
@@ -186,11 +187,8 @@ const PatientList = ({
 
     return (
         <div>
-            {/* Desktop verze */}
             <div className="d-none d-lg-block">{renderDesktopTable()}</div>
-
-            {/* Mobilní verze */}
-            <div className="d-lg-none">{patients.map(renderMobileCard)}</div>
+            <div className="d-lg-none">{patientList.map(renderMobileCard)}</div>
 
             {totalPages > 1 && (
                 <Stack
