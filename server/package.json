@@ -7,9 +7,9 @@
   },
   "name": "server",
   "version": "1.0.0",
-  "main": "app.js",
+  "main": "src/app.js",
   "scripts": {
-    "backend": "node --env-file-if-exists=.env app.js",
+    "backend": "node --env-file-if-exists=.env src/app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
