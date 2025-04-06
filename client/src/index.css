@@ -188,3 +188,59 @@ code {
 .contact-icon svg {
     font-size: 1.1rem;
 }
+
+/* Přidejte nebo upravte existující CSS pro datepicker */
+input[type='date'] {
+    position: relative;
+}
+
+input[type='date']::-webkit-calendar-picker-indicator {
+    position: absolute;
+    right: 0;
+    padding: 0.5em;
+    cursor: pointer;
+}
+
+input[type='date']::-webkit-datetime-edit-fields-wrapper {
+    padding: 0.5em;
+}
+
+/* Nastavení pořadí polí pro formát DD/MM/YYYY */
+input[type='date']::-webkit-datetime-edit-day-field {
+    order: 1;
+}
+
+input[type='date']::-webkit-datetime-edit-month-field {
+    order: 2;
+}
+
+input[type='date']::-webkit-datetime-edit-year-field {
+    order: 3;
+}
+
+/* Přidání lomítek mezi hodnoty */
+input[type='date']::-webkit-datetime-edit-text {
+    padding: 0 0.3em;
+}
+
+/* Přidejte tyto styly pro Safari */
+@supports (-webkit-touch-callout: none) {
+    input[type='date'] {
+        display: flex;
+        align-items: center;
+        min-height: 38px;
+    }
+
+    input[type='date']::-webkit-date-and-time-value {
+        text-align: left;
+    }
+
+    input[type='date']::-webkit-calendar-picker-indicator {
+        margin-left: auto;
+    }
+
+    input[type='date']::-webkit-datetime-edit {
+        display: inline-flex;
+        padding: 0 0.5em;
+    }
+}

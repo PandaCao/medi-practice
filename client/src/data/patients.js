@@ -1,4 +1,4 @@
-export const patients = [
+export let patients = [
     {
         registrationDate: '27/12/2024',
         name: 'Horák Petr',
@@ -58,7 +58,7 @@ export const patients = [
     {
         registrationDate: '02/04/2023',
         name: 'Ponikelský Karel',
-        personalId: '403109624',
+        personalId: '403115/9624',
         insurance: 'Česká průmyslová zdravotní pojišťovna',
         email: 'ponikelsky.karel@email.cz',
         phone: null,

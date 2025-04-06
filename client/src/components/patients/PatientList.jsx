@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Table, Button, Stack, Spinner, Card } from 'react-bootstrap';
 import {
     BsThreeDotsVertical,
@@ -8,15 +8,24 @@ import {
 } from 'react-icons/bs';
 import { useNavigate } from 'react-router-dom';
 import { ROUTES } from '../../config/routes';
+import { patients } from '../../data/patients';
 
-const PatientList = ({
-    patients,
-    totalPages,
-    currentPage,
-    onPageChange,
-    isLoading,
-}) => {
+const PatientList = ({ totalPages, currentPage, onPageChange, isLoading }) => {
     const navigate = useNavigate();
+    const [patientList, setPatientList] = useState([]);
+
+    // Přidáme useEffect pro aktualizaci a seřazení seznamu
+    useEffect(() => {
+        // Vytvoříme kopii pole pacientů
+        const sortedPatients = [...patients].sort((a, b) => {
+            // Převedeme datum z formátu DD/MM/YYYY na Date objekt pro porovnání
+            const dateA = a.registrationDate.split('/').reverse().join('-');
+            const dateB = b.registrationDate.split('/').reverse().join('-');
+            return new Date(dateB) - new Date(dateA); // Sestupné řazení (nejnovější první)
+        });
+
+        setPatientList(sortedPatients);
+    }, [patients]); // Přidáme patients jako dependency
 
     // Přidáme nové funkce pro handling kontaktů
     const handleEmail = (email) => {
@@ -27,7 +36,7 @@ const PatientList = ({
         window.location.href = `tel:${phone}`;
     };
 
-    if (isLoading && patients.length === 0) {
+    if (isLoading && patientList.length === 0) {
         return (
             <div className="text-center p-5">
                 <Spinner animation="border" role="status">
@@ -37,7 +46,7 @@ const PatientList = ({
         );
     }
 
-    if (!isLoading && patients.length === 0) {
+    if (!isLoading && patientList.length === 0) {
         return (
             <div className="text-center p-5">
                 <BsPeople size={48} className="text-muted mb-3" />
@@ -113,7 +122,7 @@ const PatientList = ({
                 </tr>
             </thead>
             <tbody>
-                {patients.map((patient) => (
+                {patientList.map((patient) => (
                     <tr key={patient.personalId}>
                         <td>{patient.registrationDate}</td>
                         <td>{patient.name}</td>
@@ -168,7 +177,7 @@ const PatientList = ({
             <div className="d-none d-lg-block">{renderDesktopTable()}</div>
 
             {/* Mobilní zobrazení */}
-            <div className="d-lg-none">{patients.map(renderMobileCard)}</div>
+            <div className="d-lg-none">{patientList.map(renderMobileCard)}</div>
 
             {totalPages > 1 && (
                 <Stack
