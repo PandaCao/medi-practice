@@ -1,5 +1,8 @@
+// config/routes.js
 import PatientsPage from '../pages/PatientsPage';
 import AddPatientPage from '../pages/AddPatientPage';
+import PatientDetailPage from '../pages/PatientDetailPage'; // ✅ Pridaný nový detail pacienta
+import PatientFormPage from '../pages/PatientFormPage'; // ✅ Editacní formulář
 import BloodSamplesPage from '../pages/BloodSamplesPage';
 import ReservationsPage from '../pages/ReservationsPage';
 import AppointmentsPage from '../pages/AppointmentsPage';
@@ -14,10 +17,12 @@ import {
     BsGear,
 } from 'react-icons/bs';
 
-// Přidáme konstanty pro identifikaci cest
+// Definice rout
 export const ROUTES = {
     PATIENTS: '/',
     PATIENT_ADD: '/patient/add',
+    PATIENT_DETAIL: '/patient/:id', // ✅ Detail pacienta (dashboard)
+    PATIENT_EDIT: '/patient/:id/edit', // ✅ Formulář pro úpravu
     BLOOD_SAMPLES: '/blood-samples',
     RESERVATIONS: '/reservations',
     APPOINTMENTS: '/appointments',
@@ -25,6 +30,7 @@ export const ROUTES = {
     SETTINGS: '/settings',
 };
 
+// Pole pro mapování rout a jejich komponent
 export const routes = [
     {
         path: ROUTES.PATIENTS,
@@ -39,6 +45,20 @@ export const routes = [
         path: ROUTES.PATIENT_ADD,
         component: AddPatientPage,
         name: 'Přidat pacienta',
+        showInSidebar: false,
+        isMainRoute: false,
+    },
+    {
+        path: ROUTES.PATIENT_DETAIL, // ✅ Zobrazení detailu pacienta
+        component: PatientDetailPage,
+        name: 'Detail pacienta',
+        showInSidebar: false,
+        isMainRoute: false,
+    },
+    {
+        path: ROUTES.PATIENT_EDIT, // ✅ Editace pacienta
+        component: PatientFormPage,
+        name: 'Editace pacienta',
         showInSidebar: false,
         isMainRoute: false,
     },
@@ -89,6 +109,7 @@ export const routes = [
     },
 ];
 
+// Funkce pro nalezení route podle cesty
 export const getRouteByPath = (path) => {
     return routes.find((route) => route.path === path);
 };
