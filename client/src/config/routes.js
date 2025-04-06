@@ -111,5 +111,15 @@ export const routes = [
 
 // Funkce pro nalezení route podle cesty
 export const getRouteByPath = (path) => {
-    return routes.find((route) => route.path === path);
+    // Nejdřív zkusíme najít přesnou shodu
+    const exactMatch = routes.find((route) => route.path === path);
+    if (exactMatch) return exactMatch;
+
+    // Pokud nenajdeme přesnou shodu, zkusíme najít dynamickou cestu
+    return routes.find((route) => {
+        // Převedeme pattern na regex
+        const pattern = route.path.replace(/:[^/]+/g, '[^/]+');
+        const regex = new RegExp(`^${pattern}$`);
+        return regex.test(path);
+    });
 };

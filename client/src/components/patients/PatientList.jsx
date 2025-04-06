@@ -8,9 +8,14 @@ import {
 } from 'react-icons/bs';
 import { useNavigate } from 'react-router-dom';
 import { ROUTES } from '../../config/routes';
-import { patients } from '../../data/patients';
 
-const PatientList = ({ totalPages, currentPage, onPageChange, isLoading }) => {
+const PatientList = ({
+    patients,
+    totalPages,
+    currentPage,
+    onPageChange,
+    isLoading,
+}) => {
     const navigate = useNavigate();
     const [patientList, setPatientList] = useState([]);
 
@@ -76,7 +81,9 @@ const PatientList = ({ totalPages, currentPage, onPageChange, isLoading }) => {
                         >
                             {patient.name}
                         </h5>
-                        <div className="text-muted small">{patient.personalId}</div>
+                        <div className="text-muted small">
+                            {patient.personalId}
+                        </div>
                     </div>
                     <Button variant="link" className="text-muted p-0">
                         <BsThreeDotsVertical />
@@ -204,23 +211,24 @@ const PatientList = ({ totalPages, currentPage, onPageChange, isLoading }) => {
                         >
                             Předchozí
                         </Button>
-                        {Array.from({ length: totalPages }, (_, i) => i + 1).map(
-                            (page) => (
-                                <Button
-                                    key={page}
-                                    variant={
-                                        page === currentPage ? 'primary' : 'link'
-                                    }
-                                    className={
-                                        page !== currentPage && 'text-secondary'
-                                    }
-                                    onClick={() => onPageChange(page)}
-                                    disabled={isLoading}
-                                >
-                                    {page}
-                                </Button>
-                            )
-                        )}
+                        {Array.from(
+                            { length: totalPages },
+                            (_, i) => i + 1,
+                        ).map((page) => (
+                            <Button
+                                key={page}
+                                variant={
+                                    page === currentPage ? 'primary' : 'link'
+                                }
+                                className={
+                                    page !== currentPage && 'text-secondary'
+                                }
+                                onClick={() => onPageChange(page)}
+                                disabled={isLoading}
+                            >
+                                {page}
+                            </Button>
+                        ))}
                         <Button
                             variant="link"
                             className="text-secondary"
