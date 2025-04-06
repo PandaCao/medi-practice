@@ -16,19 +16,32 @@ export async function insertPatient(payload) {
     return data;
 }
 
-export async function fetchPatients({ search = '', page, pageSize }) {
+export async function fetchPatients({ search = '', pageIndex, pageSize }) {
     let data, error;
-    const words = search.trim().split(/\s+/).filter(Boolean);
+    const cleanedSearch = search.replace(/[\/\\]/g, '').trim();
+    const words = cleanedSearch.split(/\s+/).filter(Boolean);
 
     if (words.length === 0) {
-        ({ data, error } = await supabaseClient.from(TABLE).select('*').order('first_name', { ascending: true }));
+        ({ data, error } = await supabaseClient.from(TABLE).select('*').order('last_name', { ascending: true }));
     } else {
         const searchQuery = words
-            .map(word => ['last_name', 'first_name', 'birth_number'].map(f => `${f}.ilike.%${word}%`).join(','))
+            .map(word => ['last_name_normalized', 'birth_number_clean'].map(f => `${f}.ilike.${word}%`).join(','))
             .join(',');
         ({ data, error } = await supabaseClient.from(TABLE).select('*').or(searchQuery).order('last_name'));
     }
+    const totalCount = data.length;
 
     if (error) throw error;
-    return (page && pageSize) ? paginate(data, page, pageSize) : data;
+    if (pageIndex && pageSize) {
+        data = paginate(data, pageIndex, pageSize);
+    }
+
+    return {
+        status: "200",
+        pageIndex: pageIndex,
+        pageSize: pageSize,
+        numOfResults: totalCount,
+        pageLimit: (pageIndex > 0 && pageSize > 0) ? Math.ceil(totalCount / pageSize) : 1,
+        results: data
+    }
 }
