@@ -93,14 +93,25 @@ export async function addPatient(req, res) {
     }
 }
 
+export async function getPatientById(req, res) {
+    if (!req.query.id) {
+        return res.status(400).json({ error: 'id is required.' });
+    }
+    try {
+        const patients = await patientService.getPatients({ id: req.query.id });
+        res.json(patients);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+}
+
 export async function listPatients(req, res) {
     try {
         const params = {
             id: req.query.id || '',
-            rc: req.query.rc || '',
             search: req.query.search || '',
-            pageIndex: parseInt(req.query.pageIndex) || '',
-            pageSize: parseInt(req.query.pageSize) || '',
+            pageIndex: parseInt(req.query.pageIndex) || undefined,
+            pageSize: parseInt(req.query.pageSize) || undefined,
         };
         const patients = await patientService.getPatients(params);
         res.json(patients);

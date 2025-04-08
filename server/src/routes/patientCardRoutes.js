@@ -1,9 +1,10 @@
 import express from 'express';
-import { addPatient, listPatients } from '../controllers/patientCardController.js';
+import { addPatient, listPatients, getPatientById } from '../controllers/patientCardController.js';
 
 const router = express.Router();
 
 router.post('/add', addPatient);
 router.get('/list', listPatients);
+router.get('/get', getPatientById)
 
 export default router;
