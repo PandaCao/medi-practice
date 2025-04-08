@@ -1,19 +1,21 @@
 {
-  "dependencies": {
-    "@supabase/supabase-js": "^2.49.3",
-    "bcrypt": "^5.1.1",
-    "dotenv": "^16.4.7",
-    "express": "^4.21.2"
-  },
-  "name": "server",
-  "version": "1.0.0",
-  "main": "src/app.js",
-  "scripts": {
-    "backend": "node --env-file-if-exists=.env src/app.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "",
-  "license": "ISC",
-  "description": "",
-  "type": "module"
+    "dependencies": {
+        "@supabase/supabase-js": "^2.49.3",
+        "bcrypt": "^5.1.1",
+        "dotenv": "^16.4.7",
+        "express": "^4.21.2"
+    },
+    "name": "server",
+    "version": "1.0.0",
+    "main": "src/app.js",
+    "scripts": {
+        "backend": "node --env-file-if-exists=.env src/app.js",
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "build": "npm install",
+        "start": "node src/app.js"
+    },
+    "author": "",
+    "license": "ISC",
+    "description": "",
+    "type": "module"
 }
