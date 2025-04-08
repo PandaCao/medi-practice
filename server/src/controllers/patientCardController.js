@@ -99,8 +99,8 @@ export async function listPatients(req, res) {
             id: req.query.id || '',
             rc: req.query.rc || '',
             search: req.query.search || '',
-            pageIndex: parseInt(req.query.pageIndex) || 1,
-            pageSize: parseInt(req.query.pageSize) || 10,
+            pageIndex: parseInt(req.query.pageIndex) || '',
+            pageSize: parseInt(req.query.pageSize) || '',
         };
         const patients = await patientService.getPatients(params);
         res.json(patients);
