@@ -155,19 +155,13 @@ const PatientList = ({
             </thead>
             <tbody>
                 {patientList.map((patient) => (
-                    <tr key={patient.personalId}>
-                        <td
-                            style={{ cursor: 'pointer' }}
-                            onClick={() => handlePatientClick(patient.id)}
-                        >
-                            {patient.registrationDate}
-                        </td>
-                        <td
-                            style={{ cursor: 'pointer' }}
-                            onClick={() => handlePatientClick(patient.id)}
-                        >
-                            {patient.name}
-                        </td>
+                    <tr
+                        key={patient.personalId}
+                        onClick={() => handlePatientClick(patient.id)}
+                        style={{ cursor: 'pointer' }}
+                    >
+                        <td>{patient.registrationDate}</td>
+                        <td>{patient.name}</td>
                         <td>{patient.personalId}</td>
                         <td>{getInsuranceCompanyName(patient.insurance)}</td>
                         <td>
@@ -179,9 +173,10 @@ const PatientList = ({
                                         <Button
                                             variant="link"
                                             className="contact-icon p-0"
-                                            onClick={() =>
-                                                handlePhone(patient.phone)
-                                            }
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                handlePhone(patient.phone);
+                                            }}
                                             title={patient.phone}
                                         >
                                             <BsTelephone className="text-primary" />
@@ -191,9 +186,10 @@ const PatientList = ({
                                         <Button
                                             variant="link"
                                             className="contact-icon p-0"
-                                            onClick={() =>
-                                                handleEmail(patient.email)
-                                            }
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                handleEmail(patient.email);
+                                            }}
                                             title={patient.email}
                                         >
                                             <BsEnvelope className="text-primary" />
@@ -203,7 +199,11 @@ const PatientList = ({
                             )}
                         </td>
                         <td className="text-end">
-                            <Button variant="link" className="text-muted p-0">
+                            <Button
+                                variant="link"
+                                className="text-muted p-0"
+                                onClick={(e) => e.stopPropagation()}
+                            >
                                 <BsThreeDotsVertical />
                             </Button>
                         </td>

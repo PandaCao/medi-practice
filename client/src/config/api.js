@@ -7,7 +7,7 @@ const API_BASE_URL = 'https://medipractise-server.onrender.com/api/v1';
 export const API_ENDPOINTS = {
     PATIENT_CARDS: {
         LIST: `${API_BASE_URL}/patientCards/list`,
-        DETAIL: (id) => `${API_BASE_URL}/patientCards/list?id=${id}`,
+        DETAIL: (id) => `${API_BASE_URL}/patientCards/get?id=${id}`,
     },
 };
 
@@ -59,11 +59,11 @@ export const getPatientCards = async (params = {}) => {
 };
 
 /**
- * Funkce pro získání detailu pacienta
+ * Funkce pro získání detailu pacienta podle ID
  * @param {string} id - ID pacienta
  * @returns {Promise<Object>} - Promise s detailem pacienta
  */
-export const getPatientCardDetail = async (id) => {
+export const getPatientDetail = async (id) => {
     try {
         const response = await fetch(API_ENDPOINTS.PATIENT_CARDS.DETAIL(id), {
             method: 'GET',
@@ -78,9 +78,10 @@ export const getPatientCardDetail = async (id) => {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
 
-        return await response.json();
+        const data = await response.json();
+        return data.results[0]; // Vrátíme prvního (a jediného) pacienta z výsledků
     } catch (error) {
-        console.error('Error fetching patient card detail:', error);
+        console.error('Error fetching patient detail:', error);
         throw error;
     }
 };
