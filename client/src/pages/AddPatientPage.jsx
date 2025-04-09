@@ -2,51 +2,37 @@ import React from 'react';
 import AddPatient from '../components/patients/AddPatient';
 import { useNavigate } from 'react-router-dom';
 import { ROUTES } from '../config/routes';
-import { patients } from '../data/patients'; // Import patients array
+import { addPatient } from '../api/patientApi';
 
 function AddPatientPage() {
     const navigate = useNavigate();
 
     const handleSubmit = async (formData) => {
         try {
-            // Formátování data registrace na DD/MM/YYYY
+            // Formátování data registrace na ISO string
             const formatDate = (dateString) => {
-                if (!dateString) {
-                    const today = new Date();
-                    return `${String(today.getDate()).padStart(
-                        2,
-                        '0',
-                    )}/${String(today.getMonth() + 1).padStart(
-                        2,
-                        '0',
-                    )}/${today.getFullYear()}`;
-                }
-                const date = new Date(dateString);
-                return `${String(date.getDate()).padStart(2, '0')}/${String(
-                    date.getMonth() + 1,
-                ).padStart(2, '0')}/${date.getFullYear()}`;
+                if (!dateString) return new Date().toISOString();
+                return new Date(dateString).toISOString();
             };
 
-            // Vytvoříme nového pacienta ve správném formátu
+            // Vytvoříme nového pacienta ve správném formátu pro API
             const newPatient = {
-                registrationDate: formatDate(formData.registrationDate),
-                name: `${formData.lastName} ${formData.firstName}`,
-                personalId: formData.personalId,
-                birthDate: formatDate(formData.birthDate),
-                gender: formData.gender,
-                insurance: formData.insuranceCompany,
-                email: formData.email || null,
-                phone: formData.phone || null,
-                height: formData.height || null,
-                weight: formData.weight || null,
-                contactPerson: formData.contactPerson || null,
-                diagnosisOverview: formData.diagnosisOverview || null,
-                anamnesis: formData.anamnesis || null,
-                medication: formData.medication || null,
+                first_name: formData.firstName,
+                last_name: formData.lastName,
+                birth_number: formData.personalId,
+                date_of_birth: formatDate(formData.birthDate),
+                sex: formData.gender,
+                insurance_id: formData.insuranceCompany,
+                contact_info: {
+                    contact_phone: formData.phone || null,
+                    contact_email: formData.email || null,
+                },
+                height: formData.height ? parseInt(formData.height) : null,
+                weight: formData.weight ? parseInt(formData.weight) : null,
             };
 
-            // Přidáme nového pacienta do pole patients
-            patients.push(newPatient);
+            // Voláme API pro přidání pacienta
+            await addPatient(newPatient);
             console.log('Pacient byl úspěšně přidán:', newPatient);
 
             // Po úspěšném uložení přesměrujeme na seznam pacientů
