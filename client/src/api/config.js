@@ -11,6 +11,7 @@ const api = axios.create({
         Accept: 'application/json',
     },
     withCredentials: true,
+    crossDomain: true,
 });
 
 // Přidání interceptoru pro error handling

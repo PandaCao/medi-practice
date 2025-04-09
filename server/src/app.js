@@ -13,6 +13,9 @@ const allowedOrigins = [
     'https://medipractise.onrender.com',
 ];
 
+// Enable CORS pre-flight
+app.options('*', cors());
+
 app.use(
     cors({
         origin: function (origin, callback) {
@@ -29,6 +32,8 @@ app.use(
         methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
         allowedHeaders: ['Content-Type', 'Authorization', 'Accept'],
         credentials: true,
+        preflightContinue: false,
+        optionsSuccessStatus: 204,
     }),
 );
 
