@@ -10,7 +10,7 @@ import { Container, Row, Col, Spinner } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { useDebounce } from '../hooks/useDebounce';
 import { ROUTES } from '../config/routes';
-import { getPatientCards } from '../config/api';
+import { patientApi } from '../api';
 
 const PatientsPage = () => {
     // Stavy pro hledání, stránkování a výsledky
@@ -31,7 +31,7 @@ const PatientsPage = () => {
         setError(null);
 
         try {
-            const response = await getPatientCards({
+            const response = await patientApi.getPatientCards({
                 search: query,
                 pageIndex: page,
                 pageSize: PAGE_SIZE,

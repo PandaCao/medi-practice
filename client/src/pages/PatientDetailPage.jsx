@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Button, Row, Col, Card, Modal, Spinner } from 'react-bootstrap';
 import { ROUTES } from '../config/routes';
-import { getPatientDetail } from '../config/api';
+import { patientApi } from '../api';
 
 // Komponenta pro zobrazení přehledu o pacientovi
 const PatientDetailPage = () => {
@@ -17,7 +17,7 @@ const PatientDetailPage = () => {
     useEffect(() => {
         const fetchPatientDetail = async () => {
             try {
-                const data = await getPatientDetail(id);
+                const data = await patientApi.getPatientDetail(id);
                 setPatient({
                     id: data.user_id,
                     name: `${data.first_name} ${data.last_name}`,
