@@ -1,3 +1,4 @@
+import React from 'react';
 //speciální stránka určená pro úpravu údajů o konkrétním pacientovi
 import { useParams, useNavigate } from 'react-router-dom';
 import { patients as allPatients } from '../data/patients';

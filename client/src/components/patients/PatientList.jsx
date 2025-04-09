@@ -5,9 +5,11 @@ import {
     BsEnvelope,
     BsTelephone,
     BsPeople,
+    BsSearch,
 } from 'react-icons/bs';
 import { useNavigate } from 'react-router-dom';
 import { ROUTES } from '../../config/routes';
+import { getInsuranceCompanyName } from '../../config/constants';
 
 const PatientList = ({
     patients,
@@ -15,6 +17,7 @@ const PatientList = ({
     currentPage,
     onPageChange,
     isLoading,
+    searchQuery,
 }) => {
     const navigate = useNavigate();
     const [patientList, setPatientList] = useState([]);
@@ -54,17 +57,33 @@ const PatientList = ({
     if (!isLoading && patientList.length === 0) {
         return (
             <div className="text-center p-5">
-                <BsPeople size={48} className="text-muted mb-3" />
-                <h4 className="text-muted">Zatím zde nejsou žádní pacienti</h4>
-                <p className="text-muted mb-4">
-                    Začněte přidáním prvního pacienta do systému
-                </p>
-                <Button
-                    variant="primary"
-                    onClick={() => navigate(ROUTES.PATIENT_ADD)}
-                >
-                    + Přidat prvního pacienta
-                </Button>
+                {searchQuery ? (
+                    <>
+                        <BsSearch size={48} className="text-muted mb-3" />
+                        <h4 className="text-muted">
+                            Nenalezeni žádní pacienti
+                        </h4>
+                        <p className="text-muted mb-4">
+                            Zkuste upravit vyhledávací kritéria
+                        </p>
+                    </>
+                ) : (
+                    <>
+                        <BsPeople size={48} className="text-muted mb-3" />
+                        <h4 className="text-muted">
+                            Zatím zde nejsou žádní pacienti
+                        </h4>
+                        <p className="text-muted mb-4">
+                            Začněte přidáním prvního pacienta do systému
+                        </p>
+                        <Button
+                            variant="primary"
+                            onClick={() => navigate(ROUTES.PATIENT_ADD)}
+                        >
+                            + Přidat prvního pacienta
+                        </Button>
+                    </>
+                )}
             </div>
         );
     }
@@ -89,7 +108,9 @@ const PatientList = ({
                         <BsThreeDotsVertical />
                     </Button>
                 </div>
-                <div className="text-muted mb-2">{patient.insurance}</div>
+                <div className="text-muted mb-2">
+                    {getInsuranceCompanyName(patient.insurance)}
+                </div>
                 {(patient.phone || patient.email) && (
                     <div className="d-flex gap-2 flex-wrap">
                         {patient.phone && (
@@ -148,7 +169,7 @@ const PatientList = ({
                             {patient.name}
                         </td>
                         <td>{patient.personalId}</td>
-                        <td>{patient.insurance}</td>
+                        <td>{getInsuranceCompanyName(patient.insurance)}</td>
                         <td>
                             {!patient.phone && !patient.email ? (
                                 <span className="text-muted small">-</span>

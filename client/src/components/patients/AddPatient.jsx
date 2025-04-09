@@ -1,3 +1,4 @@
+import React from 'react';
 import { useState } from 'react';
 import {
     Form,
@@ -10,6 +11,7 @@ import {
 import { useNavigate } from 'react-router-dom';
 import { BsInfoCircle } from 'react-icons/bs';
 import { validateForm } from '../../tools/AddPatientValidation';
+import { INSURANCE_COMPANIES_LIST } from '../../config/constants';
 
 const AddPatient = ({ onSaveDraft, onSubmit, onDelete, initialData = {} }) => {
     const navigate = useNavigate();
@@ -20,7 +22,9 @@ const AddPatient = ({ onSaveDraft, onSubmit, onDelete, initialData = {} }) => {
         birthDate: initialData.birthDate || '',
         gender: initialData.gender || '',
         insuranceCompany: initialData.insuranceCompany || '',
-        registrationDate: initialData.registrationDate || new Date().toISOString().split('T')[0],
+        registrationDate:
+            initialData.registrationDate ||
+            new Date().toISOString().split('T')[0],
         height: initialData.height || '',
         weight: initialData.weight || '',
         contactPerson: initialData.contactPerson || '',
@@ -58,16 +62,6 @@ const AddPatient = ({ onSaveDraft, onSubmit, onDelete, initialData = {} }) => {
             {children} <span className="text-danger">*</span>
         </Form.Label>
     );
-
-    const insuranceCompanies = [
-        { code: '111', name: 'Všeobecná zdravotní pojišťovna' },
-        { code: '201', name: 'Vojenská zdravotní pojišťovna' },
-        { code: '205', name: 'Česká průmyslová zdravotní pojišťovna' },
-        { code: '207', name: 'Oborová zdravotní pojišťovna' },
-        { code: '209', name: 'Zaměstnanecká pojišťovna Škoda' },
-        { code: '211', name: 'Zdravotní pojišťovna ministerstva vnitra' },
-        { code: '213', name: 'RBP, zdravotní pojišťovna' },
-    ];
 
     return (
         <Form onSubmit={handleSubmit}>
@@ -114,7 +108,9 @@ const AddPatient = ({ onSaveDraft, onSubmit, onDelete, initialData = {} }) => {
                         <RequiredLabel>Rodné číslo</RequiredLabel>
                         <OverlayTrigger
                             placement="right"
-                            overlay={renderTooltip('Zadejte rodné číslo ve formátu XXXXXX/XXX nebo XXXXXX/XXXX.')}
+                            overlay={renderTooltip(
+                                'Zadejte rodné číslo ve formátu XXXXXX/XXX nebo XXXXXX/XXXX.',
+                            )}
                         >
                             <BsInfoCircle className="ms-2" />
                         </OverlayTrigger>
@@ -136,7 +132,9 @@ const AddPatient = ({ onSaveDraft, onSubmit, onDelete, initialData = {} }) => {
                         <RequiredLabel>Datum narození</RequiredLabel>
                         <OverlayTrigger
                             placement="right"
-                            overlay={renderTooltip('Datum narození musí odpovídat rodnému číslu.')}
+                            overlay={renderTooltip(
+                                'Datum narození musí odpovídat rodnému číslu.',
+                            )}
                         >
                             <BsInfoCircle className="ms-2" />
                         </OverlayTrigger>
@@ -184,9 +182,9 @@ const AddPatient = ({ onSaveDraft, onSubmit, onDelete, initialData = {} }) => {
                             isInvalid={!!errors.insuranceCompany}
                         >
                             <option value="">Vyberte pojišťovnu</option>
-                            {insuranceCompanies.map((company) => (
+                            {INSURANCE_COMPANIES_LIST.map((company) => (
                                 <option key={company.code} value={company.code}>
-                                    {company.code} - {company.name}
+                                    {company.name}
                                 </option>
                             ))}
                         </Form.Select>
@@ -296,11 +294,17 @@ const AddPatient = ({ onSaveDraft, onSubmit, onDelete, initialData = {} }) => {
                     </Button>
                 )}
                 {onSaveDraft && (
-                    <Button variant="warning" onClick={() => onSaveDraft(formData)}>
+                    <Button
+                        variant="warning"
+                        onClick={() => onSaveDraft(formData)}
+                    >
                         Uložit jako koncept
                     </Button>
                 )}
-                <Button variant="outline-secondary" onClick={() => navigate(-1)}>
+                <Button
+                    variant="outline-secondary"
+                    onClick={() => navigate(-1)}
+                >
                     Zrušit
                 </Button>
                 <Button variant="primary" type="submit">

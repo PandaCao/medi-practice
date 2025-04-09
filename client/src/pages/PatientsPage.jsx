@@ -9,8 +9,8 @@ import Button from 'react-bootstrap/Button';
 import { Container, Row, Col, Spinner } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { useDebounce } from '../hooks/useDebounce';
-import { patients as allPatients } from '../data/patients';
 import { ROUTES } from '../config/routes';
+import { getPatientCards } from '../config/api';
 
 const PatientsPage = () => {
     // Stavy pro hledání, stránkování a výsledky
@@ -19,32 +19,47 @@ const PatientsPage = () => {
     const [isSearching, setIsSearching] = useState(false);
     const [patients, setPatients] = useState([]);
     const [totalPages, setTotalPages] = useState(1);
+    const [error, setError] = useState(null);
 
     const navigate = useNavigate();
     const PAGE_SIZE = 10;
     const debouncedSearchQuery = useDebounce(searchQuery, 500);
 
-    // Načítání pacientů (simulace API volání)
-    const fetchPatients = useCallback((query, page) => {
+    // Načítání pacientů z API
+    const fetchPatients = useCallback(async (query, page) => {
         setIsSearching(true);
+        setError(null);
 
-        setTimeout(() => {
-            const filteredPatients = allPatients.filter((patient) => {
-                const searchLower = query.toLowerCase();
-                return (
-                    patient.name.toLowerCase().includes(searchLower) ||
-                    patient.personalId.toLowerCase().includes(searchLower)
-                );
+        try {
+            const response = await getPatientCards({
+                search: query,
+                pageIndex: page,
+                pageSize: PAGE_SIZE,
             });
 
-            const total = Math.ceil(filteredPatients.length / PAGE_SIZE);
-            const start = (page - 1) * PAGE_SIZE;
-            const paginatedPatients = filteredPatients.slice(start, start + PAGE_SIZE);
+            // Transformace dat z API do formátu, který očekává PatientList
+            const transformedPatients = response.results.map((patient) => ({
+                id: patient.user_id,
+                name: `${patient.first_name} ${patient.last_name}`,
+                personalId: patient.birth_number,
+                registrationDate: new Date(
+                    patient.created_at,
+                ).toLocaleDateString('cs-CZ'),
+                insurance: patient.insurance_id,
+                phone: patient.contact_info?.contact_phone || '',
+                email: patient.contact_info?.contact_email || '',
+            }));
 
-            setPatients(paginatedPatients);
-            setTotalPages(total);
+            setPatients(transformedPatients);
+            setTotalPages(response.pageLimit);
+        } catch (err) {
+            console.error('Error fetching patients:', err);
+            setError(
+                'Nepodařilo se načíst seznam pacientů. Zkuste to prosím později.',
+            );
+        } finally {
             setIsSearching(false);
-        }, 300); // Simulace zpoždění odpovědi serveru
+        }
     }, []);
 
     // Spouští se při změně hledaného výrazu nebo aktuální stránky
@@ -65,7 +80,7 @@ const PatientsPage = () => {
 
     // Přesměrování na detail pacienta
     const handlePatientClick = (patientId) => {
-        navigate(ROUTES.PATIENT_DETAIL.replace(':id', patientId)); // Výměna :id za skutečné ID
+        navigate(ROUTES.PATIENT_DETAIL.replace(':id', patientId));
     };
 
     return (
@@ -103,13 +118,20 @@ const PatientsPage = () => {
                 </Row>
             </Container>
 
+            {error && (
+                <div className="alert alert-danger" role="alert">
+                    {error}
+                </div>
+            )}
+
             <PatientList
                 patients={patients}
                 totalPages={totalPages}
                 currentPage={currentPage}
                 onPageChange={setCurrentPage}
                 isLoading={isSearching}
-                onPatientClick={handlePatientClick} // Předáváme funkci pro kliknutí
+                onPatientClick={handlePatientClick}
+                searchQuery={searchQuery}
             />
         </div>
     );
