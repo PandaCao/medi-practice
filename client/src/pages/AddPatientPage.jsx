@@ -9,10 +9,10 @@ function AddPatientPage() {
 
     const handleSubmit = async (formData) => {
         try {
-            // Formátování data registrace na ISO string
+            // Formátování data registrace na YYYY-MM-DD
             const formatDate = (dateString) => {
-                if (!dateString) return new Date().toISOString();
-                return new Date(dateString).toISOString();
+                if (!dateString) return new Date().toISOString().split('T')[0];
+                return new Date(dateString).toISOString().split('T')[0];
             };
 
             // Vytvoříme nového pacienta ve správném formátu pro API
@@ -30,6 +30,11 @@ function AddPatientPage() {
                 height: formData.height ? parseInt(formData.height) : null,
                 weight: formData.weight ? parseInt(formData.weight) : null,
             };
+
+            console.log(
+                'Sending patient data to server:',
+                JSON.stringify(newPatient, null, 2),
+            );
 
             // Voláme API pro přidání pacienta
             await addPatient(newPatient);

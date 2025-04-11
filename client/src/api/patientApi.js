@@ -25,8 +25,6 @@ export const getPatientCards = async (params = {}) => {
     const searchParams = {
         ...DEFAULT_PAGINATION,
         ...params,
-        id: '',
-        rc: '',
     };
 
     try {
