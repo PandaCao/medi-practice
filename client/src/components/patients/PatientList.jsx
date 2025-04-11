@@ -21,6 +21,19 @@ const PatientList = ({
 }) => {
     const navigate = useNavigate();
     const [patientList, setPatientList] = useState([]);
+    const [showServerMessage, setShowServerMessage] = useState(false);
+
+    useEffect(() => {
+        let timer;
+        if (isLoading) {
+            timer = setTimeout(() => {
+                setShowServerMessage(true);
+            }, 5000);
+        } else {
+            setShowServerMessage(false);
+        }
+        return () => clearTimeout(timer);
+    }, [isLoading]);
 
     useEffect(() => {
         const sortedPatients = [...patients].sort((a, b) => {
@@ -47,9 +60,16 @@ const PatientList = ({
     if (isLoading && patientList.length === 0) {
         return (
             <div className="text-center p-5">
-                <Spinner animation="border" role="status">
+                <Spinner animation="border" role="status" className="mb-3">
                     <span className="visually-hidden">Načítání...</span>
                 </Spinner>
+                <h4 className="text-muted">Načítání dat</h4>
+                {showServerMessage && (
+                    <p className="text-muted">
+                        Server se může probouzet z režimu spánku. Prosím
+                        počkejte přibližně 50 sekund.
+                    </p>
+                )}
             </div>
         );
     }
