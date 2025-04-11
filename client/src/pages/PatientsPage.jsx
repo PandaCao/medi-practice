@@ -93,7 +93,7 @@ const PatientsPage = () => {
                                 <BsSearch className="text-muted" />
                             </InputGroup.Text>
                             <Form.Control
-                                placeholder="Hledat podle jména nebo rodného čísla"
+                                placeholder="Hledat podle příjmení nebo rodného čísla"
                                 aria-label="Hledat"
                                 className="bg-light border-0"
                                 value={searchQuery}
