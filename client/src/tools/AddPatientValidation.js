@@ -35,7 +35,7 @@ const isValidPersonalId = (personalId, gender, birthDate) => {
     }
 
     // Odstranění mezer
-    const cleanId = personalId.trim();
+    const cleanId = personalId.replace(/\s/g, '');
 
     // Kontrola formátu XXXXXX/XXX(X)
     const parts = cleanId.split('/');
@@ -68,6 +68,7 @@ const isValidPersonalId = (personalId, gender, birthDate) => {
     const monthForDate = isFemale ? month - 50 : month;
     const expectedGender = isFemale ? 'female' : 'male';
 
+    // Kontrola pohlaví
     if (expectedGender !== gender) {
         console.log('Gender mismatch');
         return false;
@@ -79,19 +80,30 @@ const isValidPersonalId = (personalId, gender, birthDate) => {
     // Převod roku z rodného čísla na plný rok
     const fullYear = year + (birthYear >= 2000 ? 2000 : 1900);
 
+    // Kontrola platnosti měsíce (1-12)
+    if (monthForDate < 1 || monthForDate > 12) {
+        console.log('Invalid month');
+        return false;
+    }
+
+    // Kontrola platnosti dne
+    const daysInMonth = new Date(fullYear, monthForDate, 0).getDate();
+    if (day < 1 || day > daysInMonth) {
+        console.log('Invalid day');
+        return false;
+    }
+
     console.log('Date comparison:', {
         fromRC: { year: fullYear, month: monthForDate, day },
         fromBirth: { year: birthYear, month: birthMonth, day: birthDay },
     });
 
     // Kontrola shody s datem narození
-    const isMatch =
+    return (
         fullYear === birthYear &&
         monthForDate === birthMonth &&
-        day === birthDay;
-
-    console.log('Final result:', isMatch);
-    return isMatch;
+        day === birthDay
+    );
 };
 
 const isValidInsuranceCompany = (code) => {

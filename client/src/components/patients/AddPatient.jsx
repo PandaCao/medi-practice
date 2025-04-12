@@ -12,6 +12,7 @@ import { useNavigate } from 'react-router-dom';
 import { BsInfoCircle } from 'react-icons/bs';
 import { validateForm } from '../../tools/AddPatientValidation';
 import { INSURANCE_COMPANIES_LIST } from '../../config/constants';
+import PersonalIdInput from './PersonalIdInput';
 
 const AddPatient = ({ onSaveDraft, onSubmit, onDelete, initialData = {} }) => {
     const navigate = useNavigate();
@@ -77,6 +78,7 @@ const AddPatient = ({ onSaveDraft, onSubmit, onDelete, initialData = {} }) => {
                             onChange={handleChange}
                             isInvalid={!!errors.firstName}
                             placeholder="Zadejte jméno"
+                            maxLength={50}
                         />
                         <Form.Control.Feedback type="invalid">
                             {errors.firstName}
@@ -93,6 +95,7 @@ const AddPatient = ({ onSaveDraft, onSubmit, onDelete, initialData = {} }) => {
                             onChange={handleChange}
                             isInvalid={!!errors.lastName}
                             placeholder="Zadejte příjmení"
+                            maxLength={50}
                         />
                         <Form.Control.Feedback type="invalid">
                             {errors.lastName}
@@ -114,13 +117,16 @@ const AddPatient = ({ onSaveDraft, onSubmit, onDelete, initialData = {} }) => {
                         >
                             <BsInfoCircle className="ms-2" />
                         </OverlayTrigger>
-                        <Form.Control
-                            type="text"
-                            name="personalId"
+                        <PersonalIdInput
                             value={formData.personalId}
-                            onChange={handleChange}
+                            onChange={(value) =>
+                                setFormData((prev) => ({
+                                    ...prev,
+                                    personalId: value,
+                                }))
+                            }
                             isInvalid={!!errors.personalId}
-                            placeholder="Zadejte rodné číslo"
+                            error={errors.personalId}
                         />
                         <Form.Control.Feedback type="invalid">
                             {errors.personalId}
@@ -221,6 +227,8 @@ const AddPatient = ({ onSaveDraft, onSubmit, onDelete, initialData = {} }) => {
                             name="height"
                             value={formData.height}
                             onChange={handleChange}
+                            min={1}
+                            max={999}
                         />
                     </Form.Group>
                 </Col>
@@ -232,6 +240,8 @@ const AddPatient = ({ onSaveDraft, onSubmit, onDelete, initialData = {} }) => {
                             name="weight"
                             value={formData.weight}
                             onChange={handleChange}
+                            min={1}
+                            max={999}
                         />
                     </Form.Group>
                 </Col>
@@ -247,6 +257,7 @@ const AddPatient = ({ onSaveDraft, onSubmit, onDelete, initialData = {} }) => {
                             name="email"
                             value={formData.email}
                             onChange={handleChange}
+                            maxLength={100}
                         />
                     </Form.Group>
                 </Col>
@@ -258,6 +269,8 @@ const AddPatient = ({ onSaveDraft, onSubmit, onDelete, initialData = {} }) => {
                             name="phone"
                             value={formData.phone}
                             onChange={handleChange}
+                            maxLength={13}
+                            placeholder="+420123456789"
                         />
                     </Form.Group>
                 </Col>
@@ -271,6 +284,7 @@ const AddPatient = ({ onSaveDraft, onSubmit, onDelete, initialData = {} }) => {
                     name="contactPerson"
                     value={formData.contactPerson}
                     onChange={handleChange}
+                    maxLength={100}
                 />
             </Form.Group>
 
@@ -283,6 +297,7 @@ const AddPatient = ({ onSaveDraft, onSubmit, onDelete, initialData = {} }) => {
                     name="diagnosisOverview"
                     value={formData.diagnosisOverview}
                     onChange={handleChange}
+                    maxLength={500}
                 />
             </Form.Group>
 
