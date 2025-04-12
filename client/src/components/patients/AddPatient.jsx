@@ -37,6 +37,7 @@ const AddPatient = ({ onSaveDraft, onSubmit, onDelete, initialData = {} }) => {
     });
 
     const [errors, setErrors] = useState({});
+    const [touchedFields, setTouchedFields] = useState({});
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -46,12 +47,56 @@ const AddPatient = ({ onSaveDraft, onSubmit, onDelete, initialData = {} }) => {
         }));
     };
 
+    const validateField = (name, value) => {
+        const fieldErrors = validateForm({
+            ...formData,
+            [name]: value,
+        });
+
+        // Vrátíme pouze chybu pro konkrétní pole
+        return fieldErrors[name];
+    };
+
+    const handleBlur = (e) => {
+        const { name, value } = e.target;
+
+        // Označíme pole jako "touched"
+        setTouchedFields((prev) => ({
+            ...prev,
+            [name]: true,
+        }));
+
+        // Validujeme pouze toto pole
+        const fieldError = validateField(name, value);
+        if (fieldError) {
+            setErrors((prev) => ({
+                ...prev,
+                [name]: fieldError,
+            }));
+        } else {
+            setErrors((prev) => {
+                const newErrors = { ...prev };
+                delete newErrors[name];
+                return newErrors;
+            });
+        }
+    };
+
     const handleSubmit = (e) => {
         e.preventDefault();
         const validationErrors = validateForm(formData);
         if (Object.keys(validationErrors).length === 0) {
             onSubmit(formData);
         } else {
+            // Při odeslání označíme všechna pole jako touched
+            const allFieldsTouched = Object.keys(formData).reduce(
+                (acc, field) => ({
+                    ...acc,
+                    [field]: true,
+                }),
+                {},
+            );
+            setTouchedFields(allFieldsTouched);
             setErrors(validationErrors);
         }
     };
@@ -63,6 +108,10 @@ const AddPatient = ({ onSaveDraft, onSubmit, onDelete, initialData = {} }) => {
             {children} <span className="text-danger">*</span>
         </Form.Label>
     );
+
+    // Helper pro zobrazení chyby pouze pokud bylo pole "touched"
+    const shouldShowError = (fieldName) =>
+        touchedFields[fieldName] && errors[fieldName];
 
     return (
         <Form onSubmit={handleSubmit}>
@@ -76,7 +125,8 @@ const AddPatient = ({ onSaveDraft, onSubmit, onDelete, initialData = {} }) => {
                             name="firstName"
                             value={formData.firstName}
                             onChange={handleChange}
-                            isInvalid={!!errors.firstName}
+                            onBlur={handleBlur}
+                            isInvalid={shouldShowError('firstName')}
                             placeholder="Zadejte jméno"
                             maxLength={50}
                         />
@@ -93,7 +143,8 @@ const AddPatient = ({ onSaveDraft, onSubmit, onDelete, initialData = {} }) => {
                             name="lastName"
                             value={formData.lastName}
                             onChange={handleChange}
-                            isInvalid={!!errors.lastName}
+                            onBlur={handleBlur}
+                            isInvalid={shouldShowError('lastName')}
                             placeholder="Zadejte příjmení"
                             maxLength={50}
                         />
@@ -119,18 +170,40 @@ const AddPatient = ({ onSaveDraft, onSubmit, onDelete, initialData = {} }) => {
                         </OverlayTrigger>
                         <PersonalIdInput
                             value={formData.personalId}
-                            onChange={(value) =>
+                            onChange={(value) => {
                                 setFormData((prev) => ({
                                     ...prev,
                                     personalId: value,
-                                }))
-                            }
-                            isInvalid={!!errors.personalId}
+                                }));
+                                // Validujeme při změně, protože PersonalIdInput nemá vlastní onBlur
+                                const fieldError = validateField(
+                                    'personalId',
+                                    value,
+                                );
+                                if (touchedFields.personalId) {
+                                    if (fieldError) {
+                                        setErrors((prev) => ({
+                                            ...prev,
+                                            personalId: fieldError,
+                                        }));
+                                    } else {
+                                        setErrors((prev) => {
+                                            const newErrors = { ...prev };
+                                            delete newErrors.personalId;
+                                            return newErrors;
+                                        });
+                                    }
+                                }
+                            }}
+                            onFocus={() => {
+                                setTouchedFields((prev) => ({
+                                    ...prev,
+                                    personalId: true,
+                                }));
+                            }}
+                            isInvalid={shouldShowError('personalId')}
                             error={errors.personalId}
                         />
-                        <Form.Control.Feedback type="invalid">
-                            {errors.personalId}
-                        </Form.Control.Feedback>
                     </Form.Group>
                 </Col>
                 <Col md={6}>
@@ -149,7 +222,8 @@ const AddPatient = ({ onSaveDraft, onSubmit, onDelete, initialData = {} }) => {
                             name="birthDate"
                             value={formData.birthDate}
                             onChange={handleChange}
-                            isInvalid={!!errors.birthDate}
+                            onBlur={handleBlur}
+                            isInvalid={shouldShowError('birthDate')}
                         />
                         <Form.Control.Feedback type="invalid">
                             {errors.birthDate}
@@ -167,7 +241,8 @@ const AddPatient = ({ onSaveDraft, onSubmit, onDelete, initialData = {} }) => {
                             name="gender"
                             value={formData.gender}
                             onChange={handleChange}
-                            isInvalid={!!errors.gender}
+                            onBlur={handleBlur}
+                            isInvalid={shouldShowError('gender')}
                         >
                             <option value="">Vyberte pohlaví</option>
                             <option value="male">Muž</option>
@@ -185,7 +260,8 @@ const AddPatient = ({ onSaveDraft, onSubmit, onDelete, initialData = {} }) => {
                             name="insuranceCompany"
                             value={formData.insuranceCompany}
                             onChange={handleChange}
-                            isInvalid={!!errors.insuranceCompany}
+                            onBlur={handleBlur}
+                            isInvalid={shouldShowError('insuranceCompany')}
                         >
                             <option value="">Vyberte pojišťovnu</option>
                             {INSURANCE_COMPANIES_LIST.map((company) => (
@@ -211,7 +287,8 @@ const AddPatient = ({ onSaveDraft, onSubmit, onDelete, initialData = {} }) => {
                             name="registrationDate"
                             value={formData.registrationDate}
                             onChange={handleChange}
-                            isInvalid={!!errors.registrationDate}
+                            onBlur={handleBlur}
+                            isInvalid={shouldShowError('registrationDate')}
                             max={new Date().toISOString().split('T')[0]}
                         />
                         <Form.Control.Feedback type="invalid">
@@ -227,9 +304,14 @@ const AddPatient = ({ onSaveDraft, onSubmit, onDelete, initialData = {} }) => {
                             name="height"
                             value={formData.height}
                             onChange={handleChange}
+                            onBlur={handleBlur}
+                            isInvalid={shouldShowError('height')}
                             min={1}
                             max={999}
                         />
+                        <Form.Control.Feedback type="invalid">
+                            {errors.height}
+                        </Form.Control.Feedback>
                     </Form.Group>
                 </Col>
                 <Col md={3}>
@@ -240,9 +322,14 @@ const AddPatient = ({ onSaveDraft, onSubmit, onDelete, initialData = {} }) => {
                             name="weight"
                             value={formData.weight}
                             onChange={handleChange}
+                            onBlur={handleBlur}
+                            isInvalid={shouldShowError('weight')}
                             min={1}
                             max={999}
                         />
+                        <Form.Control.Feedback type="invalid">
+                            {errors.weight}
+                        </Form.Control.Feedback>
                     </Form.Group>
                 </Col>
             </Row>
@@ -257,8 +344,13 @@ const AddPatient = ({ onSaveDraft, onSubmit, onDelete, initialData = {} }) => {
                             name="email"
                             value={formData.email}
                             onChange={handleChange}
+                            onBlur={handleBlur}
+                            isInvalid={shouldShowError('email')}
                             maxLength={100}
                         />
+                        <Form.Control.Feedback type="invalid">
+                            {errors.email}
+                        </Form.Control.Feedback>
                     </Form.Group>
                 </Col>
                 <Col md={6}>
@@ -269,9 +361,14 @@ const AddPatient = ({ onSaveDraft, onSubmit, onDelete, initialData = {} }) => {
                             name="phone"
                             value={formData.phone}
                             onChange={handleChange}
+                            onBlur={handleBlur}
+                            isInvalid={shouldShowError('phone')}
                             maxLength={13}
                             placeholder="+420123456789"
                         />
+                        <Form.Control.Feedback type="invalid">
+                            {errors.phone}
+                        </Form.Control.Feedback>
                     </Form.Group>
                 </Col>
             </Row>
@@ -284,8 +381,13 @@ const AddPatient = ({ onSaveDraft, onSubmit, onDelete, initialData = {} }) => {
                     name="contactPerson"
                     value={formData.contactPerson}
                     onChange={handleChange}
+                    onBlur={handleBlur}
+                    isInvalid={shouldShowError('contactPerson')}
                     maxLength={100}
                 />
+                <Form.Control.Feedback type="invalid">
+                    {errors.contactPerson}
+                </Form.Control.Feedback>
             </Form.Group>
 
             {/* Diagnózy */}
@@ -297,8 +399,47 @@ const AddPatient = ({ onSaveDraft, onSubmit, onDelete, initialData = {} }) => {
                     name="diagnosisOverview"
                     value={formData.diagnosisOverview}
                     onChange={handleChange}
+                    onBlur={handleBlur}
+                    isInvalid={shouldShowError('diagnosisOverview')}
                     maxLength={500}
                 />
+                <Form.Control.Feedback type="invalid">
+                    {errors.diagnosisOverview}
+                </Form.Control.Feedback>
+            </Form.Group>
+
+            <Form.Group className="mb-3">
+                <Form.Label>Anamnéza</Form.Label>
+                <Form.Control
+                    as="textarea"
+                    rows={3}
+                    name="anamnesis"
+                    value={formData.anamnesis}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    isInvalid={shouldShowError('anamnesis')}
+                    maxLength={500}
+                />
+                <Form.Control.Feedback type="invalid">
+                    {errors.anamnesis}
+                </Form.Control.Feedback>
+            </Form.Group>
+
+            <Form.Group className="mb-3">
+                <Form.Label>Seznam léků</Form.Label>
+                <Form.Control
+                    as="textarea"
+                    rows={3}
+                    name="medication"
+                    value={formData.medication}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    isInvalid={shouldShowError('medication')}
+                    maxLength={500}
+                />
+                <Form.Control.Feedback type="invalid">
+                    {errors.medication}
+                </Form.Control.Feedback>
             </Form.Group>
 
             {/* Akční tlačítka */}
