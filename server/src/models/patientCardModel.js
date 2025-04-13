@@ -24,12 +24,12 @@ export async function fetchPatients({ id, search = '', pageIndex, pageSize }) {
         ({ data, error } = await supabaseClient.from(TABLE).select('*').eq('user_id', id));
     }
     else if (words.length === 0) {
-        ({ data, error } = await supabaseClient.from(TABLE).select('*').order('last_name', { ascending: true }));
+        ({ data, error } = await supabaseClient.from(TABLE).select('*').order('created_at', { ascending: false }));
     } else {
         const searchQuery = words
             .map(word => ['last_name_normalized', 'birth_number_clean'].map(f => `${f}.ilike.${word}%`).join(','))
             .join(',');
-        ({ data, error } = await supabaseClient.from(TABLE).select('*').or(searchQuery).order('last_name'));
+        ({ data, error } = await supabaseClient.from(TABLE).select('*').or(searchQuery).order('created_at', { ascending: false }));
     }
     const totalCount = data !== null ? data.length : 0;
 
