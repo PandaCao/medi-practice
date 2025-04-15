@@ -55,34 +55,36 @@ export async function addPatient(req, res) {
     }
 
     // Not required
-    if (
-        !isValidPhoneNumber(body.contact_info.contact_phone) &&
-        body.contact_info.contact_phone != null
-    ) {
-        return res.status(400).json({
-            error: 'Invalid phone number format. Correct format: +XXXXXXXXXXXX or XXXXXXXXX.',
-        });
+    if (body.contact_info.contact_phone != null) {
+        if (!isValidPhoneNumber(body.contact_info.contact_phone)) {
+            return res.status(400).json({
+                error: 'Invalid phone number format. Correct format: +XXXXXXXXXXXX or XXXXXXXXX.',
+            });
+        }
     }
 
-    if (!isPositiveNumber(body.weight) && body.weight != null) {
-        return res.status(400).json({
-            error: 'Invalid weight format. Weight must be a positive number.',
-        });
+    if (body.weight != null){
+        if (!isPositiveNumber(body.weight)) {
+            return res.status(400).json({
+                error: 'Invalid weight format. Weight must be a positive number.',
+            });
+        }
     }
 
-    if (!isPositiveNumber(body.height) && body.height != null) {
-        return res.status(400).json({
-            error: 'Invalid height format. Height must be a positive number.',
-        });
+    if (body.height != null) {
+        if (!isPositiveNumber(body.height)) {
+            return res.status(400).json({
+                error: 'Invalid height format. Height must be a positive number.',
+            });
+        }
     }
 
-    if (
-        !isValidPostCode(body.address.address_zip_code) &&
-        body.address.address_zip_code != null
-    ) {
-        return res.status(400).json({
-            error: 'Invalid post code format. Correct format: XXX XX or XXXXX.',
-        });
+    if (body.address.address_zip_code != null) {
+        if (!isValidPostCode(body.address.address_zip_code)) {
+            return res.status(400).json({
+                error: 'Invalid post code format. Correct format: XXX XX or XXXXX.',
+            });
+        }
     }
 
     try {
