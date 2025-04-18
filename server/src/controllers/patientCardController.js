@@ -20,8 +20,7 @@ export async function addPatient(req, res) {
     const notRequired = [
         'contact_info.contact_phone',
         'weight',
-        'height',
-        'address.address_zip_code',
+        'height'
     ];
 
     for (let key in body) {
@@ -55,7 +54,7 @@ export async function addPatient(req, res) {
     }
 
     // Not required
-    if (body.contact_info.contact_phone != null) {
+  /*  if (body.contact_info && body.contact_info.contact_phone != null) {
         if (!isValidPhoneNumber(body.contact_info.contact_phone)) {
             return res.status(400).json({
                 error: 'Invalid phone number format. Correct format: +XXXXXXXXXXXX or XXXXXXXXX.',
@@ -77,15 +76,15 @@ export async function addPatient(req, res) {
                 error: 'Invalid height format. Height must be a positive number.',
             });
         }
-    }
+    } */
 
-    if (body.address.address_zip_code != null) {
+    /*if (body.address && body.address.address_zip_code != null) {
         if (!isValidPostCode(body.address.address_zip_code)) {
             return res.status(400).json({
                 error: 'Invalid post code format. Correct format: XXX XX or XXXXX.',
             });
         }
-    }
+    }*/
 
     try {
         const newPatient = await patientService.addPatient(body);
