@@ -4,6 +4,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { Button, Row, Col, Card, Modal, Spinner } from 'react-bootstrap';
 import { ROUTES } from '../config/routes';
 import { patientApi } from '../api';
+import ExaminationForm from '../components/examinations/ExaminationForm';
 
 // Komponenta pro zobrazení přehledu o pacientovi
 const PatientDetailPage = () => {
@@ -13,6 +14,8 @@ const PatientDetailPage = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const [showExaminationForm, setShowExaminationForm] = useState(false);
+    const [examinations, setExaminations] = useState([]);
 
     useEffect(() => {
         const fetchPatientDetail = async () => {
@@ -39,6 +42,16 @@ const PatientDetailPage = () => {
                         data.created_at,
                     ).toLocaleDateString('cs-CZ'),
                 });
+                // TODO: Načíst seznam vyšetření z API
+                setExaminations([
+                    {
+                        id: 1,
+                        type: 'UV Invasive Ultrasound',
+                        date: '2024-03-15',
+                        results: 'Vyšetření ukázalo změny v levé části krku.',
+                        notes: 'Doporučeno neurologické vyšetření.',
+                    },
+                ]);
             } catch (err) {
                 console.error('Error fetching patient detail:', err);
                 setError('Nepodařilo se načíst detail pacienta.');
@@ -65,6 +78,17 @@ const PatientDetailPage = () => {
         // TODO: Implement delete functionality with API
         setShowDeleteModal(false);
         navigate(ROUTES.PATIENTS);
+    };
+
+    const handleAddExamination = (examinationData) => {
+        // TODO: Implement API call to save examination
+        setExaminations((prev) => [
+            ...prev,
+            {
+                id: prev.length + 1,
+                ...examinationData,
+            },
+        ]);
     };
 
     if (isLoading) {
@@ -188,15 +212,40 @@ const PatientDetailPage = () => {
                     </Card>
 
                     <Card>
-                        <Card.Header>Výsledky vyšetření</Card.Header>
+                        <Card.Header className="d-flex justify-content-between align-items-center">
+                            <span>Výsledky vyšetření</span>
+                            <Button
+                                variant="primary"
+                                size="sm"
+                                onClick={() => setShowExaminationForm(true)}
+                            >
+                                + Přidat vyšetření
+                            </Button>
+                        </Card.Header>
                         <Card.Body>
-                            <p>
-                                <strong>UV Invasive Ultrasound</strong> – 14:00
-                            </p>
-                            <p className="text-muted">
-                                Vyšetření ukázalo změny v levé části krku.
-                                Doporučeno neurologické vyšetření.
-                            </p>
+                            {examinations.length === 0 ? (
+                                <p className="text-muted">
+                                    Žádná vyšetření nejsou k dispozici.
+                                </p>
+                            ) : (
+                                examinations.map((exam) => (
+                                    <div key={exam.id} className="mb-3">
+                                        <h5>{exam.type}</h5>
+                                        <p className="text-muted mb-1">
+                                            {new Date(
+                                                exam.date,
+                                            ).toLocaleDateString('cs-CZ')}
+                                        </p>
+                                        <p className="mb-1">{exam.results}</p>
+                                        {exam.notes && (
+                                            <p className="text-muted small">
+                                                {exam.notes}
+                                            </p>
+                                        )}
+                                        <hr />
+                                    </div>
+                                ))
+                            )}
                         </Card.Body>
                     </Card>
                 </Col>
@@ -226,6 +275,13 @@ const PatientDetailPage = () => {
                     </Button>
                 </Modal.Footer>
             </Modal>
+
+            {/* Formulář pro přidání vyšetření */}
+            <ExaminationForm
+                show={showExaminationForm}
+                onHide={() => setShowExaminationForm(false)}
+                onSubmit={handleAddExamination}
+            />
         </div>
     );
 };
