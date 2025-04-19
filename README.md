@@ -38,11 +38,11 @@ The goal of MediPractise is to simplify, clarify, and accelerate the complete or
 
 `GET /api/v1/patientCards/list`
 
-    curl -X GET --location "http://localhost:3000/api/v1/patientCards/list"
+    curl -X GET --location "http://localhost:5000/api/v1/patientCards/list"
 
 `POST /api/v1/patientCards/add`
 
-    curl -X POST --location "http://localhost:3000/api/v1/patientCards/add" \
+    curl -X POST --location "http://localhost:5000/api/v1/patientCards/add" \
     -H "Content-Type: application/json" \
     -d '{
     "first_name": "Xiao",
@@ -64,9 +64,33 @@ The goal of MediPractise is to simplify, clarify, and accelerate the complete or
     "medical_record": ""
     }'
 
-### Endpoints - NOT YET IMPLEMENTED
+`POST /api/v1/examinationRecords/add`
 
-| Method  | URL                         | Description                    |
-|---------|-----------------------------|--------------------------------|
-| `GET`   | `/api/v1/patientCards/list` | Retrieve all patient cards.    |
-| `POST`  | `/api/v1/patientCards/add`  | Create new patient card        |
+
+    curl -X POST --location "http://localhost:5000/api/v1/examinationRecords/add" \
+    -H "Content-Type: application/json" \
+    -d '{
+    "patient_id": "1e804add-d0c8-4126-bfc3-296828cd6396",
+    "doctor_id": "fb28cef4-02a5-4573-8a4c-d0eb21f0e6b1",
+    "anamnesis": "Lung cancer stage 2",
+    "diagnosis_overview": "Findings lung cancer in left chest",
+    "medication": "MEDXY-240",
+    "lab_results": "Cancer - Positive",
+    "objective_findings": "Cancer",
+    "conclusions": "",
+    "recommendations": "Chemotherapy",
+    "prescribed_medication": "MEDXY-1000",
+    "new_diagnosis": "",
+    "place": "MediPractise",
+    "stamp": "xxx",
+    "doctors_signature": "xxx"
+    }'
+
+
+### Endpoints
+
+| Method | URL                              | Description                    |
+|--------|----------------------------------|--------------------------------|
+| `GET`  | `/api/v1/patientCards/list`      | Retrieve all patient cards.    |
+| `POST` | `/api/v1/patientCards/add`       | Create new patient card.       |
+| `POST` | `/api/v1/examinationRecords/add` | Create new examination record. |
