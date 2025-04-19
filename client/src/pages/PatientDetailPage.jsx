@@ -125,12 +125,12 @@ const PatientDetailPage = () => {
                     >
                         Upravit
                     </Button>
-                    <Button
+                    {/*<Button
                         variant="danger"
                         onClick={() => setShowDeleteModal(true)}
                     >
                         Smazat
-                    </Button>
+                    </Button>*/}
                 </Col>
             </Row>
 
