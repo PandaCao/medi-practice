@@ -110,7 +110,7 @@ const PatientList = ({
                         </div>
                     </div>
                     <Button variant="link" className="text-muted p-0">
-                        <BsThreeDotsVertical />
+                        {/* <BsThreeDotsVertical /> */}
                     </Button>
                 </div>
                 <div className="text-muted mb-2">
@@ -209,7 +209,7 @@ const PatientList = ({
                                 className="text-muted p-0"
                                 onClick={(e) => e.stopPropagation()}
                             >
-                                <BsThreeDotsVertical />
+                                {/*<BsThreeDotsVertical />*/}
                             </Button>
                         </td>
                     </tr>

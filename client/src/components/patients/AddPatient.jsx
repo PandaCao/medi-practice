@@ -224,6 +224,7 @@ const AddPatient = ({ onSaveDraft, onSubmit, onDelete, initialData = {} }) => {
                             onChange={handleChange}
                             onBlur={handleBlur}
                             isInvalid={shouldShowError('birthDate')}
+                            max={new Date().toISOString().split("T")[0]}
                         />
                         <Form.Control.Feedback type="invalid">
                             {errors.birthDate}
