@@ -252,7 +252,7 @@ const PatientDetailPage = () => {
             </Row>
 
             {/* Potvrzovací dialog pro smazání */}
-            <Modal
+            {/* <Modal
                 show={showDeleteModal}
                 onHide={() => setShowDeleteModal(false)}
             >
@@ -274,7 +274,7 @@ const PatientDetailPage = () => {
                         Smazat
                     </Button>
                 </Modal.Footer>
-            </Modal>
+            </Modal> */ }
 
             {/* Formulář pro přidání vyšetření */}
             <ExaminationForm
