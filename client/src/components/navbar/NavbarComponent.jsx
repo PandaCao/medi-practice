@@ -46,20 +46,22 @@ const NavbarComponent = ({ pageTitle, toggleSidebar }) => {
                 <h4 className="mb-0">{pageTitle}</h4>
             </Navbar.Brand>
             <Navbar.Toggle />
-            <Navbar.Collapse className="justify-content-end">
+            <div className="ms-auto d-flex align-items-center">
+            {/*<Navbar.Collapse className="justify-content-end">*/}
                 <BsBell className="me-3" size={20} />
-                <Stack direction="horizontal" gap={2}>
+                 <div className="d-flex align-items-center text-end"> {/*<Stack direction="horizontal" gap={2}>*/}
                     <Image
                         src="https://placehold.co/40"
                         alt="Profile"
                         roundedCircle
+                        className="me-2 d-none d-sm-block"
                     />
                     <div>
                         <div className="fw-bold">MUDr. Jan Suk</div>
-                        <small className="text-muted">Praktický lékař</small>
+                        <small className="text-muted d-none d-sm-block">Praktický lékař</small>
                     </div>
-                </Stack>
-            </Navbar.Collapse>
+                </div>
+            </div>
         </Navbar>
     );
 };

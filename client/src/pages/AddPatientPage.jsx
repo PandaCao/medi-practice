@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import AddPatient from '../components/patients/AddPatient';
 import { useNavigate } from 'react-router-dom';
 import { ROUTES } from '../config/routes';
 import { addPatient } from '../api/patientApi';
 
 function AddPatientPage() {
+    const [showModal, setShowModal] = useState(false);
+    const [modalMessage, setModalMessage] = useState('');
     const navigate = useNavigate();
 
     const handleSubmit = async (formData) => {
@@ -42,13 +44,49 @@ function AddPatientPage() {
 
             // Po úspěšném uložení přesměrujeme na seznam pacientů
             navigate(ROUTES.PATIENTS);
+
         } catch (error) {
-            console.error('Chyba při ukládání pacienta:', error);
-            // Zde můžete přidat zobrazení chybové hlášky uživateli
+            if (error.response && error.response.status === 500) {
+                if (error.response.data && error.response.data.error === 'duplicate key value violates unique constraint "patient_card_birth_number_key"') {
+                    setModalMessage('Tento pacient již existuje. Pacienta nelze přidat.');
+                    setShowModal(true);
+                } else {
+                    setModalMessage('Došlo k chybě při ukládání pacienta. Zkontrolujte prosím vstupní data.');
+                    setShowModal(true);
+                }
+            }
         }
     };
 
-    return <AddPatient onSubmit={handleSubmit} />;
+    return (
+        <>
+            <AddPatient onSubmit={handleSubmit} />
+
+            {showModal && (
+                <div className="modal show d-block" tabIndex="-1">
+                    <div className="modal-dialog">
+                        <div className="modal-content">
+                            <div className="modal-header">
+                                <h5 className="modal-title">Upozornění</h5>
+                            </div>
+                            <div className="modal-body">
+                                <p>{modalMessage}</p>
+                            </div>
+                            <div className="modal-footer">
+                                <button
+                                    type="button"
+                                    className="btn btn-primary"
+                                    onClick={() => setShowModal(false)}
+                                >
+                                    OK
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
+        </>
+    );
 }
 
 export default AddPatientPage;
