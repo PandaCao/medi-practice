@@ -28,7 +28,6 @@ const PatientsPage = () => {
     // Načítání pacientů z API
     const fetchPatients = useCallback(async (query, page) => {
         setIsSearching(true);
-        setError(null);
 
         try {
             const response = await patientApi.getPatientCards({
@@ -60,6 +59,7 @@ const PatientsPage = () => {
         } finally {
             setIsSearching(false);
         }
+
     }, []);
 
     // Spouští se při změně hledaného výrazu nebo aktuální stránky
@@ -69,7 +69,16 @@ const PatientsPage = () => {
 
     // Zpracování vstupu hledání
     const handleSearch = (e) => {
-        setSearchQuery(e.target.value);
+        const value = e.target.value;
+        setSearchQuery(value);
+
+        const isValidInput = /[a-zA-Z0-9čČšŠžŽáéěíóúůýÁÉĚÍÓÚŮÝŘŤŇďĎťŤňŇ]/.test(value.trim()) && !/^[^\w\d]+$/.test(value.trim());
+
+        if (value.length > 0 && (!isValidInput || value.trim() === "")){
+            setError("Neplatný vstup. Zadejte prosím příjmení nebo rodné číslo.");
+            return;
+        }
+        setError(null);
         setCurrentPage(1);
     };
 
