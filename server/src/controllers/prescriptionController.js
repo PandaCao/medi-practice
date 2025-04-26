@@ -1,7 +1,6 @@
 import * as prescriptionService from '../services/prescriptionService.js';
 import { getTrimmedBody } from '../utils/validator.js';
 import QRCode from 'qrcode'
-import { log } from '../app.js';
 
 function validateRequiredFields(body, fields) {
     for (const field of fields) {
@@ -11,13 +10,13 @@ function validateRequiredFields(body, fields) {
     }
 }
 
-function preparePrescriptionBody(input) {
+async function preparePrescriptionBody(input) {
     const body = getTrimmedBody(input);
     const createdAt = new Date();
 
     body['created_at'] = createdAt.toISOString();
     body['expiration_date'] = new Date(createdAt.getTime() + 14 * 24 * 60 * 60 * 1000).toISOString();
-    body['qr_code'] = QRCode.toDataURL(JSON.stringify(body));
+    body['qr_code'] = await QRCode.toDataURL(JSON.stringify(body));
 
     return body;
 }
@@ -25,7 +24,7 @@ function preparePrescriptionBody(input) {
 export async function addPrescription(req, res) {
     try {
         validateRequiredFields(req.body, ['patient_id', 'doctor_id', 'medications']);
-        const body = preparePrescriptionBody(req.body);
+        const body = await preparePrescriptionBody(req.body);
 
         const newPrescription = await prescriptionService.addPrescription(body);
         res.status(201).json(newPrescription);
