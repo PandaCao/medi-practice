@@ -25,3 +25,6 @@ export function isValidPostCode(postCode) {
     return regex.test(postCodeBS);
 }
 
+export function checkDates(start_date, end_date){
+    return start_date < end_date;
+}
