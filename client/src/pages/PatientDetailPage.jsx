@@ -154,7 +154,11 @@ const PatientDetailPage = () => {
                     <Button
                         variant="primary"
                         className="me-2"
-                        onClick={() => navigate(`/patient/${patient.id}/edit`)}
+                        onClick={() =>
+                            navigate(`/patient/${patient.id}/edit`, {
+                                state: { patient },
+                            })
+                        }
                     >
                         Upravit
                     </Button>

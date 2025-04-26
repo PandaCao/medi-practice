@@ -1,5 +1,5 @@
 import React from 'react';
-import { Navbar, Image, Stack, Button } from 'react-bootstrap';
+import { Navbar, Image, Button } from 'react-bootstrap';
 import { BsBell, BsArrowLeft, BsList } from 'react-icons/bs';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { getRouteByPath } from '../../config/routes';
