@@ -1,10 +1,7 @@
 import * as patientService from '../services/patientCardService.js';
 import {
     isValidBirthNumber,
-    isOnlyLetters,
-    isPositiveNumber,
-    isValidPhoneNumber,
-    isValidPostCode,
+    isOnlyLetters
 } from '../utils/validator.js';
 
 export async function addPatient(req, res) {
@@ -16,11 +13,6 @@ export async function addPatient(req, res) {
         'birth_number',
         'insurance_id',
         'sex',
-    ];
-    const notRequired = [
-        'contact_info.contact_phone',
-        'weight',
-        'height'
     ];
 
     for (let key in body) {
@@ -52,39 +44,6 @@ export async function addPatient(req, res) {
             error: 'Invalid last name format. Only letters are allowed.',
         });
     }
-
-    // Not required
-  /*  if (body.contact_info && body.contact_info.contact_phone != null) {
-        if (!isValidPhoneNumber(body.contact_info.contact_phone)) {
-            return res.status(400).json({
-                error: 'Invalid phone number format. Correct format: +XXXXXXXXXXXX or XXXXXXXXX.',
-            });
-        }
-    }
-
-    if (body.weight != null){
-        if (!isPositiveNumber(body.weight)) {
-            return res.status(400).json({
-                error: 'Invalid weight format. Weight must be a positive number.',
-            });
-        }
-    }
-
-    if (body.height != null) {
-        if (!isPositiveNumber(body.height)) {
-            return res.status(400).json({
-                error: 'Invalid height format. Height must be a positive number.',
-            });
-        }
-    } */
-
-    /*if (body.address && body.address.address_zip_code != null) {
-        if (!isValidPostCode(body.address.address_zip_code)) {
-            return res.status(400).json({
-                error: 'Invalid post code format. Correct format: XXX XX or XXXXX.',
-            });
-        }
-    }*/
 
     try {
         const newPatient = await patientService.addPatient(body);

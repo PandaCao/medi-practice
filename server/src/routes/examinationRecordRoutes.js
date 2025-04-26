@@ -1,8 +1,9 @@
 import express from 'express';
-import { addExamination } from '../controllers/examinationRecordController.js';
+import { addExamination, updateExamination } from '../controllers/examinationRecordController.js';
 
 const router = express.Router();
 
-router.post('/add', addExamination);
+router.post('/', addExamination);
+router.patch('/', updateExamination);
 
 export default router;

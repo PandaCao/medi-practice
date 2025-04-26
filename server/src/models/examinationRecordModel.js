@@ -11,3 +11,12 @@ export async function insertExamination(payload) {
     if (error) throw error;
     return data;
 }
+
+export async function updateExamination(payload) {
+    const { data, error } = await supabaseClient
+        .from(TABLE)
+        .update([payload])
+        .eq('id', payload['id']);
+    if (error) throw error;
+    return data;
+}

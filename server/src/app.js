@@ -2,11 +2,14 @@ import express from 'express';
 import patientRoutes from './routes/patientCardRoutes.js';
 import examinationRecordRoutes from './routes/examinationRecordRoutes.js';
 import cors from 'cors';
+import winston from 'winston'
 
 const app = express();
 const port = process.env.PORT || 5000;
+export const log = winston.createLogger({
+    transports: [new winston.transports.Console()]
+});
 
-// CORS configuration
 app.use(
     cors({
         origin: ['http://localhost:3000', 'https://medipractise.onrender.com'],

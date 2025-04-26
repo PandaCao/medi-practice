@@ -21,7 +21,7 @@ export async function fetchPatients({ id, search = '', pageIndex, pageSize }) {
     const cleanedSearch = search.replace(/[\/\\]/g, '').trim();
     const words = cleanedSearch.split(/\s+/).filter(Boolean);
     if (id) {
-        ({ data, error } = await supabaseClient.from(TABLE).select('*').eq('user_id', id));
+        ({ data, error } = await supabaseClient.from(TABLE).select('*').eq('id', id));
     }
     else if (words.length === 0) {
         ({ data, error } = await supabaseClient.from(TABLE).select('*').order('created_at', { ascending: false }));
