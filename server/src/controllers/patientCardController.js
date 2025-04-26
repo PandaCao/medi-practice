@@ -1,9 +1,9 @@
 import * as patientService from '../services/patientCardService.js';
 import {
+    getTrimmedBody,
     isValidBirthNumber,
     isOnlyLetters
 } from '../utils/validator.js';
-import { getTrimmedBody } from '../utils/examinationRecords.js';
 
 export async function addPatient(req, res) {
     const body = req.body;
@@ -55,7 +55,7 @@ export async function addPatient(req, res) {
 }
 
 export async function getPatientById(req, res) {
-    if (!req.query.id) {
+    if (!req.params.id) {
         return res.status(400).json({ error: 'id is required.' });
     }
     try {

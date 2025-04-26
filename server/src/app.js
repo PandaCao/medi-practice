@@ -4,6 +4,7 @@ import examinationRecordRoutes from './routes/examinationRecordRoutes.js';
 import reservationRoutes from './routes/reservationRoutes.js';
 import cors from 'cors';
 import winston from 'winston'
+import prescriptionRoutes from './routes/prescriptionRoutes.js';
 
 const app = express();
 const port = process.env.PORT || 5000;
@@ -21,6 +22,7 @@ app.use(express.json());
 app.use('/api/v1/patientCards', patientRoutes);
 app.use('/api/v1/examinationRecords', examinationRecordRoutes);
 app.use('/api/v1/reservation', reservationRoutes);
+app.use('/api/v1/prescription', prescriptionRoutes);
 
 app.listen(port, () => {
     console.log(`Server running on port ${port}`);

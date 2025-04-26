@@ -18,7 +18,16 @@ export async function insertRow(table, payload) {
 export async function getAllRows(table) {
     const { data, error } = await supabase
         .from(table)
+        .select('*');
+    if (error) throw error;
+    return data;
+}
+
+export async function getAllRowsById(table, payload) {
+    const { data, error } = await supabase
+        .from(table)
         .select('*')
+        .eq('id', payload['id']);
     if (error) throw error;
     return data;
 }

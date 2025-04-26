@@ -1,6 +1,6 @@
 import * as examinationRecordService from '../services/examinationRecordService.js';
-import { getTrimmedBody } from '../utils/examinationRecords.js';
 import { log } from '../app.js';
+import { getTrimmedBody } from '../utils/validator.js';
 
 export async function addExamination(req, res) {
     const body = getTrimmedBody(req.body);
@@ -57,20 +57,14 @@ export async function updateExamination(req, res) {
 export async function getAllExaminationsByPatientId(req, res) {
     const body = getTrimmedBody(req.body);
 
-    req.params.id
+    const id = req.params.id
 
-    const required_params = [
-        'patient_id',
-    ];
-
-    for (const field of required_params) {
-        if (!body[field]) {
-            return res.status(400).json({ error: `${field} is required.` });
-        }
+    if (!id) {
+        return res.status(400).json({ error: 'id is required.' });
     }
 
     try {
-        const newExamination = await examinationRecordService.getAllExaminationsByPatientId(body);
+        const newExamination = await examinationRecordService.getAllExaminationsByPatientId(id);
 
         log.info('Examination record ' + body.id + ' was updated.');
 

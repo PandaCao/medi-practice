@@ -22,11 +22,11 @@ export async function addReservation(payload) {
     }
 }
 
-export async function getReservation(payload) {
+export async function getReservation(id) {
     const { data, error } = await supabaseClient
         .from(TABLE)
         .select()
-        .eq('id', payload['id']);
+        .eq('id', id);
     if (error) throw error;
     return data;
 }

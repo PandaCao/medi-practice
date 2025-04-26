@@ -1,5 +1,5 @@
 import * as reservationService from '../services/reservationService.js';
-import { getTrimmedBody } from '../utils/examinationRecords.js';
+import { getTrimmedBody } from '../utils/validator.js';
 
 export async function addReservation(req, res) {
     const body = getTrimmedBody(req.body);
@@ -26,18 +26,15 @@ export async function addReservation(req, res) {
 
 export async function getReservation(req, res) {
     const body = getTrimmedBody(req.body);
-    const required = [
-        'id'
-    ];
 
-    for (const field of required) {
-        if (!body[field]) {
-            return res.status(400).json({ error: `${field} is required.` });
-        }
+    const id = req.params.id
+
+    if (!id) {
+        return res.status(400).json({ error: 'id is required.' });
     }
 
     try {
-        const newReservation = await reservationService.getReservation(body);
+        const newReservation = await reservationService.getReservation(id);
         res.status(201).json(newReservation);
     } catch (err) {
         res.status(500).json({ error: err.message });

@@ -28,3 +28,12 @@ export function isValidPostCode(postCode) {
 export function checkDates(start_date, end_date){
     return start_date < end_date;
 }
+
+export function getTrimmedBody(body) {
+    for (let key in body) {
+        if (typeof body[key] === 'string') {
+            body[key] = body[key].trim();
+        }
+    }
+    return body;
+}
