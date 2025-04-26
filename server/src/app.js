@@ -5,6 +5,7 @@ import reservationRoutes from './routes/reservationRoutes.js';
 import cors from 'cors';
 import winston from 'winston'
 import prescriptionRoutes from './routes/prescriptionRoutes.js';
+import listEndpoints from 'express-list-endpoints';
 
 const app = express();
 const port = process.env.PORT || 5000;
@@ -26,4 +27,5 @@ app.use('/api/v1/prescription', prescriptionRoutes);
 
 app.listen(port, () => {
     console.log(`Server running on port ${port}`);
+    console.log(listEndpoints(app));
 });
