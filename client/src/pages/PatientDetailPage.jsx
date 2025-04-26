@@ -5,6 +5,7 @@ import { Button, Row, Col, Card, Modal, Spinner } from 'react-bootstrap';
 import { ROUTES } from '../config/routes';
 import { patientApi } from '../api';
 import ExaminationForm from '../components/examinations/ExaminationForm';
+import PrescriptionForm from '../components/prescriptions/PrescriptionForm';
 
 // Komponenta pro zobrazení přehledu o pacientovi
 const PatientDetailPage = () => {
@@ -15,6 +16,7 @@ const PatientDetailPage = () => {
     const [error, setError] = useState(null);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [showExaminationForm, setShowExaminationForm] = useState(false);
+    const [showPrescriptionForm, setShowPrescriptionForm] = useState(false);
     const [examinations, setExaminations] = useState([]);
 
     useEffect(() => {
@@ -91,6 +93,13 @@ const PatientDetailPage = () => {
         ]);
     };
 
+    const handleCreatePrescription = (prescriptionData) => {
+        // TODO: Implement API call to save prescription
+        console.log('Creating prescription:', prescriptionData);
+        // Here you would typically make an API call to save the prescription
+        // For now, we'll just log it to the console
+    };
+
     if (isLoading) {
         return (
             <div className="text-center p-5">
@@ -149,12 +158,19 @@ const PatientDetailPage = () => {
                     >
                         Upravit
                     </Button>
-                    {/*<Button
+                    <Button
+                        variant="success"
+                        className="me-2"
+                        onClick={() => setShowPrescriptionForm(true)}
+                    >
+                        E-Recept
+                    </Button>
+                    <Button
                         variant="danger"
                         onClick={() => setShowDeleteModal(true)}
                     >
                         Smazat
-                    </Button>*/}
+                    </Button>
                 </Col>
             </Row>
 
@@ -252,7 +268,7 @@ const PatientDetailPage = () => {
             </Row>
 
             {/* Potvrzovací dialog pro smazání */}
-            {/* <Modal
+            <Modal
                 show={showDeleteModal}
                 onHide={() => setShowDeleteModal(false)}
             >
@@ -274,13 +290,21 @@ const PatientDetailPage = () => {
                         Smazat
                     </Button>
                 </Modal.Footer>
-            </Modal> */ }
+            </Modal>
 
             {/* Formulář pro přidání vyšetření */}
             <ExaminationForm
                 show={showExaminationForm}
                 onHide={() => setShowExaminationForm(false)}
                 onSubmit={handleAddExamination}
+            />
+
+            {/* Formulář pro vytvoření receptu */}
+            <PrescriptionForm
+                show={showPrescriptionForm}
+                onHide={() => setShowPrescriptionForm(false)}
+                onSubmit={handleCreatePrescription}
+                patient={patient}
             />
         </div>
     );
