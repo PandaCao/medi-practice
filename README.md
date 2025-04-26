@@ -86,6 +86,15 @@ The goal of MediPractise is to simplify, clarify, and accelerate the complete or
     "doctors_signature": "xxx"
     }'
 
+`POST /api/v1/reservation/delete`
+
+
+    curl -X POST --location "http://localhost:5000/api/v1/reservation/delete" \
+    -H "Content-Type: application/json" \
+    -d '{
+    "reservation_id": "3e2df7aa-bb65-41d4-871e-f9c5a4cc1b9d"
+    }'
+
 
 ### Endpoints
 
@@ -94,3 +103,4 @@ The goal of MediPractise is to simplify, clarify, and accelerate the complete or
 | `GET`  | `/api/v1/patientCards/list`      | Retrieve all patient cards.    |
 | `POST` | `/api/v1/patientCards/add`       | Create new patient card.       |
 | `POST` | `/api/v1/examinationRecords/add` | Create new examination record. |
+| `POST` | `/api/v1/reservation/delete`     | Delete existing reservation.   |
