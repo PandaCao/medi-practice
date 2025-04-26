@@ -4,6 +4,11 @@ export async function addPatient(payload) {
     return await patientModel.insertPatient(payload);
 }
 
-export async function getPatients(query) {
-    return await patientModel.fetchPatients(query);
+export async function getPatients(payload) {
+    return await patientModel.fetchPatients(payload);
 }
+
+export async function updatePatient(payload) {
+    return await patientModel.updatePatientCard(payload);
+}
+

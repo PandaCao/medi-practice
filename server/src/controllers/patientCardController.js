@@ -3,6 +3,7 @@ import {
     isValidBirthNumber,
     isOnlyLetters
 } from '../utils/validator.js';
+import { getTrimmedBody } from '../utils/examinationRecords.js';
 
 export async function addPatient(req, res) {
     const body = req.body;
@@ -75,6 +76,26 @@ export async function listPatients(req, res) {
         };
         const patients = await patientService.getPatients(params);
         res.json(patients);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+}
+
+export async function updatePatient(req, res) {
+    const body = getTrimmedBody(req.body);
+    const required = [
+        'id'
+    ];
+
+    for (const field of required) {
+        if (!body[field]) {
+            return res.status(400).json({ error: `${field} is required.` });
+        }
+    }
+
+    try {
+        const newReservation = await patientService.updatePatient(body);
+        res.status(201).json(newReservation);
     } catch (err) {
         res.status(500).json({ error: err.message });
     }

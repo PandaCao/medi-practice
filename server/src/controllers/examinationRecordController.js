@@ -54,3 +54,29 @@ export async function updateExamination(req, res) {
     }
 }
 
+export async function getAllExaminationsByPatientId(req, res) {
+    const body = getTrimmedBody(req.body);
+
+    req.params.id
+
+    const required_params = [
+        'patient_id',
+    ];
+
+    for (const field of required_params) {
+        if (!body[field]) {
+            return res.status(400).json({ error: `${field} is required.` });
+        }
+    }
+
+    try {
+        const newExamination = await examinationRecordService.getAllExaminationsByPatientId(body);
+
+        log.info('Examination record ' + body.id + ' was updated.');
+
+        res.status(201).json(newExamination);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+}
+

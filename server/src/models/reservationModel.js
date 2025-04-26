@@ -1,4 +1,4 @@
-import supabaseClient from '../config/supabaseClient.js';
+import supabaseClient, { getAllRows, insertRow, updateRowById } from '../config/supabaseClient.js';
 import { checkDates } from '../utils/validator.js';
 import { log } from '../app.js';
 
@@ -16,12 +16,7 @@ export async function addReservation(payload) {
     log.info(checkData);
 
     if (checkData.data.length === 0) {
-        const { data, error } = await supabaseClient
-            .from(TABLE)
-            .insert([payload])
-            .select();
-        if (error) throw error;
-        return data;
+        return insertRow(TABLE, payload);
     } else {
         throw new Error('Reservation already exists');
     }
@@ -37,20 +32,11 @@ export async function getReservation(payload) {
 }
 
 export async function getReservations() {
-    const { data, error } = await supabaseClient
-        .from(TABLE)
-        .select('*')
-    if (error) throw error;
-    return data;
+    return getAllRows(TABLE);
 }
 
 export async function updateReservation(payload) {
-    const { data, error } = await supabaseClient
-        .from(TABLE)
-        .update([payload])
-        .eq('id', payload['id']);
-    if (error) throw error;
-    return data;
+    return updateRowById(TABLE, payload);
 }
 
 export async function deleteReservation(payload) {

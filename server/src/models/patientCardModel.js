@@ -1,4 +1,4 @@
-import supabaseClient from '../config/supabaseClient.js';
+import supabaseClient, { insertRow, updateRowById } from '../config/supabaseClient.js';
 
 const TABLE = 'patient_card';
 
@@ -8,12 +8,7 @@ function paginate(data, pageNum, pageSize) {
 }
 
 export async function insertPatient(payload) {
-    const { data, error } = await supabaseClient
-        .from(TABLE)
-        .insert([payload])
-        .select();
-    if (error) throw error;
-    return data;
+    return insertRow(TABLE, payload);
 }
 
 export async function fetchPatients({ id, search = '', pageIndex, pageSize }) {
@@ -47,4 +42,8 @@ export async function fetchPatients({ id, search = '', pageIndex, pageSize }) {
     response.results = data;
 
     return response;
+}
+
+export async function updatePatientCard(payload) {
+    return updateRowById(TABLE, payload);
 }
