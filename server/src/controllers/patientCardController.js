@@ -2,7 +2,7 @@ import * as patientService from '../services/patientCardService.js';
 import {
     getTrimmedBody,
     isValidBirthNumber,
-    isOnlyLetters
+    isOnlyLetters,
 } from '../utils/validator.js';
 
 export async function addPatient(req, res) {
@@ -59,7 +59,9 @@ export async function getPatientById(req, res) {
         return res.status(400).json({ error: 'id is required.' });
     }
     try {
-        const patients = await patientService.getPatients({ id: req.query.id });
+        const patients = await patientService.getPatients({
+            id: req.params.id,
+        });
         res.json(patients);
     } catch (err) {
         res.status(500).json({ error: err.message });
@@ -83,9 +85,7 @@ export async function listPatients(req, res) {
 
 export async function updatePatient(req, res) {
     const body = getTrimmedBody(req.body);
-    const required = [
-        'id'
-    ];
+    const required = ['id'];
 
     for (const field of required) {
         if (!body[field]) {
