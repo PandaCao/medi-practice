@@ -3,8 +3,11 @@ import api from './config';
 // Endpointy pro pacienty
 const PATIENT_ENDPOINTS = {
     LIST: '/patientCards/list',
-    DETAIL: (id) => `/patientCards/get?id=${id}`,
-    ADD: '/patientCards/add',
+    DETAIL: (id) => `/patientCards/${id}`,
+    ADD: '/patientCards',
+    UPDATE: '/patientCards',
+    EXAMINATIONS: (id) => `/patientCards/${id}/examinations`,
+    PRESCRIPTIONS: (id) => `/patientCards/${id}/prescriptions`,
 };
 
 // Výchozí parametry pro pagination
@@ -46,7 +49,7 @@ export const getPatientCards = async (params = {}) => {
 export const getPatientDetail = async (id) => {
     try {
         const response = await api.get(PATIENT_ENDPOINTS.DETAIL(id));
-        return response.data.results[0]; // Vrátíme prvního (a jediného) pacienta z výsledků
+        return response.data.results[0];
     } catch (error) {
         console.error('Error fetching patient detail:', error);
         throw error;
@@ -74,6 +77,51 @@ export const addPatient = async (patientData) => {
         return response.data;
     } catch (error) {
         console.error('Error adding patient:', error);
+        throw error;
+    }
+};
+
+/**
+ * Funkce pro získání vyšetření pacienta
+ * @param {string} id - ID pacienta
+ * @returns {Promise<Array>} - Promise s seznamem vyšetření
+ */
+export const getPatientExaminations = async (id) => {
+    try {
+        const response = await api.get(PATIENT_ENDPOINTS.EXAMINATIONS(id));
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching patient examinations:', error);
+        throw error;
+    }
+};
+
+/**
+ * Funkce pro získání předpisů pacienta
+ * @param {string} id - ID pacienta
+ * @returns {Promise<Array>} - Promise s seznamem předpisů
+ */
+export const getPatientPrescriptions = async (id) => {
+    try {
+        const response = await api.get(PATIENT_ENDPOINTS.PRESCRIPTIONS(id));
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching patient prescriptions:', error);
+        throw error;
+    }
+};
+
+/**
+ * Funkce pro úpravu existujícího pacienta
+ * @param {Object} patientData - Data pacienta včetně id
+ * @returns {Promise<Object>} - Promise s upraveným pacientem
+ */
+export const updatePatient = async (patientData) => {
+    try {
+        const response = await api.patch(PATIENT_ENDPOINTS.UPDATE, patientData);
+        return response.data;
+    } catch (error) {
+        console.error('Error updating patient:', error);
         throw error;
     }
 };

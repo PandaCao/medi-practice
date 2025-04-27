@@ -23,8 +23,11 @@ const PatientDetailPage = () => {
         const fetchPatientDetail = async () => {
             try {
                 const data = await patientApi.getPatientDetail(id);
+                console.log('API response:', data);
                 setPatient({
-                    id: data.user_id,
+                    id: data.id,
+                    first_name: data.first_name,
+                    last_name: data.last_name,
                     name: `${data.first_name} ${data.last_name}`,
                     personalId: data.birth_number,
                     sex: data.sex,

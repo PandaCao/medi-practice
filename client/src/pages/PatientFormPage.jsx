@@ -1,14 +1,16 @@
-import React from 'react';
+import React, { useState } from 'react';
 //speciální stránka určená pro úpravu údajů o konkrétním pacientovi
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import AddPatient from '../components/patients/AddPatient';
 import { ROUTES } from '../config/routes';
+import { patientApi } from '../api';
 
 const PatientFormPage = () => {
     const { id } = useParams();
     const navigate = useNavigate();
     const location = useLocation();
     const patient = location.state?.patient;
+    const [updateError, setUpdateError] = useState(null);
 
     if (!patient) {
         return <div>Pacient nenalezen.</div>;
@@ -27,8 +29,8 @@ const PatientFormPage = () => {
 
     // Připravíme data pro formulář
     const formData = {
-        firstName: patient.name.split(' ')[1] || '', // Křestní jméno
-        lastName: patient.name.split(' ')[0] || '', // Příjmení
+        firstName: patient.first_name || '', // Jméno
+        lastName: patient.last_name || '', // Příjmení
         personalId: patient.personalId || '',
         birthDate: formatDate(patient.dateOfBirth),
         gender: patient.sex || '',
@@ -45,20 +47,49 @@ const PatientFormPage = () => {
     };
 
     const handleSubmit = async (data) => {
+        setUpdateError(null);
         try {
-            // TODO: Implement API call to update patient
-            console.log('Updating patient:', data);
+            console.log('Patient object:', patient);
+            // Připravím data pro API (včetně id)
+            const payload = {
+                id: patient.id || patient.user_id || id,
+                first_name: data.firstName,
+                last_name: data.lastName,
+                birth_number: data.personalId,
+                date_of_birth: data.birthDate,
+                sex: data.gender,
+                insurance_id: data.insuranceCompany,
+                weight: data.weight ? parseInt(data.weight) : null,
+                height: data.height ? parseInt(data.height) : null,
+                contact_info: {
+                    contact_person: data.contactPerson,
+                    contact_email: data.email,
+                    contact_phone: data.phone,
+                },
+                diagnosis: data.diagnosisOverview,
+                anamnesis: data.anamnesis,
+                medication: data.medication,
+            };
+            const response = await patientApi.updatePatient(payload);
+            console.log('Update response:', response);
             // Přesměrujeme na detail pacienta
-            navigate(ROUTES.PATIENT_DETAIL.replace(':id', id));
+            navigate(ROUTES.PATIENT_DETAIL.replace(':id', payload.id));
         } catch (err) {
             console.error('Error updating patient:', err);
-            // Přesměrujeme na detail pacienta i v případě chyby
-            navigate(ROUTES.PATIENT_DETAIL.replace(':id', id));
+            setUpdateError(
+                'Nepodařilo se uložit změny: ' +
+                    (err?.response?.data?.error || err.message),
+            );
         }
     };
 
     return (
         <div>
+            {updateError && (
+                <div className="alert alert-danger" role="alert">
+                    {updateError}
+                </div>
+            )}
             <AddPatient initialData={formData} onSubmit={handleSubmit} />
         </div>
     );

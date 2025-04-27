@@ -38,7 +38,7 @@ const PatientsPage = () => {
 
             // Transformace dat z API do formátu, který očekává PatientList
             const transformedPatients = response.results.map((patient) => ({
-                id: patient.user_id,
+                id: patient.id,
                 name: `${patient.first_name} ${patient.last_name}`,
                 personalId: patient.birth_number,
                 registrationDate: new Date(
@@ -59,7 +59,6 @@ const PatientsPage = () => {
         } finally {
             setIsSearching(false);
         }
-
     }, []);
 
     // Spouští se při změně hledaného výrazu nebo aktuální stránky
@@ -72,10 +71,14 @@ const PatientsPage = () => {
         const value = e.target.value;
         setSearchQuery(value);
 
-        const isValidInput = /[a-zA-Z0-9čČšŠžŽáéěíóúůýÁÉĚÍÓÚŮÝŘŤŇďĎťŤňŇ]/.test(value.trim()) && !/^[^\w\d]+$/.test(value.trim());
+        const isValidInput =
+            /[a-zA-Z0-9čČšŠžŽáéěíóúůýÁÉĚÍÓÚŮÝŘŤŇďĎťŤňŇ]/.test(value.trim()) &&
+            !/^[^\w\d]+$/.test(value.trim());
 
-        if (value.length > 0 && (!isValidInput || value.trim() === "")){
-            setError("Neplatný vstup. Zadejte prosím příjmení nebo rodné číslo.");
+        if (value.length > 0 && (!isValidInput || value.trim() === '')) {
+            setError(
+                'Neplatný vstup. Zadejte prosím příjmení nebo rodné číslo.',
+            );
             return;
         }
         setError(null);
