@@ -23,6 +23,12 @@ const ExaminationForm = ({ show, onHide, onSubmit }) => {
         onHide();
     };
 
+    const RequiredLabel = ({ children }) => (
+        <Form.Label>
+            {children} <span className="text-danger">*</span>
+        </Form.Label>
+    );
+
     return (
         <Modal show={show} onHide={onHide} size="lg">
             <Modal.Header closeButton>
@@ -31,7 +37,7 @@ const ExaminationForm = ({ show, onHide, onSubmit }) => {
             <Modal.Body>
                 <Form onSubmit={handleSubmit}>
                     <Form.Group className="mb-3">
-                        <Form.Label>Typ vyšetření</Form.Label>
+                        <RequiredLabel>Typ vyšetření</RequiredLabel>
                         <Form.Control
                             type="text"
                             name="type"
@@ -39,22 +45,24 @@ const ExaminationForm = ({ show, onHide, onSubmit }) => {
                             onChange={handleChange}
                             placeholder="Např. Ultrazvuk, EKG, Laboratorní vyšetření"
                             required
+                            maxLength={50}
                         />
                     </Form.Group>
 
                     <Form.Group className="mb-3">
-                        <Form.Label>Datum vyšetření</Form.Label>
+                        <RequiredLabel>Datum vyšetření</RequiredLabel>
                         <Form.Control
                             type="date"
                             name="date"
                             value={formData.date}
                             onChange={handleChange}
                             required
+                            max={new Date().toISOString().split("T")[0]}
                         />
                     </Form.Group>
 
                     <Form.Group className="mb-3">
-                        <Form.Label>Výsledky</Form.Label>
+                        <RequiredLabel>Výsledky</RequiredLabel>
                         <Form.Control
                             as="textarea"
                             name="results"
@@ -63,6 +71,7 @@ const ExaminationForm = ({ show, onHide, onSubmit }) => {
                             rows={3}
                             placeholder="Zadejte výsledky vyšetření"
                             required
+                            maxLength={500}
                         />
                     </Form.Group>
 
@@ -75,6 +84,7 @@ const ExaminationForm = ({ show, onHide, onSubmit }) => {
                             onChange={handleChange}
                             rows={3}
                             placeholder="Doplňující informace nebo doporučení"
+                            maxLength={500}
                         />
                     </Form.Group>
 
