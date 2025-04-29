@@ -5,15 +5,22 @@ import ExaminationTypeSelect from './ExaminationTypeSelect';
 import DateTimePickerField from './DateTimePickerField';
 
 function ReservationForm({ formData, onSubmit, onChange, onDateChange }) {
+
     const handleSubmit = (e) => {
         e.preventDefault();
         onSubmit(formData);
     };
 
+    const RequiredLabel = ({ children }) => (
+        <Form.Label>
+            {children} <span className="text-danger">*</span>
+        </Form.Label>
+    );
+
     return (
         <Form onSubmit={handleSubmit}>
             <Form.Group className="mb-3">
-                <Form.Label>ID pacienta</Form.Label>
+                <RequiredLabel>ID pacienta</RequiredLabel>
                 <Form.Control
                     type="text"
                     name="patientId"
@@ -26,6 +33,8 @@ function ReservationForm({ formData, onSubmit, onChange, onDateChange }) {
             <ExaminationTypeSelect
                 value={formData.examinationType}
                 onChange={onChange}
+                otherValue={formData.otherExaminationType}
+                onOtherChange={onChange}
             />
 
             <DateTimePickerField

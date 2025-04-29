@@ -1,7 +1,8 @@
 import React from 'react';
 import { Form } from 'react-bootstrap';
 
-function ExaminationTypeSelect({ value, onChange }) {
+function ExaminationTypeSelect({ value, onChange , otherValue, onOtherChange}) {
+
     return (
         <Form.Group className="mb-3">
             <Form.Label>Typ vyšetření</Form.Label>
@@ -12,13 +13,15 @@ function ExaminationTypeSelect({ value, onChange }) {
                 required
             >
                 <option value="">Vyberte typ vyšetření</option>
+                <option value="preventivni prohlidka">Preventivní prohlídka</option>
+                <option value="vysetreni">Vyšetření</option>
                 <option value="krevní test">Krevní test</option>
                 <option value="ultrazvuk">Ultrazvuk</option>
                 <option value="rentgen">Rentgen</option>
                 <option value="EKG">EKG</option>
-                <option value="jiné">Jiné</option>
             </Form.Select>
         </Form.Group>
+
     );
 }
 
