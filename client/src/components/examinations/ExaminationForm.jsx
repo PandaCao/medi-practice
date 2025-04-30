@@ -1,13 +1,69 @@
-import React, { useState } from 'react';
-import { Form, Button, Modal } from 'react-bootstrap';
+import React, { useState, useEffect } from 'react';
+import { Modal, Form, Button } from 'react-bootstrap';
+import { examinationApi } from '../../api/examinationApi';
 
-const ExaminationForm = ({ show, onHide, onSubmit }) => {
+const ExaminationForm = ({
+    show,
+    onHide,
+    onSubmit,
+    patientId,
+    doctorId,
+    examination = null,
+}) => {
     const [formData, setFormData] = useState({
-        type: '',
-        date: new Date().toISOString().split('T')[0],
-        results: '',
-        notes: '',
+        patient_id: patientId || '',
+        doctor_id: doctorId || '',
+        anamnesis: '',
+        diagnosis_overview: '',
+        medication: '',
+        lab_results: '',
+        objective_findings: '',
+        conclusions: '',
+        recommendations: '',
+        prescribed_medication: '',
+        new_diagnosis: '',
+        place: 'MediPractise',
+        stamp: 'xxx',
+        doctors_signature: 'xxx',
     });
+
+    useEffect(() => {
+        if (examination) {
+            setFormData({
+                patient_id: examination.patient_id || patientId,
+                doctor_id: examination.doctor_id || doctorId,
+                anamnesis: examination.anamnesis || '',
+                diagnosis_overview: examination.diagnosis_overview || '',
+                medication: examination.medication || '',
+                lab_results: examination.lab_results || '',
+                objective_findings: examination.objective_findings || '',
+                conclusions: examination.conclusions || '',
+                recommendations: examination.recommendations || '',
+                prescribed_medication: examination.prescribed_medication || '',
+                new_diagnosis: examination.new_diagnosis || '',
+                place: examination.place || 'MediPractise',
+                stamp: examination.stamp || 'xxx',
+                doctors_signature: examination.doctors_signature || 'xxx',
+            });
+        } else {
+            setFormData({
+                patient_id: patientId,
+                doctor_id: doctorId,
+                anamnesis: '',
+                diagnosis_overview: '',
+                medication: '',
+                lab_results: '',
+                objective_findings: '',
+                conclusions: '',
+                recommendations: '',
+                prescribed_medication: '',
+                new_diagnosis: '',
+                place: 'MediPractise',
+                stamp: 'xxx',
+                doctors_signature: 'xxx',
+            });
+        }
+    }, [examination, patientId, doctorId]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -17,10 +73,22 @@ const ExaminationForm = ({ show, onHide, onSubmit }) => {
         }));
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        onSubmit(formData);
-        onHide();
+        try {
+            if (examination) {
+                await examinationApi.updateExamination({
+                    ...formData,
+                    id: examination.id,
+                });
+            } else {
+                await examinationApi.addExamination(formData);
+            }
+            onSubmit(formData);
+            onHide();
+        } catch (error) {
+            console.error('Error submitting examination:', error);
+        }
     };
 
     const RequiredLabel = ({ children }) => (
@@ -30,78 +98,159 @@ const ExaminationForm = ({ show, onHide, onSubmit }) => {
     );
 
     return (
-        <Modal show={show} onHide={onHide} size="lg">
+        <Modal show={show} onHide={onHide} centered size="lg">
             <Modal.Header closeButton>
-                <Modal.Title>Nový záznam vyšetření</Modal.Title>
+                <Modal.Title>
+                    {examination ? 'Upravit vyšetření' : 'Nové vyšetření'}
+                </Modal.Title>
             </Modal.Header>
-            <Modal.Body>
-                <Form onSubmit={handleSubmit}>
+            <Form onSubmit={handleSubmit}>
+                <Modal.Body>
                     <Form.Group className="mb-3">
-                        <RequiredLabel>Typ vyšetření</RequiredLabel>
+                        <RequiredLabel>Anamnéza</RequiredLabel>
+                        <Form.Control
+                            as="textarea"
+                            rows={3}
+                            name="anamnesis"
+                            value={formData.anamnesis}
+                            onChange={handleChange}
+                            required
+                        />
+                    </Form.Group>
+
+                    <Form.Group className="mb-3">
+                        <RequiredLabel>Přehled diagnóz</RequiredLabel>
+                        <Form.Control
+                            as="textarea"
+                            rows={3}
+                            name="diagnosis_overview"
+                            value={formData.diagnosis_overview}
+                            onChange={handleChange}
+                            required
+                        />
+                    </Form.Group>
+
+                    <Form.Group className="mb-3">
+                        <RequiredLabel>Medikace</RequiredLabel>
                         <Form.Control
                             type="text"
-                            name="type"
-                            value={formData.type}
+                            name="medication"
+                            value={formData.medication}
                             onChange={handleChange}
-                            placeholder="Např. Ultrazvuk, EKG, Laboratorní vyšetření"
                             required
-                            maxLength={50}
                         />
                     </Form.Group>
 
                     <Form.Group className="mb-3">
-                        <RequiredLabel>Datum vyšetření</RequiredLabel>
-                        <Form.Control
-                            type="date"
-                            name="date"
-                            value={formData.date}
-                            onChange={handleChange}
-                            required
-                            max={new Date().toISOString().split("T")[0]}
-                        />
-                    </Form.Group>
-
-                    <Form.Group className="mb-3">
-                        <RequiredLabel>Výsledky</RequiredLabel>
+                        <RequiredLabel>Laboratorní výsledky</RequiredLabel>
                         <Form.Control
                             as="textarea"
-                            name="results"
-                            value={formData.results}
-                            onChange={handleChange}
                             rows={3}
-                            placeholder="Zadejte výsledky vyšetření"
+                            name="lab_results"
+                            value={formData.lab_results}
+                            onChange={handleChange}
                             required
-                            maxLength={500}
                         />
                     </Form.Group>
 
                     <Form.Group className="mb-3">
-                        <Form.Label>Poznámky</Form.Label>
+                        <RequiredLabel>Objektivní nález</RequiredLabel>
                         <Form.Control
                             as="textarea"
-                            name="notes"
-                            value={formData.notes}
-                            onChange={handleChange}
                             rows={3}
-                            placeholder="Doplňující informace nebo doporučení"
-                            maxLength={500}
+                            name="objective_findings"
+                            value={formData.objective_findings}
+                            onChange={handleChange}
+                            required
                         />
                     </Form.Group>
 
-                    <div className="d-flex justify-content-end">
-                        <Button
-                            variant="secondary"
-                            onClick={onHide}
-                            className="me-2"
-                        >
-                            Zrušit
-                        </Button>
-                        <Button variant="primary" type="submit">
-                            Uložit
-                        </Button>
-                    </div>
-                </Form>
-            </Modal.Body>
+                    <Form.Group className="mb-3">
+                        <Form.Label>Závěry</Form.Label>
+                        <Form.Control
+                            as="textarea"
+                            rows={2}
+                            name="conclusions"
+                            value={formData.conclusions}
+                            onChange={handleChange}
+                        />
+                    </Form.Group>
+
+                    <Form.Group className="mb-3">
+                        <RequiredLabel>Doporučení</RequiredLabel>
+                        <Form.Control
+                            as="textarea"
+                            rows={3}
+                            name="recommendations"
+                            value={formData.recommendations}
+                            onChange={handleChange}
+                            required
+                        />
+                    </Form.Group>
+
+                    <Form.Group className="mb-3">
+                        <RequiredLabel>Předepsaná medikace</RequiredLabel>
+                        <Form.Control
+                            type="text"
+                            name="prescribed_medication"
+                            value={formData.prescribed_medication}
+                            onChange={handleChange}
+                            required
+                        />
+                    </Form.Group>
+
+                    <Form.Group className="mb-3">
+                        <Form.Label>Nová diagnóza</Form.Label>
+                        <Form.Control
+                            type="text"
+                            name="new_diagnosis"
+                            value={formData.new_diagnosis}
+                            onChange={handleChange}
+                        />
+                    </Form.Group>
+
+                    <Form.Group className="mb-3">
+                        <RequiredLabel>Místo</RequiredLabel>
+                        <Form.Control
+                            type="text"
+                            name="place"
+                            value={formData.place}
+                            onChange={handleChange}
+                            required
+                        />
+                    </Form.Group>
+
+                    <Form.Group className="mb-3">
+                        <RequiredLabel>Razítko</RequiredLabel>
+                        <Form.Control
+                            type="text"
+                            name="stamp"
+                            value={formData.stamp}
+                            onChange={handleChange}
+                            required
+                        />
+                    </Form.Group>
+
+                    <Form.Group className="mb-3">
+                        <RequiredLabel>Podpis lékaře</RequiredLabel>
+                        <Form.Control
+                            type="text"
+                            name="doctors_signature"
+                            value={formData.doctors_signature}
+                            onChange={handleChange}
+                            required
+                        />
+                    </Form.Group>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={onHide}>
+                        Zrušit
+                    </Button>
+                    <Button variant="primary" type="submit">
+                        {examination ? 'Uložit změny' : 'Přidat vyšetření'}
+                    </Button>
+                </Modal.Footer>
+            </Form>
         </Modal>
     );
 };

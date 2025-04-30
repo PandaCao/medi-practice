@@ -46,12 +46,14 @@ const Sidebar = ({ isOpen, onClose }) => {
                     className="border-bottom"
                     style={{ height: '72px', padding: '16px' }}
                 >
-                    <Image
-                        src={logo}
-                        alt="MediPractise"
-                        fluid
-                        style={{ height: '40px' }}
-                    />
+                    <Link to="/">
+                        <Image
+                            src={logo}
+                            alt="MediPractise"
+                            fluid
+                            style={{ height: '40px' }}
+                        />
+                    </Link>
                 </div>
 
                 <div className="d-flex flex-column flex-grow-1">

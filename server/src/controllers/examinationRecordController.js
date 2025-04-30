@@ -73,4 +73,3 @@ export async function getAllExaminationsByPatientId(req, res) {
         res.status(500).json({ error: err.message });
     }
 }
-

@@ -1,11 +1,17 @@
 // pages/PatientDetailPage.jsx
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Button, Row, Col, Card, Modal, Spinner } from 'react-bootstrap';
+import { Row, Col, Modal, Spinner, Button } from 'react-bootstrap';
 import { ROUTES } from '../config/routes';
 import { patientApi } from '../api';
+import { examinationApi } from '../api/examinationApi';
 import ExaminationForm from '../components/examinations/ExaminationForm';
 import PrescriptionForm from '../components/prescriptions/PrescriptionForm';
+import PatientDetailCard from '../components/patients/PatientDetailCard';
+import DiagnosisList from '../components/patients/DiagnosisList';
+import ExaminationList from '../components/examinations/ExaminationList';
+import PatientAnamnesis from '../components/patients/PatientAnamnesis';
+import PatientMedication from '../components/patients/PatientMedication';
 
 // Komponenta pro zobrazení přehledu o pacientovi
 const PatientDetailPage = () => {
@@ -17,13 +23,22 @@ const PatientDetailPage = () => {
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [showExaminationForm, setShowExaminationForm] = useState(false);
     const [showPrescriptionForm, setShowPrescriptionForm] = useState(false);
+    const [showDiagnosisForm, setShowDiagnosisForm] = useState(false);
     const [examinations, setExaminations] = useState([]);
 
     useEffect(() => {
         const fetchPatientDetail = async () => {
             try {
+                setIsLoading(true);
+                setError(null);
+
                 const data = await patientApi.getPatientDetail(id);
                 console.log('API response:', data);
+
+                if (!data) {
+                    throw new Error('Nepodařilo se načíst data pacienta');
+                }
+
                 setPatient({
                     id: data.id,
                     first_name: data.first_name,
@@ -39,7 +54,22 @@ const PatientDetailPage = () => {
                     phone: data.contact_info?.contact_phone,
                     contactPerson: data.contact_info?.contact_person,
                     address: data.address,
-                    diagnosis: data.diagnosis,
+                    diagnosis: data.diagnosis
+                        ? [
+                              {
+                                  id: 1,
+                                  code: 'DIABETES MELLITUS 2. TYPU (E11.9)',
+                                  description:
+                                      'Diagnostikováno 2020, kompenzace suboptimální, doporučena úprava medikace a režimová opatření.',
+                              },
+                              {
+                                  id: 2,
+                                  code: 'METABOLICKÝ SYNDROM (E88.81)',
+                                  description:
+                                      'Obezita, inzulínová rezistence, dyslipidémie a hypertenze, riziko CVD a DM2, doporučena změna životního stylu a farmakoterapie.',
+                              },
+                          ]
+                        : [],
                     anamnesis: data.anamnesis,
                     medication: data.medication,
                     medicalRecord: data.medical_record,
@@ -47,19 +77,24 @@ const PatientDetailPage = () => {
                         data.created_at,
                     ).toLocaleDateString('cs-CZ'),
                 });
-                // TODO: Načíst seznam vyšetření z API
-                setExaminations([
-                    {
-                        id: 1,
-                        type: 'UV Invasive Ultrasound',
-                        date: '2024-03-15',
-                        results: 'Vyšetření ukázalo změny v levé části krku.',
-                        notes: 'Doporučeno neurologické vyšetření.',
-                    },
-                ]);
+
+                try {
+                    // Načtení vyšetření z API
+                    const examinationsData =
+                        await examinationApi.getPatientExaminations(id);
+                    setExaminations(examinationsData || []);
+                } catch (examError) {
+                    console.error('Error fetching examinations:', examError);
+                    // Pokud se nepodaří načíst vyšetření, nastavíme prázdný seznam
+                    setExaminations([]);
+                }
             } catch (err) {
                 console.error('Error fetching patient detail:', err);
-                setError('Nepodařilo se načíst detail pacienta.');
+                setError(
+                    err.response?.data?.message ||
+                        err.message ||
+                        'Nepodařilo se načíst detail pacienta. Zkontrolujte připojení k serveru.',
+                );
             } finally {
                 setIsLoading(false);
             }
@@ -85,15 +120,25 @@ const PatientDetailPage = () => {
         navigate(ROUTES.PATIENTS);
     };
 
-    const handleAddExamination = (examinationData) => {
-        // TODO: Implement API call to save examination
-        setExaminations((prev) => [
-            ...prev,
-            {
-                id: prev.length + 1,
+    const handleUpdate = () => {
+        navigate(`/patient/${patient.id}/edit`, {
+            state: { patient },
+        });
+    };
+
+    const handleAddExamination = async (examinationData) => {
+        try {
+            const newExamination = await examinationApi.addExamination({
+                patient_id: patient.id,
+                doctor_id: 'fb28cef4-02a5-4573-8a4c-d0eb21f0e6b1', // TODO: Get from auth context
                 ...examinationData,
-            },
-        ]);
+            });
+
+            setExaminations((prev) => [...prev, newExamination]);
+        } catch (error) {
+            console.error('Error adding examination:', error);
+            // TODO: Show error message to user
+        }
     };
 
     const handleCreatePrescription = (prescriptionData) => {
@@ -115,166 +160,105 @@ const PatientDetailPage = () => {
 
     if (error) {
         return (
-            <div className="alert alert-danger" role="alert">
-                {error}
+            <div className="alert alert-danger m-4" role="alert">
+                <h4 className="alert-heading">Chyba při načítání dat</h4>
+                <p>{error}</p>
+                <hr />
+                <p className="mb-0">
+                    <Button
+                        variant="outline-danger"
+                        onClick={() => window.location.reload()}
+                    >
+                        Zkusit znovu
+                    </Button>
+                </p>
             </div>
         );
     }
 
     if (!patient) {
-        return <div className="p-4">Pacient nenalezen.</div>;
+        return (
+            <div className="alert alert-warning m-4" role="alert">
+                <h4 className="alert-heading">Pacient nenalezen</h4>
+                <p>Pacient s ID {id} nebyl nalezen v systému.</p>
+                <hr />
+                <p className="mb-0">
+                    <Button
+                        variant="outline-warning"
+                        onClick={() => navigate(ROUTES.PATIENTS)}
+                    >
+                        Zpět na seznam pacientů
+                    </Button>
+                </p>
+            </div>
+        );
     }
 
     return (
-        <div>
-            <Row className="align-items-center mb-4">
-                <Col md={8}>
-                    <h2>{patient.name}</h2>
-                    <p className="text-muted">
-                        {patient.sex === 'female' ? 'Žena' : 'Muž'} &bull; Věk{' '}
-                        {calculateAge(patient.dateOfBirth)}
-                    </p>
-                    <div className="d-flex gap-3">
-                        <Button
-                            variant="outline-primary"
-                            onClick={() =>
-                                (window.location.href = `tel:${patient.phone}`)
-                            }
-                        >
-                            Zavolat
-                        </Button>
-                        <Button
-                            variant="outline-secondary"
-                            onClick={() =>
-                                (window.location.href = `mailto:${patient.email}`)
-                            }
-                        >
-                            Poslat Email
-                        </Button>
+        <>
+            <PatientDetailCard
+                patient={patient}
+                onUpdate={handleUpdate}
+                onDelete={() => setShowDeleteModal(true)}
+                onERecept={() => setShowPrescriptionForm(true)}
+            />
+
+            <hr className="my-4" />
+
+            <Row className="g-0 position-relative">
+                <Col md={6} className="pe-md-4">
+                    <DiagnosisList
+                        diagnoses={patient.diagnosis}
+                        onAdd={() => setShowDiagnosisForm(true)}
+                        onEdit={(diagnosis) => {
+                            // TODO: Implement edit functionality
+                            console.log('Editing diagnosis:', diagnosis);
+                        }}
+                    />
+                </Col>
+
+                <div className="d-none d-md-block position-absolute start-50 top-0 bottom-0 border-start"></div>
+
+                <Col md={6} className="ps-md-4 pt-4 pt-md-0">
+                    <div className="position-relative">
+                        <ExaminationList
+                            examinations={examinations}
+                            onAdd={() => setShowExaminationForm(true)}
+                            onEdit={(examination) => {
+                                // TODO: Implement edit functionality
+                                console.log(
+                                    'Editing examination:',
+                                    examination,
+                                );
+                            }}
+                        />
                     </div>
                 </Col>
-                <Col md={4} className="text-end">
-                    <Button
-                        variant="primary"
-                        className="me-2"
-                        onClick={() =>
-                            navigate(`/patient/${patient.id}/edit`, {
-                                state: { patient },
-                            })
-                        }
-                    >
-                        Upravit
-                    </Button>
-                    <Button
-                        variant="success"
-                        className="me-2"
-                        onClick={() => setShowPrescriptionForm(true)}
-                    >
-                        E-Recept
-                    </Button>
-                   {/* <Button
-                        variant="danger"
-                        onClick={() => setShowDeleteModal(true)}
-                    >
-                        Smazat
-                    </Button>*/}
+            </Row>
+
+            <hr className="my-4" />
+
+            <Row>
+                <Col md={6}>
+                    <PatientAnamnesis
+                        anamnesis={patient.anamnesis}
+                        onEdit={() => {
+                            // TODO: Implement edit functionality
+                            console.log('Editing anamnesis');
+                        }}
+                    />
+
+                    <PatientMedication
+                        medication={patient.medication}
+                        onEdit={() => {
+                            // TODO: Implement edit functionality
+                            console.log('Editing medication');
+                        }}
+                    />
                 </Col>
             </Row>
 
-            {/* Přehledové karty */}
-            <Row className="mb-4">
-                <Col md={12}>
-                    <Card className="mb-3">
-                        <Card.Header>Vitals</Card.Header>
-                        <Card.Body className="d-flex gap-5 flex-wrap">
-                            <div>
-                                <strong>120 mg/dt</strong>
-                                <br />
-                                Hladina cukru
-                            </div>
-                            <div>
-                                <strong>{patient.weight} kg</strong>
-                                <br />
-                                Váha
-                            </div>
-                            <div>
-                                <strong>70 bpm</strong>
-                                <br />
-                                Tepová frekvence
-                            </div>
-                            <div>
-                                <strong>71%</strong>
-                                <br />
-                                Saturace kyslíkem
-                            </div>
-                            <div>
-                                <strong>36.8 &deg;C</strong>
-                                <br />
-                                Teplota
-                            </div>
-                            <div>
-                                <strong>120/80</strong>
-                                <br />
-                                Tlak
-                            </div>
-                        </Card.Body>
-                    </Card>
-
-                    <Card className="mb-3">
-                        <Card.Header>Léky</Card.Header>
-                        <Card.Body>
-                            <p>
-                                <strong>Ursofalk 300</strong> – 2 tablety,
-                                14:00, Běžná léčba
-                            </p>
-                            <p>
-                                <strong>Indever 20</strong> – 1 tableta, 14:20,
-                                Akutní stav
-                            </p>
-                        </Card.Body>
-                    </Card>
-
-                    <Card>
-                        <Card.Header className="d-flex justify-content-between align-items-center">
-                            <span>Výsledky vyšetření</span>
-                            <Button
-                                variant="primary"
-                                size="sm"
-                                onClick={() => setShowExaminationForm(true)}
-                            >
-                                + Přidat vyšetření
-                            </Button>
-                        </Card.Header>
-                        <Card.Body>
-                            {examinations.length === 0 ? (
-                                <p className="text-muted">
-                                    Žádná vyšetření nejsou k dispozici.
-                                </p>
-                            ) : (
-                                examinations.map((exam) => (
-                                    <div key={exam.id} className="mb-3">
-                                        <h5>{exam.type}</h5>
-                                        <p className="text-muted mb-1">
-                                            {new Date(
-                                                exam.date,
-                                            ).toLocaleDateString('cs-CZ')}
-                                        </p>
-                                        <p className="mb-1">{exam.results}</p>
-                                        {exam.notes && (
-                                            <p className="text-muted small">
-                                                {exam.notes}
-                                            </p>
-                                        )}
-                                        <hr />
-                                    </div>
-                                ))
-                            )}
-                        </Card.Body>
-                    </Card>
-                </Col>
-            </Row>
-
-            {/* Potvrzovací dialog pro smazání */}
+            {/* Modals */}
             <Modal
                 show={showDeleteModal}
                 onHide={() => setShowDeleteModal(false)}
@@ -299,21 +283,21 @@ const PatientDetailPage = () => {
                 </Modal.Footer>
             </Modal>
 
-            {/* Formulář pro přidání vyšetření */}
             <ExaminationForm
                 show={showExaminationForm}
                 onHide={() => setShowExaminationForm(false)}
                 onSubmit={handleAddExamination}
+                patientId={patient.id}
+                doctorId="fb28cef4-02a5-4573-8a4c-d0eb21f0e6b1" // TODO: Get from auth context
             />
 
-            {/* Formulář pro vytvoření receptu */}
             <PrescriptionForm
                 show={showPrescriptionForm}
                 onHide={() => setShowPrescriptionForm(false)}
                 onSubmit={handleCreatePrescription}
                 patient={patient}
             />
-        </div>
+        </>
     );
 };
 
