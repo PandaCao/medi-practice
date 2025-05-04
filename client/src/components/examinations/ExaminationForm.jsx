@@ -76,14 +76,6 @@ const ExaminationForm = ({
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            if (examination) {
-                await examinationApi.updateExamination({
-                    ...formData,
-                    id: examination.id,
-                });
-            } else {
-                await examinationApi.addExamination(formData);
-            }
             onSubmit(formData);
             onHide();
         } catch (error) {

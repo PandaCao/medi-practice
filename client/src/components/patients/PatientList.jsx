@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Table, Button, Stack, Spinner, Card } from 'react-bootstrap';
 import {
-    BsThreeDotsVertical,
     BsEnvelope,
     BsTelephone,
     BsPeople,
