@@ -135,7 +135,10 @@ const PatientDetailPage = () => {
                 ...examinationData,
             });
 
-            setExaminations((prev) => [...prev, newExamination]);
+            // Načteme všechna vyšetření znovu, abychom měli aktuální data
+            const examinationsData =
+                await examinationApi.getPatientExaminations(patient.id);
+            setExaminations(examinationsData || []);
         } catch (error) {
             console.error('Error adding examination:', error);
             // TODO: Show error message to user
