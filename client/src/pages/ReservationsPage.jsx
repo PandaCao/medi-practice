@@ -10,6 +10,9 @@ function ReservationsPage() {
         notes: '',
     });
 
+    const [showModal, setShowModal] = useState(false);
+    const [modalMessage, setModalMessage] = useState('');
+
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData((prev) => ({
@@ -29,21 +32,61 @@ function ReservationsPage() {
         try {
             // TODO: Implement API call to save reservation
             console.log('Form submitted:', formData);
+
+            //Message box - Form subbmited
+            setModalMessage('Rezervace byla úspěšně vytvořená!');
+            setShowModal(true);
         } catch (error) {
             console.error('Error creating reservation:', error);
+
+            // TODO: Message box - Form submitted
+            setModalMessage('Rezervace nebyla vytvořená.');
+            setShowModal(true);
         }
     };
 
+    const closeModal = () => {
+        setShowModal(false);
+        setModalMessage('');
+    };
+
     return (
-        <Container className="py-4">
-            <h2 className="mb-4">Vytvoření nové rezervace</h2>
-            <ReservationForm
-                formData={formData}
-                onSubmit={handleSubmit}
-                onChange={handleChange}
-                onDateChange={handleDateChange}
-            />
-        </Container>
+
+        <>
+            <Container className="py-4">
+                <h2 className="mb-4">Vytvoření nové rezervace</h2>
+                <ReservationForm
+                    formData={formData}
+                    onSubmit={handleSubmit}
+                    onChange={handleChange}
+                    onDateChange={handleDateChange}
+                />
+            </Container>
+
+            {showModal && (
+                <div className="modal show d-block" tabIndex="-1">
+                    <div className="modal-dialog">
+                        <div className="modal-content">
+                            <div className="modal-header">
+                                <h5 className="modal-title">Upozornění</h5>
+                            </div>
+                            <div className="modal-body">
+                                <p>{modalMessage}</p>
+                            </div>
+                            <div className="modal-footer">
+                                <button
+                                    type="button"
+                                    className="btn btn-primary"
+                                    onClick={() => setShowModal(false)}
+                                >
+                                    OK
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
+        </>
     );
 }
 

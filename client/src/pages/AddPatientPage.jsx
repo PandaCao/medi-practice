@@ -21,6 +21,7 @@ function AddPatientPage() {
             const newPatient = {
                 first_name: formData.firstName,
                 last_name: formData.lastName,
+                created_at: formatDate(formData.registrationDate),
                 birth_number: formData.personalId,
                 date_of_birth: formatDate(formData.birthDate),
                 sex: formData.gender,

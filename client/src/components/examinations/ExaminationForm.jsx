@@ -77,13 +77,16 @@ const ExaminationForm = ({
         e.preventDefault();
         try {
             if (examination) {
+                console.log('Upravuji pacienta ', formData);
                 await examinationApi.updateExamination({
                     ...formData,
                     id: examination.id,
                 });
             } else {
+                console.log('Pridavam pacienta ', formData);
                 await examinationApi.addExamination(formData);
             }
+            console.log('On submit ', formData);
             onSubmit(formData);
             onHide();
         } catch (error) {
@@ -115,6 +118,7 @@ const ExaminationForm = ({
                             value={formData.anamnesis}
                             onChange={handleChange}
                             required
+                            maxLength={250}
                         />
                     </Form.Group>
 
@@ -127,6 +131,7 @@ const ExaminationForm = ({
                             value={formData.diagnosis_overview}
                             onChange={handleChange}
                             required
+                            maxLength={250}
                         />
                     </Form.Group>
 
@@ -138,6 +143,7 @@ const ExaminationForm = ({
                             value={formData.medication}
                             onChange={handleChange}
                             required
+                            maxLength={250}
                         />
                     </Form.Group>
 
@@ -150,6 +156,7 @@ const ExaminationForm = ({
                             value={formData.lab_results}
                             onChange={handleChange}
                             required
+                            maxLength={250}
                         />
                     </Form.Group>
 
@@ -162,6 +169,7 @@ const ExaminationForm = ({
                             value={formData.objective_findings}
                             onChange={handleChange}
                             required
+                            maxLength={250}
                         />
                     </Form.Group>
 
@@ -173,6 +181,7 @@ const ExaminationForm = ({
                             name="conclusions"
                             value={formData.conclusions}
                             onChange={handleChange}
+                            maxLength={250}
                         />
                     </Form.Group>
 
@@ -185,6 +194,7 @@ const ExaminationForm = ({
                             value={formData.recommendations}
                             onChange={handleChange}
                             required
+                            maxLength={250}
                         />
                     </Form.Group>
 
@@ -196,6 +206,7 @@ const ExaminationForm = ({
                             value={formData.prescribed_medication}
                             onChange={handleChange}
                             required
+                            maxLength={250}
                         />
                     </Form.Group>
 
@@ -206,6 +217,7 @@ const ExaminationForm = ({
                             name="new_diagnosis"
                             value={formData.new_diagnosis}
                             onChange={handleChange}
+                            maxLength={250}
                         />
                     </Form.Group>
 
@@ -217,6 +229,7 @@ const ExaminationForm = ({
                             value={formData.place}
                             onChange={handleChange}
                             required
+                            maxLength={250}
                         />
                     </Form.Group>
 

@@ -85,7 +85,6 @@ class ExaminationApi {
         try {
             // Simulate API delay
             await new Promise((resolve) => setTimeout(resolve, 500));
-
             return mockExaminations.filter((e) => e.patient_id === patientId);
         } catch (error) {
             console.error('Error fetching patient examinations:', error);

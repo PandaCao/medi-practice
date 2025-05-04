@@ -113,6 +113,7 @@ const AddPatient = ({ onSaveDraft, onSubmit, onDelete, initialData = {} }) => {
     const shouldShowError = (fieldName) =>
         touchedFields[fieldName] && errors[fieldName];
 
+
     return (
         <Form onSubmit={handleSubmit}>
             {/* Osobní údaje */}
@@ -365,10 +366,10 @@ const AddPatient = ({ onSaveDraft, onSubmit, onDelete, initialData = {} }) => {
                             onBlur={handleBlur}
                             isInvalid={shouldShowError('phone')}
                             maxLength={13}
-                            placeholder="+420123456789"
+                            placeholder="123456789"
                         />
                         <Form.Control.Feedback type="invalid">
-                            {errors.phone}
+                            {errors.phone + '. Zadejte číslo bez předvolby +420, například 777123456.'}
                         </Form.Control.Feedback>
                     </Form.Group>
                 </Col>

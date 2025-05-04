@@ -83,6 +83,7 @@ const PatientDetailPage = () => {
                     const examinationsData =
                         await examinationApi.getPatientExaminations(id);
                     setExaminations(examinationsData || []);
+
                 } catch (examError) {
                     console.error('Error fetching examinations:', examError);
                     // Pokud se nepodaří načíst vyšetření, nastavíme prázdný seznam
