@@ -4,7 +4,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { Row, Col, Modal, Spinner, Button } from 'react-bootstrap';
 import { ROUTES } from '../config/routes';
 import { patientApi } from '../api';
-import { examinationApi } from '../api/examinationApi';
+import { getPatientExaminations, addExamination } from '../api/examinationApi';
 import ExaminationForm from '../components/examinations/ExaminationForm';
 import PrescriptionForm from '../components/prescriptions/PrescriptionForm';
 import PatientDetailCard from '../components/patients/PatientDetailCard';
@@ -80,10 +80,8 @@ const PatientDetailPage = () => {
 
                 try {
                     // Načtení vyšetření z API
-                    const examinationsData =
-                        await examinationApi.getPatientExaminations(id);
+                    const examinationsData = await getPatientExaminations(id);
                     setExaminations(examinationsData || []);
-
                 } catch (examError) {
                     console.error('Error fetching examinations:', examError);
                     // Pokud se nepodaří načíst vyšetření, nastavíme prázdný seznam
@@ -129,16 +127,11 @@ const PatientDetailPage = () => {
 
     const handleAddExamination = async (examinationData) => {
         try {
-            const newExamination = await examinationApi.addExamination({
-                patient_id: patient.id,
-                doctor_id: 'fb28cef4-02a5-4573-8a4c-d0eb21f0e6b1', // TODO: Get from auth context
-                ...examinationData,
-            });
-
+            await addExamination(examinationData);
             // Načteme všechna vyšetření znovu, abychom měli aktuální data
-            const examinationsData =
-                await examinationApi.getPatientExaminations(patient.id);
+            const examinationsData = await getPatientExaminations(patient.id);
             setExaminations(examinationsData || []);
+            setShowExaminationForm(false);
         } catch (error) {
             console.error('Error adding examination:', error);
             // TODO: Show error message to user
@@ -290,9 +283,16 @@ const PatientDetailPage = () => {
             <ExaminationForm
                 show={showExaminationForm}
                 onHide={() => setShowExaminationForm(false)}
-                onSubmit={handleAddExamination}
+                onSubmit={() => {
+                    // Načteme všechna vyšetření znovu, abychom měli aktuální data
+                    getPatientExaminations(patient.id).then(
+                        (examinationsData) => {
+                            setExaminations(examinationsData || []);
+                            setShowExaminationForm(false);
+                        },
+                    );
+                }}
                 patientId={patient.id}
-                doctorId="fb28cef4-02a5-4573-8a4c-d0eb21f0e6b1" // TODO: Get from auth context
             />
 
             <PrescriptionForm

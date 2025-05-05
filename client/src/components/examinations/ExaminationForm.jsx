@@ -1,18 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { Modal, Form, Button } from 'react-bootstrap';
-import { examinationApi } from '../../api/examinationApi';
+import { addExamination, updateExamination } from '../../api/examinationApi';
 
 const ExaminationForm = ({
     show,
     onHide,
     onSubmit,
     patientId,
-    doctorId,
+    doctorId = 'd6574103-a485-4eba-a536-d4dcbb3f2077', // Default doctor ID until we have authentication
     examination = null,
 }) => {
     const [formData, setFormData] = useState({
         patient_id: patientId || '',
-        doctor_id: doctorId || '',
+        doctor_id: doctorId,
+        examination_date: new Date().toISOString(),
         anamnesis: '',
         diagnosis_overview: '',
         medication: '',
@@ -32,6 +33,8 @@ const ExaminationForm = ({
             setFormData({
                 patient_id: examination.patient_id || patientId,
                 doctor_id: examination.doctor_id || doctorId,
+                examination_date:
+                    examination.examination_date || new Date().toISOString(),
                 anamnesis: examination.anamnesis || '',
                 diagnosis_overview: examination.diagnosis_overview || '',
                 medication: examination.medication || '',
@@ -49,6 +52,7 @@ const ExaminationForm = ({
             setFormData({
                 patient_id: patientId,
                 doctor_id: doctorId,
+                examination_date: new Date().toISOString(),
                 anamnesis: '',
                 diagnosis_overview: '',
                 medication: '',
@@ -76,8 +80,12 @@ const ExaminationForm = ({
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            onSubmit(formData);
-            onHide();
+            if (examination) {
+                await updateExamination(formData);
+            } else {
+                await addExamination(formData);
+            }
+            onSubmit();
         } catch (error) {
             console.error('Error submitting examination:', error);
         }
