@@ -3,6 +3,17 @@ import { Button } from 'react-bootstrap';
 import { BsPencil } from 'react-icons/bs';
 import { RiFileList2Line } from 'react-icons/ri';
 
+const EmptyFieldMessage = () => (
+    <div className="text-muted small">Není vyplněno</div>
+);
+
+const ContactField = ({ label, value }) => (
+    <div className="mb-1">
+        <div className="text-muted small">{label}:</div>
+        {value ? <div>{value}</div> : <EmptyFieldMessage />}
+    </div>
+);
+
 const PatientDetailCard = ({ patient, onUpdate, onERecept }) => {
     return (
         <div className="mb-4">
@@ -41,23 +52,23 @@ const PatientDetailCard = ({ patient, onUpdate, onERecept }) => {
                             <div className="text-muted small">
                                 Datum narození:
                             </div>
-                            <div>12/3/1986</div>
+                            <div>{patient.dateOfBirth}</div>
                         </div>
                         <div className="mb-1">
                             <div className="text-muted small">Rodné číslo:</div>
-                            <div>860312/5412</div>
+                            <div>{patient.personalId}</div>
                         </div>
                         <div className="mb-1">
                             <div className="text-muted small">
                                 Datum registrace:
                             </div>
-                            <div>27/12/2024</div>
+                            <div>{patient.registrationDate}</div>
                         </div>
                         <div>
                             <div className="text-muted small">
                                 Zdravotní pojišťovna:
                             </div>
-                            <div>Česká průmyslová zdravotní pojišťovna</div>
+                            <div>{patient.insurance}</div>
                         </div>
                     </div>
                 </div>
@@ -65,32 +76,18 @@ const PatientDetailCard = ({ patient, onUpdate, onERecept }) => {
                 <div className="col-md-4">
                     <div className="mb-4">
                         <div className="text-muted mb-2">Kontaktní údaje:</div>
-                        <div className="mb-1">
-                            <div className="text-muted small">Email:</div>
-                            <div>Petr.horak@gmail.com</div>
-                        </div>
-                        <div>
-                            <div className="text-muted small">Telefon:</div>
-                            <div>+420 777 564 123</div>
-                        </div>
+                        <ContactField label="Email" value={patient.email} />
+                        <ContactField label="Telefon" value={patient.phone} />
                     </div>
                 </div>
 
                 <div className="col-md-4">
                     <div className="mb-4">
                         <div className="text-muted mb-2">Kontaktní osoba:</div>
-                        <div className="mb-1">
-                            <div className="text-muted small">Jméno:</div>
-                            <div>Jana Horáková</div>
-                        </div>
-                        <div className="mb-1">
-                            <div className="text-muted small">Vztah:</div>
-                            <div>manželka</div>
-                        </div>
-                        <div>
-                            <div className="text-muted small">Telefon:</div>
-                            <div>+420 777 565 868</div>
-                        </div>
+                        <ContactField
+                            label="Jméno"
+                            value={patient.contactPerson}
+                        />
                     </div>
                 </div>
             </div>
@@ -106,11 +103,11 @@ const PatientDetailCard = ({ patient, onUpdate, onERecept }) => {
                     </div>
                     <div>
                         <div className="text-muted small">Výška:</div>
-                        <div>180 cm</div>
+                        <div>{patient.height} cm</div>
                     </div>
                     <div>
                         <div className="text-muted small">Váha:</div>
-                        <div>90 kg</div>
+                        <div>{patient.weight} kg</div>
                     </div>
                     <div>
                         <div className="text-muted small">Krevní tlak:</div>
