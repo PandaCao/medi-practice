@@ -59,6 +59,16 @@ const PatientDetailCard = ({ patient, onUpdate, onERecept }) => {
                             <div className="text-muted small">Rodné číslo:</div>
                             <div>{patient.personalId}</div>
                         </div>
+                        <div>
+                            <div className="text-muted small">Pohlaví:</div>
+                            <div>
+                                {patient.sex ? (
+                                    patient.sex === "male" ? "Muž" : "Žena"
+                                ) : (
+                                    <EmptyFieldMessage />
+                                )}
+                            </div>
+                        </div>
                         <div className="mb-1">
                             <div className="text-muted small">
                                 Datum registrace:

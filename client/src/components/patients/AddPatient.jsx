@@ -10,7 +10,7 @@ import {
 } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { BsInfoCircle } from 'react-icons/bs';
-import { validateForm } from '../../tools/AddPatientValidation';
+import { validateForm, parsePersonalId } from '../../tools/AddPatientValidation';
 import { INSURANCE_COMPANIES_LIST } from '../../config/constants';
 import PersonalIdInput from './PersonalIdInput';
 
@@ -20,28 +20,51 @@ const AddPatient = ({ onSaveDraft, onSubmit, onDelete, initialData = {} }) => {
         firstName: initialData.firstName || '',
         lastName: initialData.lastName || '',
         personalId: initialData.personalId || '',
-        birthDate: initialData.birthDate || '',
-        gender: initialData.gender || '',
+        birthDate: '', // Ukládáme interně, ale nezobrazujeme
+        gender: '',    // Ukládáme interně, ale nezobrazujeme
         insuranceCompany: initialData.insuranceCompany || '',
-        registrationDate:
-            initialData.registrationDate ||
-            new Date().toISOString().split('T')[0],
+        registrationDate: initialData.registrationDate || new Date().toISOString().split('T')[0],
         height: initialData.height || '',
         weight: initialData.weight || '',
         contactPerson: initialData.contactPerson || '',
         email: initialData.email || '',
-        phone: initialData.phone || '',
+        phone: initialData.phone || ''
     });
 
     const [errors, setErrors] = useState({});
     const [touchedFields, setTouchedFields] = useState({});
 
     const handleChange = (e) => {
-        const { name, value } = e.target;
-        setFormData((prev) => ({
-            ...prev,
-            [name]: value,
-        }));
+        let name, value;
+        
+        // Podpora pro oba typy vstupů - event objekt i přímá hodnota
+        if (e && e.target) {
+            // Klasický input event
+            name = e.target.name;
+            value = e.target.value;
+        } else {
+            // Přímá hodnota (např. z PersonalIdInput)
+            name = 'personalId';
+            value = e;
+        }
+        
+        // Speciální logika pro rodné číslo
+        if (name === 'personalId') {
+            const parsedData = parsePersonalId(value);
+            setFormData((prev) => ({
+                ...prev,
+                [name]: value,
+                ...(parsedData ? {
+                    birthDate: parsedData.birthDate,
+                    gender: parsedData.gender
+                } : {})
+            }));
+        } else {
+            setFormData((prev) => ({
+                ...prev,
+                [name]: value,
+            }));
+        }
     };
 
     const validateField = (name, value) => {
@@ -152,103 +175,19 @@ const AddPatient = ({ onSaveDraft, onSubmit, onDelete, initialData = {} }) => {
                 </Col>
             </Row>
 
-            {/* Rodné číslo a datum narození */}
+            {/* Rodné číslo a pojišťovna */}
             <Row className="mb-3">
                 <Col md={6}>
                     <Form.Group>
                         <RequiredLabel>Rodné číslo</RequiredLabel>
-                        <OverlayTrigger
-                            placement="right"
-                            overlay={renderTooltip(
-                                'Zadejte rodné číslo ve formátu XXXXXX/XXX nebo XXXXXX/XXXX.',
-                            )}
-                        >
-                            <BsInfoCircle className="ms-2" />
-                        </OverlayTrigger>
                         <PersonalIdInput
                             value={formData.personalId}
-                            onChange={(value) => {
-                                setFormData((prev) => ({
-                                    ...prev,
-                                    personalId: value,
-                                }));
-                                // Validujeme při změně, protože PersonalIdInput nemá vlastní onBlur
-                                const fieldError = validateField(
-                                    'personalId',
-                                    value,
-                                );
-                                if (touchedFields.personalId) {
-                                    if (fieldError) {
-                                        setErrors((prev) => ({
-                                            ...prev,
-                                            personalId: fieldError,
-                                        }));
-                                    } else {
-                                        setErrors((prev) => {
-                                            const newErrors = { ...prev };
-                                            delete newErrors.personalId;
-                                            return newErrors;
-                                        });
-                                    }
-                                }
-                            }}
-                            onFocus={() => {
-                                setTouchedFields((prev) => ({
-                                    ...prev,
-                                    personalId: true,
-                                }));
-                            }}
+                            onChange={(value) => handleChange(value)}
+                            name="personalId"
+                            onBlur={handleBlur}
                             isInvalid={shouldShowError('personalId')}
                             error={errors.personalId}
                         />
-                    </Form.Group>
-                </Col>
-                <Col md={6}>
-                    <Form.Group>
-                        <RequiredLabel>Datum narození</RequiredLabel>
-                        <OverlayTrigger
-                            placement="right"
-                            overlay={renderTooltip(
-                                'Datum narození musí odpovídat rodnému číslu.',
-                            )}
-                        >
-                            <BsInfoCircle className="ms-2" />
-                        </OverlayTrigger>
-                        <Form.Control
-                            type="date"
-                            name="birthDate"
-                            value={formData.birthDate}
-                            onChange={handleChange}
-                            onBlur={handleBlur}
-                            isInvalid={shouldShowError('birthDate')}
-                            max={new Date().toISOString().split('T')[0]}
-                        />
-                        <Form.Control.Feedback type="invalid">
-                            {errors.birthDate}
-                        </Form.Control.Feedback>
-                    </Form.Group>
-                </Col>
-            </Row>
-
-            {/* Pojišťovna a pohlaví */}
-            <Row className="mb-3">
-                <Col md={6}>
-                    <Form.Group>
-                        <RequiredLabel>Pohlaví</RequiredLabel>
-                        <Form.Select
-                            name="gender"
-                            value={formData.gender}
-                            onChange={handleChange}
-                            onBlur={handleBlur}
-                            isInvalid={shouldShowError('gender')}
-                        >
-                            <option value="">Vyberte pohlaví</option>
-                            <option value="male">Muž</option>
-                            <option value="female">Žena</option>
-                        </Form.Select>
-                        <Form.Control.Feedback type="invalid">
-                            {errors.gender}
-                        </Form.Control.Feedback>
                     </Form.Group>
                 </Col>
                 <Col md={6}>

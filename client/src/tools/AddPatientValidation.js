@@ -26,84 +26,13 @@ const isValidWeight = (weight) => {
     return /^\d{2,3}$/.test(weight);
 };
 
-const isValidPersonalId = (personalId, gender, birthDate) => {
-    console.log('Validating:', { personalId, gender, birthDate });
-
-    if (!personalId || !birthDate || !gender) {
-        console.log('Missing required data');
-        return false;
-    }
-
-    // Odstranění mezer
-    const cleanId = personalId.replace(/\s/g, '');
-
-    // Kontrola formátu XXXXXX/XXX(X)
-    const parts = cleanId.split('/');
-    if (parts.length !== 2) {
-        console.log('Invalid format - missing slash');
-        return false;
-    }
-
-    const [firstPart, secondPart] = parts;
-
-    // První část musí mít 6 číslic
-    if (!/^\d{6}$/.test(firstPart)) {
-        console.log('Invalid first part format');
-        return false;
-    }
-
-    // Druhá část musí mít 3 nebo 4 číslice
-    if (!/^\d{3,4}$/.test(secondPart)) {
-        console.log('Invalid second part format');
-        return false;
-    }
-
-    // Získání jednotlivých částí data z rodného čísla
-    const year = parseInt(firstPart.substring(0, 2));
-    let month = parseInt(firstPart.substring(2, 4));
-    const day = parseInt(firstPart.substring(4, 6));
-
-    // Úprava měsíce a kontrola pohlaví
-    const isFemale = month > 50;
-    const monthForDate = isFemale ? month - 50 : month;
-    const expectedGender = isFemale ? 'female' : 'male';
-
-    // Kontrola pohlaví
-    if (expectedGender !== gender) {
-        console.log('Gender mismatch');
-        return false;
-    }
-
-    // Parsování datumu z ISO formátu (YYYY-MM-DD)
-    const [birthYear, birthMonth, birthDay] = birthDate.split('-').map(Number);
-
-    // Převod roku z rodného čísla na plný rok
-    const fullYear = year + (birthYear >= 2000 ? 2000 : 1900);
-
-    // Kontrola platnosti měsíce (1-12)
-    if (monthForDate < 1 || monthForDate > 12) {
-        console.log('Invalid month');
-        return false;
-    }
-
-    // Kontrola platnosti dne
-    const daysInMonth = new Date(fullYear, monthForDate, 0).getDate();
-    if (day < 1 || day > daysInMonth) {
-        console.log('Invalid day');
-        return false;
-    }
-
-    console.log('Date comparison:', {
-        fromRC: { year: fullYear, month: monthForDate, day },
-        fromBirth: { year: birthYear, month: birthMonth, day: birthDay },
-    });
-
-    // Kontrola shody s datem narození
-    return (
-        fullYear === birthYear &&
-        monthForDate === birthMonth &&
-        day === birthDay
-    );
+// Upravit validaci rodného čísla - nyní kontrolujeme jen formát
+const isValidPersonalId = (personalId) => {
+    if (!personalId) return false;
+    
+    // Formát RRMMDD/XXXX nebo RRMMDDXXXX
+    const regex = /^\d{6}[\/]?\d{3,4}$/;
+    return regex.test(personalId);
 };
 
 const isValidInsuranceCompany = (code) => {
@@ -121,6 +50,43 @@ const isValidRegistrationDate = (date) => {
     today.setHours(0, 0, 0, 0);
 
     return selectedDate <= today;
+};
+
+// Pomocná funkce pro extrakci datumu narození a pohlaví z rodného čísla
+export const parsePersonalId = (personalId) => {
+    if (!personalId) return null;
+    
+    // Odstraníme lomítko pokud existuje
+    const cleanId = personalId.replace(/\D/g, '');
+    
+    if (cleanId.length < 9 || cleanId.length > 10) return null;
+    
+    // Rozdělení rodného čísla
+    const yearPart = cleanId.substr(0, 2);
+    const monthPart = parseInt(cleanId.substr(2, 2));
+    const dayPart = parseInt(cleanId.substr(4, 2));
+    
+    // Určení pohlaví a oprava měsíce
+    let gender = 'male';
+    let month = monthPart;
+    
+    if (monthPart > 12) {
+        gender = 'female';
+        month = monthPart - 50;
+    }
+    
+    // Určení roku
+    let year = parseInt(yearPart) + 1900;
+    if (year < 1954) year += 100; // Pro rodná čísla po roce 2000
+    
+    // Validace data
+    const date = new Date(year, month - 1, dayPart);
+    if (isNaN(date.getTime())) return null;
+    
+    return {
+        birthDate: `${year}-${String(month).padStart(2, '0')}-${String(dayPart).padStart(2, '0')}`,
+        gender,
+    };
 };
 
 export const validateForm = (data) => {
@@ -158,11 +124,8 @@ export const validateForm = (data) => {
     // Rodné číslo - povinné, formát XXXXXX/XXX(X)
     if (!data.personalId) {
         errors.personalId = 'Rodné číslo je povinné';
-    } else if (
-        !isValidPersonalId(data.personalId, data.gender, data.birthDate)
-    ) {
-        errors.personalId =
-            'Neplatné rodné číslo nebo nesouhlasí s pohlavím či datem narození';
+    } else if (!isValidPersonalId(data.personalId)) {
+        errors.personalId = 'Neplatné rodné číslo';
     }
 
     // Pohlaví - povinné
