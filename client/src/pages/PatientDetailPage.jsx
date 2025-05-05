@@ -132,8 +132,7 @@ const PatientDetailPage = () => {
     };
 
     const handleAddExamination = () => {
-        // TODO: Implement add examination functionality
-        console.log('Adding examination');
+        setShowExaminationForm(true);
     };
 
     const handleEditExamination = (examination) => {
