@@ -27,6 +27,7 @@ function AddPatientPage() {
                 sex: formData.gender,
                 insurance_id: formData.insuranceCompany,
                 contact_info: {
+                    contact_person: formData.contactPerson || null,
                     contact_phone: formData.phone || null,
                     contact_email: formData.email || null,
                 },
@@ -45,14 +46,21 @@ function AddPatientPage() {
 
             // Po úspěšném uložení přesměrujeme na seznam pacientů
             navigate(ROUTES.PATIENTS);
-
         } catch (error) {
             if (error.response && error.response.status === 500) {
-                if (error.response.data && error.response.data.error === 'duplicate key value violates unique constraint "patient_card_birth_number_key"') {
-                    setModalMessage('Tento pacient již existuje. Pacienta nelze přidat.');
+                if (
+                    error.response.data &&
+                    error.response.data.error ===
+                        'duplicate key value violates unique constraint "patient_card_birth_number_key"'
+                ) {
+                    setModalMessage(
+                        'Tento pacient již existuje. Pacienta nelze přidat.',
+                    );
                     setShowModal(true);
                 } else {
-                    setModalMessage('Došlo k chybě při ukládání pacienta. Zkontrolujte prosím vstupní data.');
+                    setModalMessage(
+                        'Došlo k chybě při ukládání pacienta. Zkontrolujte prosím vstupní data.',
+                    );
                     setShowModal(true);
                 }
             }

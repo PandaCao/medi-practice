@@ -31,9 +31,6 @@ const AddPatient = ({ onSaveDraft, onSubmit, onDelete, initialData = {} }) => {
         contactPerson: initialData.contactPerson || '',
         email: initialData.email || '',
         phone: initialData.phone || '',
-        diagnosisOverview: initialData.diagnosisOverview || '',
-        anamnesis: initialData.anamnesis || '',
-        medication: initialData.medication || '',
     });
 
     const [errors, setErrors] = useState({});
@@ -112,7 +109,6 @@ const AddPatient = ({ onSaveDraft, onSubmit, onDelete, initialData = {} }) => {
     // Helper pro zobrazení chyby pouze pokud bylo pole "touched"
     const shouldShowError = (fieldName) =>
         touchedFields[fieldName] && errors[fieldName];
-
 
     return (
         <Form onSubmit={handleSubmit}>
@@ -225,7 +221,7 @@ const AddPatient = ({ onSaveDraft, onSubmit, onDelete, initialData = {} }) => {
                             onChange={handleChange}
                             onBlur={handleBlur}
                             isInvalid={shouldShowError('birthDate')}
-                            max={new Date().toISOString().split("T")[0]}
+                            max={new Date().toISOString().split('T')[0]}
                         />
                         <Form.Control.Feedback type="invalid">
                             {errors.birthDate}
@@ -369,7 +365,8 @@ const AddPatient = ({ onSaveDraft, onSubmit, onDelete, initialData = {} }) => {
                             placeholder="123456789"
                         />
                         <Form.Control.Feedback type="invalid">
-                            {errors.phone + '. Zadejte číslo bez předvolby +420, například 777123456.'}
+                            {errors.phone +
+                                '. Zadejte číslo bez předvolby +420, například 777123456.'}
                         </Form.Control.Feedback>
                     </Form.Group>
                 </Col>
@@ -389,58 +386,6 @@ const AddPatient = ({ onSaveDraft, onSubmit, onDelete, initialData = {} }) => {
                 />
                 <Form.Control.Feedback type="invalid">
                     {errors.contactPerson}
-                </Form.Control.Feedback>
-            </Form.Group>
-
-            {/* Diagnózy */}
-            <Form.Group className="mb-3">
-                <Form.Label>Přehled diagnóz</Form.Label>
-                <Form.Control
-                    as="textarea"
-                    rows={3}
-                    name="diagnosisOverview"
-                    value={formData.diagnosisOverview}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    isInvalid={shouldShowError('diagnosisOverview')}
-                    maxLength={500}
-                />
-                <Form.Control.Feedback type="invalid">
-                    {errors.diagnosisOverview}
-                </Form.Control.Feedback>
-            </Form.Group>
-
-            <Form.Group className="mb-3">
-                <Form.Label>Anamnéza</Form.Label>
-                <Form.Control
-                    as="textarea"
-                    rows={3}
-                    name="anamnesis"
-                    value={formData.anamnesis}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    isInvalid={shouldShowError('anamnesis')}
-                    maxLength={500}
-                />
-                <Form.Control.Feedback type="invalid">
-                    {errors.anamnesis}
-                </Form.Control.Feedback>
-            </Form.Group>
-
-            <Form.Group className="mb-3">
-                <Form.Label>Seznam léků</Form.Label>
-                <Form.Control
-                    as="textarea"
-                    rows={3}
-                    name="medication"
-                    value={formData.medication}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    isInvalid={shouldShowError('medication')}
-                    maxLength={500}
-                />
-                <Form.Control.Feedback type="invalid">
-                    {errors.medication}
                 </Form.Control.Feedback>
             </Form.Group>
 

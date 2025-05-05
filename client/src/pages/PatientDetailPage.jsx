@@ -4,7 +4,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { Row, Col, Modal, Spinner, Button } from 'react-bootstrap';
 import { ROUTES } from '../config/routes';
 import { patientApi } from '../api';
-import { getPatientExaminations, addExamination } from '../api/examinationApi';
+import { getPatientExaminations } from '../api/examinationApi';
 import ExaminationForm from '../components/examinations/ExaminationForm';
 import PrescriptionForm from '../components/prescriptions/PrescriptionForm';
 import PatientDetailCard from '../components/patients/PatientDetailCard';
@@ -23,7 +23,7 @@ const PatientDetailPage = () => {
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [showExaminationForm, setShowExaminationForm] = useState(false);
     const [showPrescriptionForm, setShowPrescriptionForm] = useState(false);
-    const [showDiagnosisForm, setShowDiagnosisForm] = useState(false);
+    const [setShowDiagnosisForm] = useState(false);
     const [examinations, setExaminations] = useState([]);
 
     useEffect(() => {
@@ -102,17 +102,6 @@ const PatientDetailPage = () => {
         fetchPatientDetail();
     }, [id]);
 
-    const calculateAge = (birthDate) => {
-        const today = new Date();
-        const birth = new Date(birthDate);
-        let age = today.getFullYear() - birth.getFullYear();
-        const m = today.getMonth() - birth.getMonth();
-        if (m < 0 || (m === 0 && today.getDate() < birth.getDate())) {
-            age--;
-        }
-        return age;
-    };
-
     const handleDelete = () => {
         // TODO: Implement delete functionality with API
         setShowDeleteModal(false);
@@ -125,24 +114,41 @@ const PatientDetailPage = () => {
         });
     };
 
-    const handleAddExamination = async (examinationData) => {
-        try {
-            await addExamination(examinationData);
-            // Načteme všechna vyšetření znovu, abychom měli aktuální data
-            const examinationsData = await getPatientExaminations(patient.id);
-            setExaminations(examinationsData || []);
-            setShowExaminationForm(false);
-        } catch (error) {
-            console.error('Error adding examination:', error);
-            // TODO: Show error message to user
-        }
-    };
-
     const handleCreatePrescription = (prescriptionData) => {
         // TODO: Implement API call to save prescription
         console.log('Creating prescription:', prescriptionData);
         // Here you would typically make an API call to save the prescription
         // For now, we'll just log it to the console
+    };
+
+    const handleAddDiagnosis = () => {
+        // TODO: Implement add diagnosis functionality
+        console.log('Adding diagnosis');
+    };
+
+    const handleEditDiagnosis = (diagnosis) => {
+        // TODO: Implement edit diagnosis functionality
+        console.log('Editing diagnosis:', diagnosis);
+    };
+
+    const handleAddExamination = () => {
+        // TODO: Implement add examination functionality
+        console.log('Adding examination');
+    };
+
+    const handleEditExamination = (examination) => {
+        // TODO: Implement edit examination functionality
+        console.log('Editing examination:', examination);
+    };
+
+    const handleUpdateAnamnesis = (updatedAnamnesis) => {
+        // TODO: Implement update anamnesis functionality
+        console.log('Updating anamnesis:', updatedAnamnesis);
+    };
+
+    const handleUpdateMedication = (updatedMedication) => {
+        // TODO: Implement update medication functionality
+        console.log('Updating medication:', updatedMedication);
     };
 
     if (isLoading) {
@@ -202,55 +208,38 @@ const PatientDetailPage = () => {
 
             <hr className="my-4" />
 
-            <Row className="g-0 position-relative">
+            <Row className="mb-4 position-relative">
                 <Col md={6} className="pe-md-4">
                     <DiagnosisList
                         diagnoses={patient.diagnosis}
-                        onAdd={() => setShowDiagnosisForm(true)}
-                        onEdit={(diagnosis) => {
-                            // TODO: Implement edit functionality
-                            console.log('Editing diagnosis:', diagnosis);
-                        }}
+                        onAdd={handleAddDiagnosis}
+                        onEdit={handleEditDiagnosis}
                     />
                 </Col>
-
                 <div className="d-none d-md-block position-absolute start-50 top-0 bottom-0 border-start"></div>
-
-                <Col md={6} className="ps-md-4 pt-4 pt-md-0">
-                    <div className="position-relative">
-                        <ExaminationList
-                            examinations={examinations}
-                            onAdd={() => setShowExaminationForm(true)}
-                            onEdit={(examination) => {
-                                // TODO: Implement edit functionality
-                                console.log(
-                                    'Editing examination:',
-                                    examination,
-                                );
-                            }}
-                        />
-                    </div>
+                <Col md={6} className="ps-md-4">
+                    <ExaminationList
+                        examinations={examinations}
+                        onAdd={handleAddExamination}
+                        onEdit={handleEditExamination}
+                    />
                 </Col>
             </Row>
 
             <hr className="my-4" />
 
-            <Row>
-                <Col md={6}>
+            <Row className="mb-4 position-relative">
+                <Col md={6} className="pe-md-4">
                     <PatientAnamnesis
                         anamnesis={patient.anamnesis}
-                        onEdit={() => {
-                            // TODO: Implement edit functionality
-                            console.log('Editing anamnesis');
-                        }}
+                        onUpdate={handleUpdateAnamnesis}
                     />
-
+                </Col>
+                <div className="d-none d-md-block position-absolute start-50 top-0 bottom-0 border-start"></div>
+                <Col md={6} className="ps-md-4">
                     <PatientMedication
                         medication={patient.medication}
-                        onEdit={() => {
-                            // TODO: Implement edit functionality
-                            console.log('Editing medication');
-                        }}
+                        onUpdate={handleUpdateMedication}
                     />
                 </Col>
             </Row>

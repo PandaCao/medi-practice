@@ -41,9 +41,6 @@ const PatientFormPage = () => {
         contactPerson: patient.contactPerson || '',
         email: patient.email || '',
         phone: patient.phone || '',
-        diagnosisOverview: patient.diagnosis || '',
-        anamnesis: patient.anamnesis || '',
-        medication: patient.medication || '',
     };
 
     const handleSubmit = async (data) => {
@@ -66,9 +63,6 @@ const PatientFormPage = () => {
                     contact_email: data.email,
                     contact_phone: data.phone,
                 },
-                diagnosis: data.diagnosisOverview,
-                anamnesis: data.anamnesis,
-                medication: data.medication,
             };
             const response = await patientApi.updatePatient(payload);
             console.log('Update response:', response);

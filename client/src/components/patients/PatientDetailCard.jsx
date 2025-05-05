@@ -2,6 +2,7 @@ import React from 'react';
 import { Button } from 'react-bootstrap';
 import { BsPencil } from 'react-icons/bs';
 import { RiFileList2Line } from 'react-icons/ri';
+import { getInsuranceCompanyName } from '../../config/constants';
 
 const EmptyFieldMessage = () => (
     <div className="text-muted small">Není vyplněno</div>
@@ -68,7 +69,9 @@ const PatientDetailCard = ({ patient, onUpdate, onERecept }) => {
                             <div className="text-muted small">
                                 Zdravotní pojišťovna:
                             </div>
-                            <div>{patient.insurance}</div>
+                            <div>
+                                {getInsuranceCompanyName(patient.insurance)}
+                            </div>
                         </div>
                     </div>
                 </div>

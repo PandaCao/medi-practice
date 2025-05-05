@@ -45,11 +45,6 @@ function ReservationsPage() {
         }
     };
 
-    const closeModal = () => {
-        setShowModal(false);
-        setModalMessage('');
-    };
-
     return (
 
         <>
