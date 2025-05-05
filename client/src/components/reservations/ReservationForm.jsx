@@ -3,9 +3,9 @@ import { Form, Button } from 'react-bootstrap';
 import 'react-datepicker/dist/react-datepicker.css';
 import ExaminationTypeSelect from './ExaminationTypeSelect';
 import DateTimePickerField from './DateTimePickerField';
+import PatientSearchSelect from './PatientSearchSelect';
 
 function ReservationForm({ formData, onSubmit, onChange, onDateChange }) {
-
     const handleSubmit = (e) => {
         e.preventDefault();
         onSubmit(formData);
@@ -17,16 +17,23 @@ function ReservationForm({ formData, onSubmit, onChange, onDateChange }) {
         </Form.Label>
     );
 
+    const handlePatientSelect = (patient) => {
+        onChange({
+            target: {
+                name: 'patientId',
+                value: patient.id,
+            },
+        });
+    };
+
     return (
         <Form onSubmit={handleSubmit}>
             <Form.Group className="mb-3">
-                <RequiredLabel>ID pacienta</RequiredLabel>
-                <Form.Control
-                    type="text"
-                    name="patientId"
+                <RequiredLabel>Pacient</RequiredLabel>
+                <PatientSearchSelect
                     value={formData.patientId}
                     onChange={onChange}
-                    required
+                    onSelect={handlePatientSelect}
                 />
             </Form.Group>
 
