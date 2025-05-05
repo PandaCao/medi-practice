@@ -65,7 +65,7 @@ function PatientSearchSelect({ value, onChange, onSelect }) {
                 </InputGroup.Text>
                 <Form.Control
                     type="text"
-                    placeholder="Hledat podle jména nebo rodného čísla"
+                    placeholder="Hledat podle příjmení nebo rodného čísla"
                     value={searchQuery}
                     onChange={handleSearch}
                     className="bg-light border-0"
