@@ -65,12 +65,32 @@ const PatientDetailCard = ({ patient, onUpdate, onERecept }) => {
                             </div>
                             <div>{patient.registrationDate}</div>
                         </div>
-                        <div>
+                        <div className="mb-1">
                             <div className="text-muted small">
                                 Zdravotní pojišťovna:
                             </div>
                             <div>
                                 {getInsuranceCompanyName(patient.insurance)}
+                            </div>
+                        </div>
+                        <div className="mb-1">
+                            <div className="text-muted small">Výška:</div>
+                            <div>
+                                {patient.height ? (
+                                    `${patient.height} cm`
+                                ) : (
+                                    <EmptyFieldMessage />
+                                )}
+                            </div>
+                        </div>
+                        <div>
+                            <div className="text-muted small">Váha:</div>
+                            <div>
+                                {patient.weight ? (
+                                    `${patient.weight} kg`
+                                ) : (
+                                    <EmptyFieldMessage />
+                                )}
                             </div>
                         </div>
                     </div>
@@ -91,30 +111,6 @@ const PatientDetailCard = ({ patient, onUpdate, onERecept }) => {
                             label="Jméno"
                             value={patient.contactPerson}
                         />
-                    </div>
-                </div>
-            </div>
-
-            <hr />
-
-            <div>
-                <div className="text-muted mb-2">Poslední návštěva:</div>
-                <div className="d-flex gap-5">
-                    <div>
-                        <div className="text-muted small">Datum:</div>
-                        <div>2/3/2025</div>
-                    </div>
-                    <div>
-                        <div className="text-muted small">Výška:</div>
-                        <div>{patient.height} cm</div>
-                    </div>
-                    <div>
-                        <div className="text-muted small">Váha:</div>
-                        <div>{patient.weight} kg</div>
-                    </div>
-                    <div>
-                        <div className="text-muted small">Krevní tlak:</div>
-                        <div>140/90 mmHg</div>
                     </div>
                 </div>
             </div>

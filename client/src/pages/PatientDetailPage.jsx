@@ -46,7 +46,16 @@ const PatientDetailPage = () => {
                     name: `${data.first_name} ${data.last_name}`,
                     personalId: data.birth_number,
                     sex: data.sex,
-                    dateOfBirth: data.date_of_birth,
+                    dateOfBirth: (() => {
+                        const date = new Date(data.date_of_birth);
+                        const day = String(date.getDate()).padStart(2, '0');
+                        const month = String(date.getMonth() + 1).padStart(
+                            2,
+                            '0',
+                        );
+                        const year = date.getFullYear();
+                        return `${day}. ${month}. ${year}`;
+                    })(),
                     insurance: data.insurance_id,
                     weight: data.weight,
                     height: data.height,
