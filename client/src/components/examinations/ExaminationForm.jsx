@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Modal, Form, Button } from 'react-bootstrap';
+import { BsPlus, BsTrash } from 'react-icons/bs';
 import { addExamination, updateExamination } from '../../api/examinationApi';
 
 const ExaminationForm = ({
@@ -28,6 +29,8 @@ const ExaminationForm = ({
         doctors_signature: 'xxx',
     });
 
+    const [diagnoses, setDiagnoses] = useState([]);
+
     useEffect(() => {
         if (examination) {
             setFormData({
@@ -48,6 +51,23 @@ const ExaminationForm = ({
                 stamp: examination.stamp || 'xxx',
                 doctors_signature: examination.doctors_signature || 'xxx',
             });
+
+            // Pokud má vyšetření diagnózy, načteme je
+            if (examination.diagnosis_overview) {
+                try {
+                    const parsedDiagnoses = JSON.parse(
+                        examination.diagnosis_overview,
+                    );
+                    setDiagnoses(
+                        Array.isArray(parsedDiagnoses) ? parsedDiagnoses : [],
+                    );
+                } catch (e) {
+                    console.error('Error parsing diagnoses:', e);
+                    setDiagnoses([]);
+                }
+            } else {
+                setDiagnoses([]);
+            }
         } else {
             setFormData({
                 patient_id: patientId,
@@ -66,6 +86,7 @@ const ExaminationForm = ({
                 stamp: 'xxx',
                 doctors_signature: 'xxx',
             });
+            setDiagnoses([{ code: '', description: '' }]);
         }
     }, [examination, patientId, doctorId]);
 
@@ -74,6 +95,39 @@ const ExaminationForm = ({
         setFormData((prev) => ({
             ...prev,
             [name]: value,
+        }));
+    };
+
+    const handleDiagnosisChange = (index, e) => {
+        const { name, value } = e.target;
+        const newDiagnoses = [...diagnoses];
+        newDiagnoses[index] = {
+            ...newDiagnoses[index],
+            [name]: value,
+        };
+        setDiagnoses(newDiagnoses);
+        // Aktualizujeme diagnosis_overview v formData
+        setFormData((prev) => ({
+            ...prev,
+            diagnosis_overview: JSON.stringify(newDiagnoses),
+        }));
+    };
+
+    const handleAddDiagnosis = () => {
+        const newDiagnoses = [...diagnoses, { code: '', description: '' }];
+        setDiagnoses(newDiagnoses);
+        setFormData((prev) => ({
+            ...prev,
+            diagnosis_overview: JSON.stringify(newDiagnoses),
+        }));
+    };
+
+    const handleRemoveDiagnosis = (index) => {
+        const newDiagnoses = diagnoses.filter((_, i) => i !== index);
+        setDiagnoses(newDiagnoses);
+        setFormData((prev) => ({
+            ...prev,
+            diagnosis_overview: JSON.stringify(newDiagnoses),
         }));
     };
 
@@ -107,61 +161,104 @@ const ExaminationForm = ({
             <Form onSubmit={handleSubmit}>
                 <Modal.Body>
                     <Form.Group className="mb-3">
-                        <RequiredLabel>Anamnéza</RequiredLabel>
+                        <Form.Label>Anamnéza</Form.Label>
                         <Form.Control
                             as="textarea"
                             rows={3}
                             name="anamnesis"
                             value={formData.anamnesis}
                             onChange={handleChange}
-                            required
                         />
                     </Form.Group>
 
-                    <Form.Group className="mb-3">
-                        <RequiredLabel>Přehled diagnóz</RequiredLabel>
-                        <Form.Control
-                            as="textarea"
-                            rows={3}
-                            name="diagnosis_overview"
-                            value={formData.diagnosis_overview}
-                            onChange={handleChange}
-                            required
-                        />
-                    </Form.Group>
+                    <div className="mb-4">
+                        <div className="d-flex justify-content-between align-items-center mb-2">
+                            <Form.Label>Diagnózy</Form.Label>
+                            <Button
+                                variant="outline-primary"
+                                size="sm"
+                                onClick={handleAddDiagnosis}
+                                className="d-inline-flex align-items-center gap-2"
+                            >
+                                <BsPlus />
+                                Přidat diagnózu
+                            </Button>
+                        </div>
+                        {diagnoses.map((diagnosis, index) => (
+                            <div
+                                key={index}
+                                className="mb-3 position-relative border rounded p-3"
+                            >
+                                {index > 0 && (
+                                    <Button
+                                        variant="link"
+                                        className="position-absolute end-0 top-0 text-danger p-0"
+                                        onClick={() =>
+                                            handleRemoveDiagnosis(index)
+                                        }
+                                    >
+                                        <BsTrash />
+                                    </Button>
+                                )}
+                                <Form.Group className="mb-3">
+                                    <Form.Label>Kód diagnózy</Form.Label>
+                                    <Form.Control
+                                        type="text"
+                                        name="code"
+                                        value={diagnosis.code}
+                                        onChange={(e) =>
+                                            handleDiagnosisChange(index, e)
+                                        }
+                                        placeholder="Např. DIABETES MELLITUS 2. TYPU (E11.9)"
+                                    />
+                                </Form.Group>
+
+                                <Form.Group className="mb-3">
+                                    <Form.Label>Popis</Form.Label>
+                                    <Form.Control
+                                        as="textarea"
+                                        rows={2}
+                                        name="description"
+                                        value={diagnosis.description}
+                                        onChange={(e) =>
+                                            handleDiagnosisChange(index, e)
+                                        }
+                                        placeholder="Popis diagnózy a doporučení"
+                                    />
+                                </Form.Group>
+                            </div>
+                        ))}
+                    </div>
 
                     <Form.Group className="mb-3">
-                        <RequiredLabel>Medikace</RequiredLabel>
+                        <Form.Label>Medikace</Form.Label>
                         <Form.Control
                             type="text"
                             name="medication"
                             value={formData.medication}
                             onChange={handleChange}
-                            required
                         />
                     </Form.Group>
 
                     <Form.Group className="mb-3">
-                        <RequiredLabel>Laboratorní výsledky</RequiredLabel>
+                        <Form.Label>Laboratorní výsledky</Form.Label>
                         <Form.Control
                             as="textarea"
                             rows={3}
                             name="lab_results"
                             value={formData.lab_results}
                             onChange={handleChange}
-                            required
                         />
                     </Form.Group>
 
                     <Form.Group className="mb-3">
-                        <RequiredLabel>Objektivní nález</RequiredLabel>
+                        <Form.Label>Objektivní nález</Form.Label>
                         <Form.Control
                             as="textarea"
                             rows={3}
                             name="objective_findings"
                             value={formData.objective_findings}
                             onChange={handleChange}
-                            required
                         />
                     </Form.Group>
 
@@ -177,34 +274,22 @@ const ExaminationForm = ({
                     </Form.Group>
 
                     <Form.Group className="mb-3">
-                        <RequiredLabel>Doporučení</RequiredLabel>
+                        <Form.Label>Doporučení</Form.Label>
                         <Form.Control
                             as="textarea"
                             rows={3}
                             name="recommendations"
                             value={formData.recommendations}
                             onChange={handleChange}
-                            required
                         />
                     </Form.Group>
 
                     <Form.Group className="mb-3">
-                        <RequiredLabel>Předepsaná medikace</RequiredLabel>
+                        <Form.Label>Předepsaná medikace</Form.Label>
                         <Form.Control
                             type="text"
                             name="prescribed_medication"
                             value={formData.prescribed_medication}
-                            onChange={handleChange}
-                            required
-                        />
-                    </Form.Group>
-
-                    <Form.Group className="mb-3">
-                        <Form.Label>Nová diagnóza</Form.Label>
-                        <Form.Control
-                            type="text"
-                            name="new_diagnosis"
-                            value={formData.new_diagnosis}
                             onChange={handleChange}
                         />
                     </Form.Group>

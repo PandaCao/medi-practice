@@ -8,12 +8,8 @@ import { getPatientExaminations } from '../api/examinationApi';
 import ExaminationForm from '../components/examinations/ExaminationForm';
 import PrescriptionForm from '../components/prescriptions/PrescriptionForm';
 import PatientDetailCard from '../components/patients/PatientDetailCard';
-import DiagnosisList from '../components/patients/DiagnosisList';
 import ExaminationList from '../components/examinations/ExaminationList';
-import PatientAnamnesis from '../components/patients/PatientAnamnesis';
-import PatientMedication from '../components/patients/PatientMedication';
 
-// Komponenta pro zobrazení přehledu o pacientovi
 const PatientDetailPage = () => {
     const { id } = useParams();
     const navigate = useNavigate();
@@ -23,7 +19,6 @@ const PatientDetailPage = () => {
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [showExaminationForm, setShowExaminationForm] = useState(false);
     const [showPrescriptionForm, setShowPrescriptionForm] = useState(false);
-    const [setShowDiagnosisForm] = useState(false);
     const [examinations, setExaminations] = useState([]);
 
     useEffect(() => {
@@ -63,25 +58,6 @@ const PatientDetailPage = () => {
                     phone: data.contact_info?.contact_phone,
                     contactPerson: data.contact_info?.contact_person,
                     address: data.address,
-                    diagnosis: data.diagnosis
-                        ? [
-                              {
-                                  id: 1,
-                                  code: 'DIABETES MELLITUS 2. TYPU (E11.9)',
-                                  description:
-                                      'Diagnostikováno 2020, kompenzace suboptimální, doporučena úprava medikace a režimová opatření.',
-                              },
-                              {
-                                  id: 2,
-                                  code: 'METABOLICKÝ SYNDROM (E88.81)',
-                                  description:
-                                      'Obezita, inzulínová rezistence, dyslipidémie a hypertenze, riziko CVD a DM2, doporučena změna životního stylu a farmakoterapie.',
-                              },
-                          ]
-                        : [],
-                    anamnesis: data.anamnesis,
-                    medication: data.medication,
-                    medicalRecord: data.medical_record,
                     registrationDate: new Date(
                         data.created_at,
                     ).toLocaleDateString('cs-CZ'),
@@ -130,16 +106,6 @@ const PatientDetailPage = () => {
         // For now, we'll just log it to the console
     };
 
-    const handleAddDiagnosis = () => {
-        // TODO: Implement add diagnosis functionality
-        console.log('Adding diagnosis');
-    };
-
-    const handleEditDiagnosis = (diagnosis) => {
-        // TODO: Implement edit diagnosis functionality
-        console.log('Editing diagnosis:', diagnosis);
-    };
-
     const handleAddExamination = () => {
         setShowExaminationForm(true);
     };
@@ -147,16 +113,6 @@ const PatientDetailPage = () => {
     const handleEditExamination = (examination) => {
         // TODO: Implement edit examination functionality
         console.log('Editing examination:', examination);
-    };
-
-    const handleUpdateAnamnesis = (updatedAnamnesis) => {
-        // TODO: Implement update anamnesis functionality
-        console.log('Updating anamnesis:', updatedAnamnesis);
-    };
-
-    const handleUpdateMedication = (updatedMedication) => {
-        // TODO: Implement update medication functionality
-        console.log('Updating medication:', updatedMedication);
     };
 
     if (isLoading) {
@@ -216,38 +172,12 @@ const PatientDetailPage = () => {
 
             <hr className="my-4" />
 
-            <Row className="mb-4 position-relative">
-                <Col md={6} className="pe-md-4">
-                    <DiagnosisList
-                        diagnoses={patient.diagnosis}
-                        onAdd={handleAddDiagnosis}
-                        onEdit={handleEditDiagnosis}
-                    />
-                </Col>
-                <div className="d-none d-md-block position-absolute start-50 top-0 bottom-0 border-start"></div>
-                <Col md={6} className="ps-md-4">
+            <Row className="mb-4">
+                <Col>
                     <ExaminationList
                         examinations={examinations}
                         onAdd={handleAddExamination}
                         onEdit={handleEditExamination}
-                    />
-                </Col>
-            </Row>
-
-            <hr className="my-4" />
-
-            <Row className="mb-4 position-relative">
-                <Col md={6} className="pe-md-4">
-                    <PatientAnamnesis
-                        anamnesis={patient.anamnesis}
-                        onUpdate={handleUpdateAnamnesis}
-                    />
-                </Col>
-                <div className="d-none d-md-block position-absolute start-50 top-0 bottom-0 border-start"></div>
-                <Col md={6} className="ps-md-4">
-                    <PatientMedication
-                        medication={patient.medication}
-                        onUpdate={handleUpdateMedication}
                     />
                 </Col>
             </Row>
