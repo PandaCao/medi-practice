@@ -181,7 +181,7 @@ const PatientDetailCard = ({
                             Adresa
                         </div>
                         <div className="mb-1">
-                            <span className="text-muted small">
+                            <span className="text-muted">
                                 {patient.address ? (
                                     <>
                                         {patient.address.street && (
