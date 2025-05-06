@@ -1,17 +1,33 @@
 import React from 'react';
-import { Navbar, Image, Button } from 'react-bootstrap';
-import { BsBell, BsArrowLeft, BsList } from 'react-icons/bs';
+import { Navbar, Button, Image } from 'react-bootstrap';
+import { BsList, BsArrowLeft } from 'react-icons/bs';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext';
 import { getRouteByPath } from '../../config/routes';
 import './Navbar.css';
 
-const NavbarComponent = ({ pageTitle, toggleSidebar }) => {
+const NavbarComponent = ({ toggleSidebar, pageTitle }) => {
     const navigate = useNavigate();
     const location = useLocation();
+    const { user, logout } = useAuth();
+
     const currentRoute = getRouteByPath(location.pathname);
 
     const handleBack = () => {
         navigate(-1);
+    };
+
+    const handleLogout = () => {
+        logout();
+        navigate('/login');
+    };
+
+    // Funkce pro získání profilového obrázku podle role uživatele
+    const getProfileImage = () => {
+        if (user?.role === 'doctor') {
+            return 'https://placehold.co/40/4a90e2/ffffff?text=JS';
+        }
+        return 'https://placehold.co/40/e24a90/ffffff?text=MN';
     };
 
     return (
@@ -47,19 +63,26 @@ const NavbarComponent = ({ pageTitle, toggleSidebar }) => {
             </Navbar.Brand>
             <Navbar.Toggle />
             <div className="ms-auto d-flex align-items-center">
-            {/*<Navbar.Collapse className="justify-content-end">*/}
-                <BsBell className="me-3" size={20} />
-                 <div className="d-flex align-items-center text-end"> {/*<Stack direction="horizontal" gap={2}>*/}
+                <div className="d-flex align-items-center text-end">
                     <Image
-                        src="https://placehold.co/40"
+                        src={getProfileImage()}
                         alt="Profile"
                         roundedCircle
                         className="me-2 d-none d-sm-block"
                     />
                     <div>
-                        <div className="fw-bold">MUDr. Jan Suk</div>
-                        <small className="text-muted d-none d-sm-block">Praktický lékař</small>
+                        <div className="fw-bold">{user?.name}</div>
+                        <small className="text-muted d-none d-sm-block">
+                            {user?.title}
+                        </small>
                     </div>
+                    <Button
+                        variant="link"
+                        className="text-dark ms-3"
+                        onClick={handleLogout}
+                    >
+                        Odhlásit
+                    </Button>
                 </div>
             </div>
         </Navbar>
