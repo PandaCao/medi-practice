@@ -63,6 +63,11 @@ const PrescriptionItem = ({ prescription, onShowQr }) => {
                                                 Dávkování: {med.dosage}{' '}
                                             </span>
                                         )}
+                                        {med.frequency && (
+                                            <span>
+                                                | Frekvence: {med.frequency}{' '}
+                                            </span>
+                                        )}
                                         {med.duration && (
                                             <span>| Délka: {med.duration}</span>
                                         )}

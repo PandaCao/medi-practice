@@ -68,7 +68,18 @@ const PrescriptionForm = ({ show, onHide, onSubmit, patient }) => {
                             value={formData.dosage}
                             onChange={handleChange}
                             required
-                            placeholder="např. 2x denně"
+                            placeholder="např. 1 tableta"
+                        />
+                    </Form.Group>
+                    <Form.Group className="mb-3">
+                        <Form.Label>Frekvence</Form.Label>
+                        <Form.Control
+                            type="text"
+                            name="frequency"
+                            value={formData.frequency}
+                            onChange={handleChange}
+                            required
+                            placeholder="např. 3x denně"
                         />
                     </Form.Group>
                     <Form.Group className="mb-3">

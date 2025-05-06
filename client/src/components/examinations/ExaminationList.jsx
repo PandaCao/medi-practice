@@ -7,6 +7,39 @@ import PermissionGuard from '../common/PermissionGuard';
 
 const ITEMS_PER_PAGE = 3;
 
+const StampPreview = ({ text }) => (
+    <div
+        style={{
+            fontFamily: 'Arial, sans-serif',
+            fontSize: '1rem',
+            color: '#dc3545',
+            transform: 'rotate(-5deg)',
+            border: '2px solid #dc3545',
+            padding: '5px 10px',
+            borderRadius: '5px',
+            backgroundColor: 'rgba(255, 255, 255, 0.9)',
+            display: 'inline-block',
+        }}
+    >
+        {text}
+    </div>
+);
+
+const SignaturePreview = ({ text }) => (
+    <div
+        style={{
+            fontFamily: 'Brush Script MT, cursive',
+            fontSize: '1.2rem',
+            color: '#000',
+            borderBottom: '2px solid #000',
+            padding: '0 10px',
+            display: 'inline-block',
+        }}
+    >
+        {text}
+    </div>
+);
+
 const ExaminationItem = ({ examination, onEdit }) => {
     const formatDate = (dateString) => {
         const date = new Date(dateString);
@@ -120,6 +153,35 @@ const ExaminationItem = ({ examination, onEdit }) => {
                                 </p>
                             </div>
                         )}
+                    </div>
+                </div>
+
+                <div className="border-top mt-4 pt-3">
+                    <div className="d-flex justify-content-between align-items-center">
+                        <div>
+                            <div className="text-muted small mb-1">Lékař</div>
+                            <div className="fw-bold">MUDr. Jan Suk</div>
+                        </div>
+                        <div className="d-flex gap-3">
+                            {examination.stamp && (
+                                <div>
+                                    <div className="text-muted small mb-1">
+                                        Razítko
+                                    </div>
+                                    <StampPreview text={examination.stamp} />
+                                </div>
+                            )}
+                            {examination.doctors_signature && (
+                                <div>
+                                    <div className="text-muted small mb-1">
+                                        Podpis
+                                    </div>
+                                    <SignaturePreview
+                                        text={examination.doctors_signature}
+                                    />
+                                </div>
+                            )}
+                        </div>
                     </div>
                 </div>
             </Card.Body>

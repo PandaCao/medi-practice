@@ -136,6 +136,29 @@ const PatientDetailPage = () => {
         setShowExaminationForm(true);
     };
 
+    const handleExaminationSubmit = async () => {
+        try {
+            // Načteme všechna vyšetření znovu
+            const examinationsData = await getPatientExaminations(patient.id);
+            setExaminations(examinationsData || []);
+
+            // Načteme e-recepty znovu, protože mohlo být vytvořeno nové vyšetření s e-receptem
+            const prescriptionsData = await patientApi.getPatientPrescriptions(
+                patient.id,
+            );
+            setPrescriptions(prescriptionsData || []);
+
+            setShowExaminationForm(false);
+        } catch (error) {
+            console.error('Error updating lists after examination:', error);
+            setError(
+                error.response?.data?.message ||
+                    error.message ||
+                    'Nepodařilo se aktualizovat seznamy po vytvoření vyšetření.',
+            );
+        }
+    };
+
     const handleEditExamination = (examination) => {
         // TODO: Implement edit examination functionality
         console.log('Editing examination:', examination);
@@ -253,15 +276,7 @@ const PatientDetailPage = () => {
             <ExaminationForm
                 show={showExaminationForm}
                 onHide={() => setShowExaminationForm(false)}
-                onSubmit={() => {
-                    // Načteme všechna vyšetření znovu, abychom měli aktuální data
-                    getPatientExaminations(patient.id).then(
-                        (examinationsData) => {
-                            setExaminations(examinationsData || []);
-                            setShowExaminationForm(false);
-                        },
-                    );
-                }}
+                onSubmit={handleExaminationSubmit}
                 patientId={patient.id}
             />
 
