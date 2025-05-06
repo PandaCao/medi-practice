@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Modal, Form, Button, Row, Col } from 'react-bootstrap';
+import { Modal, Form, Button } from 'react-bootstrap';
 
 const PrescriptionForm = ({ show, onHide, onSubmit, patient }) => {
     const [formData, setFormData] = useState({

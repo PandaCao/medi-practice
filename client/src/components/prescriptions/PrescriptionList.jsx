@@ -1,7 +1,6 @@
 import React from 'react';
 import { Button, Card } from 'react-bootstrap';
 import { BsPlus, BsQrCode } from 'react-icons/bs';
-import { usePermissions } from '../../hooks/usePermissions';
 import { PERMISSIONS } from '../../config/permissions';
 import PermissionGuard from '../common/PermissionGuard';
 
