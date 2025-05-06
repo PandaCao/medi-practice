@@ -29,8 +29,8 @@ const PatientFormPage = () => {
 
     // Připravíme data pro formulář
     const formData = {
-        firstName: patient.first_name || '', // Jméno
-        lastName: patient.last_name || '', // Příjmení
+        firstName: patient.first_name || '',
+        lastName: patient.last_name || '',
         personalId: patient.personalId || '',
         birthDate: formatDate(patient.dateOfBirth),
         gender: patient.sex || '',
@@ -38,15 +38,24 @@ const PatientFormPage = () => {
         registrationDate: formatDate(patient.registrationDate),
         height: patient.height || '',
         weight: patient.weight || '',
-        contactPerson: patient.contactPerson || '',
-        email: patient.email || '',
-        phone: patient.phone || '',
+        contactPersonName:
+            patient.contact_info?.contact_person?.name ||
+            patient.contact_info?.contact_person_name ||
+            '',
+        contactPersonPhone:
+            patient.contact_info?.contact_person?.phone ||
+            patient.contact_info?.contact_person_phone ||
+            '',
+        email: patient.contact_info?.contact_email || patient.email || '',
+        phone: patient.contact_info?.contact_phone || patient.phone || '',
+        addressStreet: patient.address?.street || '',
+        addressCity: patient.address?.city || '',
+        addressZip: patient.address?.zip || '',
     };
 
     const handleSubmit = async (data) => {
         setUpdateError(null);
         try {
-            console.log('Patient object:', patient);
             // Připravím data pro API (včetně id)
             const payload = {
                 id: patient.id || patient.user_id || id,
@@ -59,17 +68,20 @@ const PatientFormPage = () => {
                 weight: data.weight ? parseInt(data.weight) : null,
                 height: data.height ? parseInt(data.height) : null,
                 contact_info: {
-                    contact_person: data.contactPerson,
+                    contact_person_name: data.contactPersonName,
+                    contact_person_phone: data.contactPersonPhone,
                     contact_email: data.email,
                     contact_phone: data.phone,
                 },
+                address: {
+                    street: data.addressStreet,
+                    city: data.addressCity,
+                    zip: data.addressZip,
+                },
             };
             const response = await patientApi.updatePatient(payload);
-            console.log('Update response:', response);
-            // Přesměrujeme na detail pacienta
             navigate(ROUTES.PATIENT_DETAIL.replace(':id', payload.id));
         } catch (err) {
-            console.error('Error updating patient:', err);
             setUpdateError(
                 'Nepodařilo se uložit změny: ' +
                     (err?.response?.data?.error || err.message),

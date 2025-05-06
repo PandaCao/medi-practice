@@ -1,5 +1,4 @@
-import React from 'react';
-import { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
     Form,
     Button,
@@ -10,7 +9,10 @@ import {
 } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { BsInfoCircle } from 'react-icons/bs';
-import { validateForm, parsePersonalId } from '../../tools/AddPatientValidation';
+import {
+    validateForm,
+    parsePersonalId,
+} from '../../tools/AddPatientValidation';
 import { INSURANCE_COMPANIES_LIST } from '../../config/constants';
 import PersonalIdInput from './PersonalIdInput';
 
@@ -21,22 +23,41 @@ const AddPatient = ({ onSaveDraft, onSubmit, onDelete, initialData = {} }) => {
         lastName: initialData.lastName || '',
         personalId: initialData.personalId || '',
         birthDate: '', // Ukládáme interně, ale nezobrazujeme
-        gender: '',    // Ukládáme interně, ale nezobrazujeme
+        gender: '', // Ukládáme interně, ale nezobrazujeme
         insuranceCompany: initialData.insuranceCompany || '',
-        registrationDate: initialData.registrationDate || new Date().toISOString().split('T')[0],
+        registrationDate:
+            initialData.registrationDate ||
+            new Date().toISOString().split('T')[0],
         height: initialData.height || '',
         weight: initialData.weight || '',
-        contactPerson: initialData.contactPerson || '',
+        contactPersonName: initialData.contactPersonName || '',
+        contactPersonPhone: initialData.contactPersonPhone || '',
         email: initialData.email || '',
-        phone: initialData.phone || ''
+        phone: initialData.phone || '',
+        addressStreet: initialData.addressStreet || '',
+        addressCity: initialData.addressCity || '',
+        addressZip: initialData.addressZip || '',
     });
 
     const [errors, setErrors] = useState({});
     const [touchedFields, setTouchedFields] = useState({});
 
+    useEffect(() => {
+        if (initialData.personalId) {
+            const parsed = parsePersonalId(initialData.personalId);
+            if (parsed) {
+                setFormData((prev) => ({
+                    ...prev,
+                    birthDate: parsed.birthDate,
+                    gender: parsed.gender,
+                }));
+            }
+        }
+    }, [initialData.personalId]);
+
     const handleChange = (e) => {
         let name, value;
-        
+
         // Podpora pro oba typy vstupů - event objekt i přímá hodnota
         if (e && e.target) {
             // Klasický input event
@@ -47,17 +68,19 @@ const AddPatient = ({ onSaveDraft, onSubmit, onDelete, initialData = {} }) => {
             name = 'personalId';
             value = e;
         }
-        
+
         // Speciální logika pro rodné číslo
         if (name === 'personalId') {
             const parsedData = parsePersonalId(value);
             setFormData((prev) => ({
                 ...prev,
                 [name]: value,
-                ...(parsedData ? {
-                    birthDate: parsedData.birthDate,
-                    gender: parsedData.gender
-                } : {})
+                ...(parsedData
+                    ? {
+                          birthDate: parsedData.birthDate,
+                          gender: parsedData.gender,
+                      }
+                    : {}),
             }));
         } else {
             setFormData((prev) => ({
@@ -105,7 +128,9 @@ const AddPatient = ({ onSaveDraft, onSubmit, onDelete, initialData = {} }) => {
     const handleSubmit = (e) => {
         e.preventDefault();
         const validationErrors = validateForm(formData);
+        console.log('Submitting form', formData, validationErrors);
         if (Object.keys(validationErrors).length === 0) {
+            console.log('Calling onSubmit');
             onSubmit(formData);
         } else {
             // Při odeslání označíme všechna pole jako touched
@@ -311,22 +336,73 @@ const AddPatient = ({ onSaveDraft, onSubmit, onDelete, initialData = {} }) => {
                 </Col>
             </Row>
 
-            {/* Kontaktní osoba */}
-            <Form.Group className="mb-3">
-                <Form.Label>Kontaktní osoba</Form.Label>
-                <Form.Control
-                    type="text"
-                    name="contactPerson"
-                    value={formData.contactPerson}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    isInvalid={shouldShowError('contactPerson')}
-                    maxLength={100}
-                />
-                <Form.Control.Feedback type="invalid">
-                    {errors.contactPerson}
-                </Form.Control.Feedback>
-            </Form.Group>
+            {/* Adresa */}
+            <Row className="mb-3">
+                <Col md={4}>
+                    <Form.Group>
+                        <Form.Label>Ulice a číslo</Form.Label>
+                        <Form.Control
+                            type="text"
+                            name="addressStreet"
+                            value={formData.addressStreet}
+                            onChange={handleChange}
+                            placeholder="Např. Hlavní 123"
+                        />
+                    </Form.Group>
+                </Col>
+                <Col md={4}>
+                    <Form.Group>
+                        <Form.Label>Město</Form.Label>
+                        <Form.Control
+                            type="text"
+                            name="addressCity"
+                            value={formData.addressCity}
+                            onChange={handleChange}
+                            placeholder="Např. Praha"
+                        />
+                    </Form.Group>
+                </Col>
+                <Col md={4}>
+                    <Form.Group>
+                        <Form.Label>PSČ</Form.Label>
+                        <Form.Control
+                            type="text"
+                            name="addressZip"
+                            value={formData.addressZip}
+                            onChange={handleChange}
+                            placeholder="Např. 11000"
+                        />
+                    </Form.Group>
+                </Col>
+            </Row>
+
+            {/* Kontaktní osoba - jméno a telefon */}
+            <Row className="mb-3">
+                <Col md={6}>
+                    <Form.Group>
+                        <Form.Label>Jméno kontaktní osoby</Form.Label>
+                        <Form.Control
+                            type="text"
+                            name="contactPersonName"
+                            value={formData.contactPersonName}
+                            onChange={handleChange}
+                            placeholder="Jméno kontaktní osoby"
+                        />
+                    </Form.Group>
+                </Col>
+                <Col md={6}>
+                    <Form.Group>
+                        <Form.Label>Telefon kontaktní osoby</Form.Label>
+                        <Form.Control
+                            type="text"
+                            name="contactPersonPhone"
+                            value={formData.contactPersonPhone}
+                            onChange={handleChange}
+                            placeholder="Telefon kontaktní osoby"
+                        />
+                    </Form.Group>
+                </Col>
+            </Row>
 
             {/* Akční tlačítka */}
             <div className="d-flex justify-content-end gap-2 mt-4">

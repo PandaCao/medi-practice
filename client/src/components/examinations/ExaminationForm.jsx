@@ -32,63 +32,69 @@ const ExaminationForm = ({
     const [diagnoses, setDiagnoses] = useState([]);
 
     useEffect(() => {
-        if (examination) {
-            setFormData({
-                patient_id: examination.patient_id || patientId,
-                doctor_id: examination.doctor_id || doctorId,
-                examination_date:
-                    examination.examination_date || new Date().toISOString(),
-                anamnesis: examination.anamnesis || '',
-                diagnosis_overview: examination.diagnosis_overview || '',
-                medication: examination.medication || '',
-                lab_results: examination.lab_results || '',
-                objective_findings: examination.objective_findings || '',
-                conclusions: examination.conclusions || '',
-                recommendations: examination.recommendations || '',
-                prescribed_medication: examination.prescribed_medication || '',
-                new_diagnosis: examination.new_diagnosis || '',
-                place: examination.place || 'MediPractise',
-                stamp: examination.stamp || 'xxx',
-                doctors_signature: examination.doctors_signature || 'xxx',
-            });
+        if (show) {
+            if (examination) {
+                setFormData({
+                    patient_id: examination.patient_id || patientId,
+                    doctor_id: examination.doctor_id || doctorId,
+                    examination_date:
+                        examination.examination_date ||
+                        new Date().toISOString(),
+                    anamnesis: examination.anamnesis || '',
+                    diagnosis_overview: examination.diagnosis_overview || '',
+                    medication: examination.medication || '',
+                    lab_results: examination.lab_results || '',
+                    objective_findings: examination.objective_findings || '',
+                    conclusions: examination.conclusions || '',
+                    recommendations: examination.recommendations || '',
+                    prescribed_medication:
+                        examination.prescribed_medication || '',
+                    new_diagnosis: examination.new_diagnosis || '',
+                    place: examination.place || 'MediPractise',
+                    stamp: examination.stamp || 'xxx',
+                    doctors_signature: examination.doctors_signature || 'xxx',
+                });
 
-            // Pokud má vyšetření diagnózy, načteme je
-            if (examination.diagnosis_overview) {
-                try {
-                    const parsedDiagnoses = JSON.parse(
-                        examination.diagnosis_overview,
-                    );
-                    setDiagnoses(
-                        Array.isArray(parsedDiagnoses) ? parsedDiagnoses : [],
-                    );
-                } catch (e) {
-                    console.error('Error parsing diagnoses:', e);
+                // Pokud má vyšetření diagnózy, načteme je
+                if (examination.diagnosis_overview) {
+                    try {
+                        const parsedDiagnoses = JSON.parse(
+                            examination.diagnosis_overview,
+                        );
+                        setDiagnoses(
+                            Array.isArray(parsedDiagnoses)
+                                ? parsedDiagnoses
+                                : [],
+                        );
+                    } catch (e) {
+                        console.error('Error parsing diagnoses:', e);
+                        setDiagnoses([]);
+                    }
+                } else {
                     setDiagnoses([]);
                 }
             } else {
-                setDiagnoses([]);
+                setFormData({
+                    patient_id: patientId,
+                    doctor_id: doctorId,
+                    examination_date: new Date().toISOString(),
+                    anamnesis: '',
+                    diagnosis_overview: '',
+                    medication: '',
+                    lab_results: '',
+                    objective_findings: '',
+                    conclusions: '',
+                    recommendations: '',
+                    prescribed_medication: '',
+                    new_diagnosis: '',
+                    place: 'MediPractise',
+                    stamp: 'xxx',
+                    doctors_signature: 'xxx',
+                });
+                setDiagnoses([{ code: '', description: '' }]);
             }
-        } else {
-            setFormData({
-                patient_id: patientId,
-                doctor_id: doctorId,
-                examination_date: new Date().toISOString(),
-                anamnesis: '',
-                diagnosis_overview: '',
-                medication: '',
-                lab_results: '',
-                objective_findings: '',
-                conclusions: '',
-                recommendations: '',
-                prescribed_medication: '',
-                new_diagnosis: '',
-                place: 'MediPractise',
-                stamp: 'xxx',
-                doctors_signature: 'xxx',
-            });
-            setDiagnoses([{ code: '', description: '' }]);
         }
-    }, [examination, patientId, doctorId]);
+    }, [show, examination, patientId, doctorId]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;

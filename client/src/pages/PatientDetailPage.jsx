@@ -5,10 +5,12 @@ import { Row, Col, Modal, Spinner, Button } from 'react-bootstrap';
 import { ROUTES } from '../config/routes';
 import { patientApi } from '../api';
 import { getPatientExaminations } from '../api/examinationApi';
+import { addPrescription } from '../api/prescriptionApi';
 import ExaminationForm from '../components/examinations/ExaminationForm';
 import PrescriptionForm from '../components/prescriptions/PrescriptionForm';
 import PatientDetailCard from '../components/patients/PatientDetailCard';
 import ExaminationList from '../components/examinations/ExaminationList';
+import PrescriptionList from '../components/prescriptions/PrescriptionList';
 
 const PatientDetailPage = () => {
     const { id } = useParams();
@@ -20,6 +22,11 @@ const PatientDetailPage = () => {
     const [showExaminationForm, setShowExaminationForm] = useState(false);
     const [showPrescriptionForm, setShowPrescriptionForm] = useState(false);
     const [examinations, setExaminations] = useState([]);
+    const [prescriptions, setPrescriptions] = useState([]);
+    const [showPrescriptionQr, setShowPrescriptionQr] = useState({
+        show: false,
+        qr: null,
+    });
 
     useEffect(() => {
         const fetchPatientDetail = async () => {
@@ -54,13 +61,9 @@ const PatientDetailPage = () => {
                     insurance: data.insurance_id,
                     weight: data.weight,
                     height: data.height,
-                    email: data.contact_info?.contact_email,
-                    phone: data.contact_info?.contact_phone,
-                    contactPerson: data.contact_info?.contact_person,
+                    contact_info: data.contact_info,
                     address: data.address,
-                    registrationDate: new Date(
-                        data.created_at,
-                    ).toLocaleDateString('cs-CZ'),
+                    registrationDate: data.created_at,
                 });
 
                 try {
@@ -71,6 +74,14 @@ const PatientDetailPage = () => {
                     console.error('Error fetching examinations:', examError);
                     // Pokud se nepodaří načíst vyšetření, nastavíme prázdný seznam
                     setExaminations([]);
+                }
+                try {
+                    // Načtení e-receptů z API
+                    const prescriptionsData =
+                        await patientApi.getPatientPrescriptions(id);
+                    setPrescriptions(prescriptionsData || []);
+                } catch (prescError) {
+                    setPrescriptions([]);
                 }
             } catch (err) {
                 console.error('Error fetching patient detail:', err);
@@ -99,11 +110,22 @@ const PatientDetailPage = () => {
         });
     };
 
-    const handleCreatePrescription = (prescriptionData) => {
-        // TODO: Implement API call to save prescription
-        console.log('Creating prescription:', prescriptionData);
-        // Here you would typically make an API call to save the prescription
-        // For now, we'll just log it to the console
+    const handleCreatePrescription = async (prescriptionData) => {
+        try {
+            await addPrescription(prescriptionData);
+            // Reload prescriptions after creation
+            const prescriptionsData = await patientApi.getPatientPrescriptions(
+                patient.id,
+            );
+            setPrescriptions(prescriptionsData || []);
+            setShowPrescriptionForm(false);
+        } catch (error) {
+            setError(
+                error.response?.data?.message ||
+                    error.message ||
+                    'Nepodařilo se vytvořit e-recept.',
+            );
+        }
     };
 
     const handleAddExamination = () => {
@@ -113,6 +135,10 @@ const PatientDetailPage = () => {
     const handleEditExamination = (examination) => {
         // TODO: Implement edit examination functionality
         console.log('Editing examination:', examination);
+    };
+
+    const handleShowPrescriptionQr = (prescription) => {
+        setShowPrescriptionQr({ show: true, qr: prescription.qr_code });
     };
 
     if (isLoading) {
@@ -182,6 +208,16 @@ const PatientDetailPage = () => {
                 </Col>
             </Row>
 
+            <Row className="mb-4">
+                <Col>
+                    <PrescriptionList
+                        prescriptions={prescriptions}
+                        onAdd={() => setShowPrescriptionForm(true)}
+                        onShowQr={handleShowPrescriptionQr}
+                    />
+                </Col>
+            </Row>
+
             {/* Modals */}
             <Modal
                 show={showDeleteModal}
@@ -228,6 +264,27 @@ const PatientDetailPage = () => {
                 onSubmit={handleCreatePrescription}
                 patient={patient}
             />
+
+            <Modal
+                show={showPrescriptionQr.show}
+                onHide={() => setShowPrescriptionQr({ show: false, qr: null })}
+                centered
+            >
+                <Modal.Header closeButton>
+                    <Modal.Title>QR kód e-receptu</Modal.Title>
+                </Modal.Header>
+                <Modal.Body className="text-center">
+                    {showPrescriptionQr.qr ? (
+                        <img
+                            src={showPrescriptionQr.qr}
+                            alt="QR kód e-receptu"
+                            style={{ maxWidth: '100%' }}
+                        />
+                    ) : (
+                        <p>QR kód není k dispozici.</p>
+                    )}
+                </Modal.Body>
+            </Modal>
         </>
     );
 };

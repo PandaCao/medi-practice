@@ -8,16 +8,29 @@ const PrescriptionForm = ({ show, onHide, onSubmit, patient }) => {
         frequency: '',
         duration: '',
         notes: '',
-        prescriptionType: 'regular', // regular or emergency
     });
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        onSubmit({
-            ...formData,
-            patientId: patient.id,
-            date: new Date().toISOString(),
-        });
+        // Prepare payload for API
+        const defaultDoctorId = 'd6574103-a485-4eba-a536-d4dcbb3f2077';
+        const expirationDate = new Date();
+        expirationDate.setDate(expirationDate.getDate() + 7); // default 7 days
+        const prescriptionPayload = {
+            patient_id: patient.id,
+            doctor_id: defaultDoctorId,
+            expiration_date: expirationDate.toISOString(),
+            medications: [
+                {
+                    name: formData.medication,
+                    dosage: formData.dosage,
+                    frequency: formData.frequency,
+                    duration: formData.duration,
+                },
+            ],
+            notes: formData.notes,
+        };
+        onSubmit(prescriptionPayload);
         onHide();
     };
 
@@ -89,18 +102,6 @@ const PrescriptionForm = ({ show, onHide, onSubmit, patient }) => {
                             </Form.Group>
                         </Col>
                     </Row>
-
-                    <Form.Group className="mb-3">
-                        <Form.Label>Typ receptu</Form.Label>
-                        <Form.Select
-                            name="prescriptionType"
-                            value={formData.prescriptionType}
-                            onChange={handleChange}
-                        >
-                            <option value="regular">Běžný recept</option>
-                            <option value="emergency">Nouzový recept</option>
-                        </Form.Select>
-                    </Form.Group>
 
                     <Form.Group className="mb-3">
                         <Form.Label>Poznámky</Form.Label>

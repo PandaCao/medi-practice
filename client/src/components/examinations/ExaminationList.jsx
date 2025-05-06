@@ -27,10 +27,10 @@ const ExaminationItem = ({ examination, onEdit }) => {
 
     return (
         <Card className="mb-3 shadow-sm">
-            <Card.Header className="bg-light d-flex justify-content-between align-items-center">
+            <Card.Header className="bg-light d-flex justify-content-between align-items-center border-bottom">
                 <div className="d-flex align-items-center gap-2">
-                    <BsFileMedical className="text-primary" />
-                    <h6 className="mb-0">
+                    <BsFileMedical className="text-primary" size={20} />
+                    <h6 className="mb-0 fw-bold text-dark">
                         Vyšetření ze dne{' '}
                         {formatDate(examination.examination_date)}
                     </h6>
@@ -38,10 +38,10 @@ const ExaminationItem = ({ examination, onEdit }) => {
                 <Button
                     variant="link"
                     size="sm"
-                    className="d-inline-flex align-items-center text-muted p-0"
+                    className="d-inline-flex align-items-center text-primary p-0"
                     onClick={() => onEdit(examination)}
                 >
-                    <BsPencil />
+                    <BsPencil size={18} />
                 </Button>
             </Card.Header>
             <Card.Body>
@@ -144,7 +144,7 @@ const ExaminationList = ({ examinations = [], onAdd, onEdit }) => {
     return (
         <div>
             <div className="d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center gap-2 mb-3">
-                <h5 className="mb-0">Přehled vyšetření</h5>
+                <h5 className="mb-0 fw-bold text-primary">Přehled vyšetření</h5>
                 <Button
                     type="button"
                     variant="primary"
@@ -153,7 +153,7 @@ const ExaminationList = ({ examinations = [], onAdd, onEdit }) => {
                     onClick={onAdd}
                     style={{ cursor: 'pointer', zIndex: 1 }}
                 >
-                    <BsPlus />
+                    <BsPlus className="text-white" />
                     <span className="d-none d-sm-inline">Přidat vyšetření</span>
                     <span className="d-sm-none">Přidat</span>
                 </Button>

@@ -27,9 +27,17 @@ function AddPatientPage() {
                 sex: formData.gender,
                 insurance_id: formData.insuranceCompany,
                 contact_info: {
-                    contact_person: formData.contactPerson || null,
-                    contact_phone: formData.phone || null,
-                    contact_email: formData.email || null,
+                    contact_person: {
+                        name: formData.contactPersonName || '',
+                        phone: formData.contactPersonPhone || '',
+                    },
+                    contact_email: formData.email || '',
+                    contact_phone: formData.phone || '',
+                },
+                address: {
+                    street: formData.addressStreet || '',
+                    city: formData.addressCity || '',
+                    zip: formData.addressZip || '',
                 },
                 height: formData.height ? parseInt(formData.height) : null,
                 weight: formData.weight ? parseInt(formData.weight) : null,
