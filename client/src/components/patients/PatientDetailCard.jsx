@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Card } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 import {
     BsPencil,
     BsPersonCircle,
@@ -38,34 +38,21 @@ const PatientDetailCard = ({
     const age = getAge(patient.dateOfBirth);
 
     return (
-        <Card className="mb-4 shadow-sm border-0">
-            <Card.Header className="bg-primary text-white d-flex justify-content-between align-items-center rounded-top">
+        <div className="border-0" style={{ margin: '-16px' }}>
+            <div className="bg-primary text-white d-flex justify-content-between align-items-center rounded-top p-3">
                 <div className="d-flex align-items-center gap-3">
                     {/* <BsPersonCircle size={40} className="text-white" /> */}
                     <div>
                         <div className="fw-bold h4 mb-0">{patient.name}</div>
-                        <div className="small">
-                            {age !== null && <span>{age} let</span>}
-                            {patient.sex && (
-                                <span className="ms-2">
-                                    {patient.sex === 'male' ? 'Muž' : 'Žena'}
-                                </span>
-                            )}
-                        </div>
+                        {age !== null && <span>{age} let</span>}
+                        {patient.sex && (
+                            <span className="ms-2">
+                                {patient.sex === 'male' ? 'Muž' : 'Žena'}
+                            </span>
+                        )}
                     </div>
                 </div>
                 <div className="d-flex gap-2">
-                    {showEReceptButton && (
-                        <Button
-                            variant="outline-primary"
-                            size="sm"
-                            onClick={onERecept}
-                            className="d-inline-flex align-items-center gap-2"
-                        >
-                            <BsPrescription />
-                            E-recept
-                        </Button>
-                    )}
                     <Button
                         variant="light"
                         size="sm"
@@ -78,10 +65,10 @@ const PatientDetailCard = ({
                         </span>
                     </Button>
                 </div>
-            </Card.Header>
-            <Card.Body>
+            </div>
+            <div className="bg-white p-3">
                 <div className="row">
-                    <div className="col-md-6 col-lg-4 mb-3">
+                    <div className="col-md-6 col-lg-4 ">
                         <div className="fw-bold text-primary mb-2">
                             Základní informace
                         </div>
@@ -136,7 +123,7 @@ const PatientDetailCard = ({
                             </span>
                         </div>
                     </div>
-                    <div className="col-md-6 col-lg-4 mb-3">
+                    <div className="col-md-6 col-lg-4 ">
                         <div className="fw-bold text-primary mb-2">
                             Kontaktní údaje
                         </div>
@@ -157,7 +144,7 @@ const PatientDetailCard = ({
                             }
                         />
                     </div>
-                    <div className="col-md-6 col-lg-4 mb-3">
+                    <div className="col-md-6 col-lg-4 ">
                         <div className="fw-bold text-primary mb-2">
                             Kontaktní osoba
                         </div>
@@ -201,8 +188,8 @@ const PatientDetailCard = ({
                         </div>
                     </div>
                 </div>
-            </Card.Body>
-        </Card>
+            </div>
+        </div>
     );
 };
 
