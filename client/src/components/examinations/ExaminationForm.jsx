@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Modal, Form, Button } from 'react-bootstrap';
-import { BsPlus, BsTrash, BsPencil, BsFileText } from 'react-icons/bs';
+import { BsPlus, BsTrash } from 'react-icons/bs';
 import { addExamination, updateExamination } from '../../api/examinationApi';
 import { addPrescription } from '../../api/prescriptionApi';
 
@@ -232,11 +232,10 @@ const ExaminationForm = ({
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            let examinationResult;
             if (examination) {
-                examinationResult = await updateExamination(formData);
+                await updateExamination(formData);
             } else {
-                examinationResult = await addExamination(formData);
+                await addExamination(formData);
             }
 
             // If prescription is enabled and there's prescribed medication, create e-prescription

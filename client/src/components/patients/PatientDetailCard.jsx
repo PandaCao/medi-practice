@@ -2,9 +2,6 @@ import React from 'react';
 import { Button } from 'react-bootstrap';
 import {
     BsPencil,
-    BsPersonCircle,
-    BsPrescription,
-    BsTrash,
 } from 'react-icons/bs';
 import { getInsuranceCompanyName } from '../../config/constants';
 

@@ -4,11 +4,8 @@ import {
     Button,
     Row,
     Col,
-    OverlayTrigger,
-    Tooltip,
 } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
-import { BsInfoCircle } from 'react-icons/bs';
 import {
     validateForm,
     parsePersonalId,
@@ -145,8 +142,6 @@ const AddPatient = ({ onSaveDraft, onSubmit, onDelete, initialData = {} }) => {
             setErrors(validationErrors);
         }
     };
-
-    const renderTooltip = (text) => <Tooltip>{text}</Tooltip>;
 
     const RequiredLabel = ({ children }) => (
         <Form.Label>

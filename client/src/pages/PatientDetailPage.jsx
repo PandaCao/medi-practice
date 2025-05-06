@@ -13,7 +13,6 @@ import ExaminationList from '../components/examinations/ExaminationList';
 import PrescriptionList from '../components/prescriptions/PrescriptionList';
 import { usePermissions } from '../hooks/usePermissions';
 import { PERMISSIONS } from '../config/permissions';
-import PermissionGuard from '../components/common/PermissionGuard';
 
 const PatientDetailPage = () => {
     const { id } = useParams();

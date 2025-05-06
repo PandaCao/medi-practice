@@ -1,7 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { Button, Card } from 'react-bootstrap';
 import { BsPencil, BsPlus, BsFileMedical, BsChevronDown } from 'react-icons/bs';
-import { usePermissions } from '../../hooks/usePermissions';
 import { PERMISSIONS } from '../../config/permissions';
 import PermissionGuard from '../common/PermissionGuard';
 
@@ -191,7 +190,6 @@ const ExaminationItem = ({ examination, onEdit }) => {
 
 const ExaminationList = ({ examinations = [], onAdd, onEdit }) => {
     const [visibleCount, setVisibleCount] = useState(ITEMS_PER_PAGE);
-    const { hasPermission } = usePermissions();
 
     // Sort examinations by date (newest first) and memoize the result
     const sortedExaminations = useMemo(() => {
