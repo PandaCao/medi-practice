@@ -60,11 +60,6 @@ const PrescriptionItem = ({ prescription, onShowQr }) => {
                                                 Dávkování: {med.dosage}{' '}
                                             </span>
                                         )}
-                                        {med.frequency && (
-                                            <span>
-                                                | Frekvence: {med.frequency}{' '}
-                                            </span>
-                                        )}
                                         {med.duration && (
                                             <span>| Délka: {med.duration}</span>
                                         )}
@@ -86,39 +81,45 @@ const PrescriptionItem = ({ prescription, onShowQr }) => {
     );
 };
 
-const PrescriptionList = ({ prescriptions = [], onAdd, onShowQr }) => (
-    <div>
-        <div className="d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center gap-2 mb-3">
-            <h5 className="mb-0 fw-bold text-primary">Přehled e-receptů</h5>
-            <Button
-                type="button"
-                variant="primary"
-                size="sm"
-                className="d-inline-flex align-items-center gap-2"
-                onClick={onAdd}
-                style={{ cursor: 'pointer', zIndex: 1 }}
-            >
-                <BsPlus className="text-white" />
-                <span className="d-none d-sm-inline">Přidat e-recept</span>
-                <span className="d-sm-none">Přidat</span>
-            </Button>
-        </div>
+const PrescriptionList = ({ prescriptions = [], onAdd, onShowQr }) => {
+    // Sort prescriptions by created_at (newest first)
+    const sortedPrescriptions = [...prescriptions].sort(
+        (a, b) => new Date(b.created_at) - new Date(a.created_at),
+    );
+    return (
         <div>
-            {prescriptions.length > 0 ? (
-                prescriptions.map((prescription) => (
-                    <PrescriptionItem
-                        key={prescription.id}
-                        prescription={prescription}
-                        onShowQr={onShowQr}
-                    />
-                ))
-            ) : (
-                <p className="text-muted small mb-0">
-                    Žádné e-recepty nejsou k dispozici.
-                </p>
-            )}
+            <div className="d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center gap-2 mb-3">
+                <h5 className="mb-0 fw-bold text-primary">Přehled e-receptů</h5>
+                <Button
+                    type="button"
+                    variant="primary"
+                    size="sm"
+                    className="d-inline-flex align-items-center gap-2"
+                    onClick={onAdd}
+                    style={{ cursor: 'pointer', zIndex: 1 }}
+                >
+                    <BsPlus className="text-white" />
+                    <span className="d-none d-sm-inline">Přidat e-recept</span>
+                    <span className="d-sm-none">Přidat</span>
+                </Button>
+            </div>
+            <div>
+                {sortedPrescriptions.length > 0 ? (
+                    sortedPrescriptions.map((prescription) => (
+                        <PrescriptionItem
+                            key={prescription.id}
+                            prescription={prescription}
+                            onShowQr={onShowQr}
+                        />
+                    ))
+                ) : (
+                    <p className="text-muted small mb-0">
+                        Žádné e-recepty nejsou k dispozici.
+                    </p>
+                )}
+            </div>
         </div>
-    </div>
-);
+    );
+};
 
 export default PrescriptionList;

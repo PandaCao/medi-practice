@@ -49,60 +49,39 @@ const PrescriptionForm = ({ show, onHide, onSubmit, patient }) => {
             </Modal.Header>
             <Modal.Body>
                 <Form onSubmit={handleSubmit}>
-                    <Row>
-                        <Col md={6}>
-                            <Form.Group className="mb-3">
-                                <Form.Label>Lék</Form.Label>
-                                <Form.Control
-                                    type="text"
-                                    name="medication"
-                                    value={formData.medication}
-                                    onChange={handleChange}
-                                    required
-                                />
-                            </Form.Group>
-                        </Col>
-                        <Col md={6}>
-                            <Form.Group className="mb-3">
-                                <Form.Label>Dávkování</Form.Label>
-                                <Form.Control
-                                    type="text"
-                                    name="dosage"
-                                    value={formData.dosage}
-                                    onChange={handleChange}
-                                    required
-                                />
-                            </Form.Group>
-                        </Col>
-                    </Row>
-
-                    <Row>
-                        <Col md={6}>
-                            <Form.Group className="mb-3">
-                                <Form.Label>Frekvence</Form.Label>
-                                <Form.Control
-                                    type="text"
-                                    name="frequency"
-                                    value={formData.frequency}
-                                    onChange={handleChange}
-                                    required
-                                />
-                            </Form.Group>
-                        </Col>
-                        <Col md={6}>
-                            <Form.Group className="mb-3">
-                                <Form.Label>Délka užívání</Form.Label>
-                                <Form.Control
-                                    type="text"
-                                    name="duration"
-                                    value={formData.duration}
-                                    onChange={handleChange}
-                                    required
-                                />
-                            </Form.Group>
-                        </Col>
-                    </Row>
-
+                    <Form.Group className="mb-3">
+                        <Form.Label>Lék</Form.Label>
+                        <Form.Control
+                            type="text"
+                            name="medication"
+                            value={formData.medication}
+                            onChange={handleChange}
+                            required
+                            placeholder="např. Paracetamol"
+                        />
+                    </Form.Group>
+                    <Form.Group className="mb-3">
+                        <Form.Label>Dávkování</Form.Label>
+                        <Form.Control
+                            type="text"
+                            name="dosage"
+                            value={formData.dosage}
+                            onChange={handleChange}
+                            required
+                            placeholder="např. 2x denně"
+                        />
+                    </Form.Group>
+                    <Form.Group className="mb-3">
+                        <Form.Label>Délka užívání</Form.Label>
+                        <Form.Control
+                            type="text"
+                            name="duration"
+                            value={formData.duration}
+                            onChange={handleChange}
+                            required
+                            placeholder="např. 7 dní"
+                        />
+                    </Form.Group>
                     <Form.Group className="mb-3">
                         <Form.Label>Poznámky</Form.Label>
                         <Form.Control
@@ -113,7 +92,6 @@ const PrescriptionForm = ({ show, onHide, onSubmit, patient }) => {
                             onChange={handleChange}
                         />
                     </Form.Group>
-
                     <div className="d-flex justify-content-end gap-2">
                         <Button variant="secondary" onClick={onHide}>
                             Zrušit
