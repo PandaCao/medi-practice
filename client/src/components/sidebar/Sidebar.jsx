@@ -2,12 +2,22 @@ import React from 'react';
 import { Nav, Image } from 'react-bootstrap';
 import { Link, useLocation } from 'react-router-dom';
 import { routes } from '../../config/routes';
+import { usePermissions } from '../../hooks/usePermissions';
 import logo from '../../assets/logo.svg';
 import './Sidebar.css';
 
 const Sidebar = ({ isOpen, onClose }) => {
     const location = useLocation();
-    const sidebarRoutes = routes.filter((route) => route.showInSidebar);
+    const { hasPermission } = usePermissions();
+
+    // Filtrujeme routy podle oprávnění a zobrazení v sidebaru
+    const sidebarRoutes = routes.filter(
+        (route) =>
+            route.showInSidebar &&
+            (!route.requiredPermission ||
+                hasPermission(route.requiredPermission)),
+    );
+
     const topRoutes = sidebarRoutes.filter((route) => route.position === 'top');
     const bottomRoutes = sidebarRoutes.filter(
         (route) => route.position === 'bottom',

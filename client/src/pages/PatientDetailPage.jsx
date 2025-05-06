@@ -11,10 +11,14 @@ import PrescriptionForm from '../components/prescriptions/PrescriptionForm';
 import PatientDetailCard from '../components/patients/PatientDetailCard';
 import ExaminationList from '../components/examinations/ExaminationList';
 import PrescriptionList from '../components/prescriptions/PrescriptionList';
+import { usePermissions } from '../hooks/usePermissions';
+import { PERMISSIONS } from '../config/permissions';
+import PermissionGuard from '../components/common/PermissionGuard';
 
 const PatientDetailPage = () => {
     const { id } = useParams();
     const navigate = useNavigate();
+    const { hasPermission } = usePermissions();
     const [patient, setPatient] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -194,6 +198,9 @@ const PatientDetailPage = () => {
                 onUpdate={handleUpdate}
                 onDelete={() => setShowDeleteModal(true)}
                 onERecept={() => setShowPrescriptionForm(true)}
+                showEReceptButton={hasPermission(
+                    PERMISSIONS.PRESCRIPTION_CREATE,
+                )}
             />
 
             <hr className="my-4" />

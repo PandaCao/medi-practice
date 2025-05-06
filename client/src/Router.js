@@ -4,12 +4,18 @@ import Layout from './layout/Layout';
 import { routes } from './config/routes';
 import LoginPage from './pages/LoginPage';
 import { useAuth } from './context/AuthContext';
+import { usePermissions } from './hooks/usePermissions';
 
-const ProtectedRoute = ({ children }) => {
+const ProtectedRoute = ({ children, requiredPermission }) => {
     const { user } = useAuth();
+    const { hasPermission } = usePermissions();
 
     if (!user) {
         return <Navigate to="/login" />;
+    }
+
+    if (requiredPermission && !hasPermission(requiredPermission)) {
+        return <Navigate to="/" />;
     }
 
     return children;
@@ -31,7 +37,13 @@ const Router = () => {
                     <Route
                         key={route.path}
                         path={route.path === '/' ? '' : route.path}
-                        element={<route.component />}
+                        element={
+                            <ProtectedRoute
+                                requiredPermission={route.requiredPermission}
+                            >
+                                <route.component />
+                            </ProtectedRoute>
+                        }
                     />
                 ))}
             </Route>

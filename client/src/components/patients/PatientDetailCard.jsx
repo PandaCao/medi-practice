@@ -1,6 +1,11 @@
 import React from 'react';
 import { Button, Card } from 'react-bootstrap';
-import { BsPencil, BsPersonCircle } from 'react-icons/bs';
+import {
+    BsPencil,
+    BsPersonCircle,
+    BsPrescription,
+    BsTrash,
+} from 'react-icons/bs';
 import { getInsuranceCompanyName } from '../../config/constants';
 
 const EmptyFieldMessage = () => (
@@ -14,7 +19,13 @@ const ContactField = ({ label, value }) => (
     </div>
 );
 
-const PatientDetailCard = ({ patient, onUpdate, onERecept }) => {
+const PatientDetailCard = ({
+    patient,
+    onUpdate,
+    onDelete,
+    onERecept,
+    showEReceptButton = true,
+}) => {
     // Věk z data narození
     const getAge = (dateString) => {
         if (!dateString) return null;
@@ -44,6 +55,17 @@ const PatientDetailCard = ({ patient, onUpdate, onERecept }) => {
                     </div>
                 </div>
                 <div className="d-flex gap-2">
+                    {showEReceptButton && (
+                        <Button
+                            variant="outline-primary"
+                            size="sm"
+                            onClick={onERecept}
+                            className="d-inline-flex align-items-center gap-2"
+                        >
+                            <BsPrescription />
+                            E-recept
+                        </Button>
+                    )}
                     <Button
                         variant="light"
                         size="sm"

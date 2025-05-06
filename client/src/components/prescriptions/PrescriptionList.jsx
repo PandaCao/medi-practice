@@ -1,6 +1,9 @@
 import React from 'react';
 import { Button, Card } from 'react-bootstrap';
 import { BsPlus, BsQrCode } from 'react-icons/bs';
+import { usePermissions } from '../../hooks/usePermissions';
+import { PERMISSIONS } from '../../config/permissions';
+import PermissionGuard from '../common/PermissionGuard';
 
 const formatDate = (dateString) => {
     if (!dateString) return 'Neuvedeno';
@@ -90,18 +93,22 @@ const PrescriptionList = ({ prescriptions = [], onAdd, onShowQr }) => {
         <div>
             <div className="d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center gap-2 mb-3">
                 <h5 className="mb-0 fw-bold text-primary">Přehled e-receptů</h5>
-                <Button
-                    type="button"
-                    variant="primary"
-                    size="sm"
-                    className="d-inline-flex align-items-center gap-2"
-                    onClick={onAdd}
-                    style={{ cursor: 'pointer', zIndex: 1 }}
-                >
-                    <BsPlus className="text-white" />
-                    <span className="d-none d-sm-inline">Přidat e-recept</span>
-                    <span className="d-sm-none">Přidat</span>
-                </Button>
+                <PermissionGuard permission={PERMISSIONS.PRESCRIPTION_CREATE}>
+                    <Button
+                        type="button"
+                        variant="primary"
+                        size="sm"
+                        className="d-inline-flex align-items-center gap-2"
+                        onClick={onAdd}
+                        style={{ cursor: 'pointer', zIndex: 1 }}
+                    >
+                        <BsPlus className="text-white" />
+                        <span className="d-none d-sm-inline">
+                            Přidat e-recept
+                        </span>
+                        <span className="d-sm-none">Přidat</span>
+                    </Button>
+                </PermissionGuard>
             </div>
             <div>
                 {sortedPrescriptions.length > 0 ? (

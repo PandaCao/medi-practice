@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { Form, Button, Card, Container, Alert } from 'react-bootstrap';
+import { Form, Button, Card, Alert } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { ROUTES } from '../config/routes';
+import logo from '../assets/logo.svg';
 
 const LoginPage = () => {
     const [username, setUsername] = useState('');
@@ -11,28 +11,36 @@ const LoginPage = () => {
     const navigate = useNavigate();
     const { login } = useAuth();
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        setError('');
-
-        if (login(username, password)) {
-            navigate(ROUTES.PATIENTS);
-        } else {
-            setError('Neplatné přihlašovací údaje');
+        try {
+            await login(username, password);
+            navigate('/');
+        } catch (err) {
+            setError('Nesprávné přihlašovací údaje');
         }
     };
 
     return (
-        <Container
-            className="d-flex align-items-center justify-content-center"
-            style={{ minHeight: '100vh' }}
-        >
-            <Card style={{ width: '400px' }}>
-                <Card.Body>
-                    <Card.Title className="text-center mb-4">
-                        Přihlášení
-                    </Card.Title>
-                    {error && <Alert variant="danger">{error}</Alert>}
+        <div className="min-vh-100 d-flex align-items-center justify-content-center bg-light">
+            <Card className="shadow-sm" style={{ width: '400px' }}>
+                <Card.Body className="p-4">
+                    <div className="text-center mb-4">
+                        <img
+                            src={logo}
+                            alt="MediPractise"
+                            style={{ height: '60px' }}
+                            className="mb-3"
+                        />
+                        <h4 className="text-primary mb-0">Přihlášení</h4>
+                    </div>
+
+                    {error && (
+                        <Alert variant="danger" className="mb-3">
+                            {error}
+                        </Alert>
+                    )}
+
                     <Form onSubmit={handleSubmit}>
                         <Form.Group className="mb-3">
                             <Form.Label>Uživatelské jméno</Form.Label>
@@ -43,6 +51,7 @@ const LoginPage = () => {
                                 required
                             />
                         </Form.Group>
+
                         <Form.Group className="mb-3">
                             <Form.Label>Heslo</Form.Label>
                             <Form.Control
@@ -52,17 +61,42 @@ const LoginPage = () => {
                                 required
                             />
                         </Form.Group>
+
                         <Button
-                            variant="primary"
                             type="submit"
-                            className="w-100"
+                            variant="primary"
+                            className="w-100 mb-3"
                         >
-                            Přihlásit
+                            Přihlásit se
                         </Button>
                     </Form>
+
+                    <div className="text-center">
+                        <div className="text-muted small mb-2">
+                            Testovací účty:
+                        </div>
+                        <div className="d-flex justify-content-center gap-4">
+                            <div>
+                                <div className="fw-bold">Doktor</div>
+                                <div className="small text-muted">
+                                    Uživatel: doktor
+                                    <br />
+                                    Heslo: doktor
+                                </div>
+                            </div>
+                            <div>
+                                <div className="fw-bold">Sestra</div>
+                                <div className="small text-muted">
+                                    Uživatel: sestra
+                                    <br />
+                                    Heslo: sestra
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </Card.Body>
             </Card>
-        </Container>
+        </div>
     );
 };
 

@@ -16,6 +16,7 @@ import {
     BsQuestionCircle,
     BsGear,
 } from 'react-icons/bs';
+import { PERMISSIONS } from './permissions';
 
 // Definice rout
 export const ROUTES = {
@@ -40,6 +41,7 @@ export const routes = [
         showInSidebar: true,
         isMainRoute: true,
         position: 'top',
+        requiredPermission: PERMISSIONS.PATIENT_VIEW,
     },
     {
         path: ROUTES.PATIENT_ADD,
@@ -47,6 +49,7 @@ export const routes = [
         name: 'Přidat pacienta',
         showInSidebar: false,
         isMainRoute: false,
+        requiredPermission: PERMISSIONS.PATIENT_CREATE,
     },
     {
         path: ROUTES.PATIENT_DETAIL, // ✅ Zobrazení detailu pacienta
@@ -54,6 +57,7 @@ export const routes = [
         name: 'Detail pacienta',
         showInSidebar: false,
         isMainRoute: false,
+        requiredPermission: PERMISSIONS.PATIENT_VIEW,
     },
     {
         path: ROUTES.PATIENT_EDIT, // ✅ Editace pacienta
@@ -61,6 +65,7 @@ export const routes = [
         name: 'Editace pacienta',
         showInSidebar: false,
         isMainRoute: false,
+        requiredPermission: PERMISSIONS.PATIENT_EDIT,
     },
     {
         path: ROUTES.BLOOD_SAMPLES,
@@ -70,6 +75,7 @@ export const routes = [
         showInSidebar: true,
         isMainRoute: true,
         position: 'top',
+        requiredPermission: PERMISSIONS.EXAMINATION_VIEW,
     },
     {
         path: ROUTES.RESERVATIONS,
@@ -79,6 +85,7 @@ export const routes = [
         showInSidebar: true,
         isMainRoute: true,
         position: 'top',
+        requiredPermission: PERMISSIONS.RESERVATION_VIEW,
     },
     {
         path: ROUTES.APPOINTMENTS,
@@ -88,6 +95,7 @@ export const routes = [
         showInSidebar: true,
         isMainRoute: true,
         position: 'top',
+        requiredPermission: PERMISSIONS.RESERVATION_VIEW,
     },
     {
         path: ROUTES.HELP,

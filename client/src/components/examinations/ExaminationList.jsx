@@ -1,6 +1,9 @@
 import React, { useState, useMemo } from 'react';
 import { Button, Card } from 'react-bootstrap';
 import { BsPencil, BsPlus, BsFileMedical, BsChevronDown } from 'react-icons/bs';
+import { usePermissions } from '../../hooks/usePermissions';
+import { PERMISSIONS } from '../../config/permissions';
+import PermissionGuard from '../common/PermissionGuard';
 
 const ITEMS_PER_PAGE = 3;
 
@@ -126,6 +129,7 @@ const ExaminationItem = ({ examination, onEdit }) => {
 
 const ExaminationList = ({ examinations = [], onAdd, onEdit }) => {
     const [visibleCount, setVisibleCount] = useState(ITEMS_PER_PAGE);
+    const { hasPermission } = usePermissions();
 
     // Sort examinations by date (newest first) and memoize the result
     const sortedExaminations = useMemo(() => {
@@ -145,18 +149,22 @@ const ExaminationList = ({ examinations = [], onAdd, onEdit }) => {
         <div>
             <div className="d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center gap-2 mb-3">
                 <h5 className="mb-0 fw-bold text-primary">Přehled vyšetření</h5>
-                <Button
-                    type="button"
-                    variant="primary"
-                    size="sm"
-                    className="d-inline-flex align-items-center gap-2"
-                    onClick={onAdd}
-                    style={{ cursor: 'pointer', zIndex: 1 }}
-                >
-                    <BsPlus className="text-white" />
-                    <span className="d-none d-sm-inline">Přidat vyšetření</span>
-                    <span className="d-sm-none">Přidat</span>
-                </Button>
+                <PermissionGuard permission={PERMISSIONS.EXAMINATION_CREATE}>
+                    <Button
+                        type="button"
+                        variant="primary"
+                        size="sm"
+                        className="d-inline-flex align-items-center gap-2"
+                        onClick={onAdd}
+                        style={{ cursor: 'pointer', zIndex: 1 }}
+                    >
+                        <BsPlus className="text-white" />
+                        <span className="d-none d-sm-inline">
+                            Přidat vyšetření
+                        </span>
+                        <span className="d-sm-none">Přidat</span>
+                    </Button>
+                </PermissionGuard>
             </div>
             <div>
                 {visibleExaminations.length > 0 ? (
