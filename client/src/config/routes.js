@@ -95,7 +95,7 @@ export const routes = [
         showInSidebar: true,
         isMainRoute: true,
         position: 'top',
-        requiredPermission: PERMISSIONS.RESERVATION_VIEW,
+        requiredPermission: PERMISSIONS.APPOINTMENT_VIEW,
     },
     {
         path: ROUTES.HELP,

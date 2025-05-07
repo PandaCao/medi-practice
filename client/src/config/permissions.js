@@ -20,6 +20,9 @@ export const PERMISSIONS = {
     RESERVATION_CREATE: 'reservation:create',
     RESERVATION_EDIT: 'reservation:edit',
     RESERVATION_DELETE: 'reservation:delete',
+
+    // Schůzky (Appointments)
+    APPOINTMENT_VIEW: 'appointment:view',
 };
 
 // Definice rolí a jejich oprávnění
@@ -34,10 +37,7 @@ export const ROLE_PERMISSIONS = {
         PERMISSIONS.PRESCRIPTION_VIEW,
         PERMISSIONS.PRESCRIPTION_CREATE,
         PERMISSIONS.PRESCRIPTION_EDIT,
-        PERMISSIONS.RESERVATION_VIEW,
-        PERMISSIONS.RESERVATION_CREATE,
-        PERMISSIONS.RESERVATION_EDIT,
-        PERMISSIONS.RESERVATION_DELETE,
+        PERMISSIONS.APPOINTMENT_VIEW,
     ],
     nurse: [
         PERMISSIONS.PATIENT_VIEW,
@@ -49,5 +49,6 @@ export const ROLE_PERMISSIONS = {
         PERMISSIONS.RESERVATION_CREATE,
         PERMISSIONS.RESERVATION_EDIT,
         PERMISSIONS.RESERVATION_DELETE,
+        PERMISSIONS.APPOINTMENT_VIEW,
     ],
 };
