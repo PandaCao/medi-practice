@@ -323,7 +323,7 @@ const ExaminationForm = ({
             <Form onSubmit={handleSubmit}>
                 <Modal.Body>
                     <Form.Group className="mb-3">
-                        <Form.Label>Anamnéza</Form.Label>
+                        <RequiredLabel>Anamnéza</RequiredLabel>
                         <Form.Control
                             as="textarea"
                             rows={3}
@@ -331,6 +331,8 @@ const ExaminationForm = ({
                             value={formData.anamnesis}
                             onChange={handleChange}
                             placeholder="Popište anamnézu pacienta"
+                            required
+                            maxLength={200}
                         />
                     </Form.Group>
 
@@ -364,7 +366,7 @@ const ExaminationForm = ({
                                     </Button>
                                 )}
                                 <Form.Group className="mb-3">
-                                    <Form.Label>Kód diagnózy</Form.Label>
+                                    <RequiredLabel>Kód diagnózy</RequiredLabel>
                                     <Form.Control
                                         type="text"
                                         name="code"
@@ -373,6 +375,8 @@ const ExaminationForm = ({
                                             handleDiagnosisChange(index, e)
                                         }
                                         placeholder="Např. DIABETES MELLITUS 2. TYPU (E11.9)"
+                                        required
+                                        maxLength={100}
                                     />
                                 </Form.Group>
 
@@ -387,6 +391,7 @@ const ExaminationForm = ({
                                             handleDiagnosisChange(index, e)
                                         }
                                         placeholder="Popis diagnózy a doporučení"
+                                        maxLength={200}
                                     />
                                 </Form.Group>
                             </div>
@@ -402,6 +407,7 @@ const ExaminationForm = ({
                             value={formData.lab_results}
                             onChange={handleChange}
                             placeholder="Zadejte laboratorní výsledky"
+                            maxLength={350}
                         />
                     </Form.Group>
 
@@ -414,11 +420,12 @@ const ExaminationForm = ({
                             value={formData.objective_findings}
                             onChange={handleChange}
                             placeholder="Popište objektivní nález"
+                            maxLength={250}
                         />
                     </Form.Group>
 
                     <Form.Group className="mb-3">
-                        <Form.Label>Závěry</Form.Label>
+                        <RequiredLabel>Závěry</RequiredLabel>
                         <Form.Control
                             as="textarea"
                             rows={2}
@@ -426,6 +433,8 @@ const ExaminationForm = ({
                             value={formData.conclusions}
                             onChange={handleChange}
                             placeholder="Zadejte závěry vyšetření"
+                            required
+                            maxLength={250}
                         />
                     </Form.Group>
 
@@ -438,6 +447,7 @@ const ExaminationForm = ({
                             value={formData.recommendations}
                             onChange={handleChange}
                             placeholder="Zadejte doporučení pro pacienta"
+                            maxLength={350}
                         />
                     </Form.Group>
 
@@ -464,7 +474,7 @@ const ExaminationForm = ({
                                     {prescriptionData.medications.map((medication, index) => (
                                         <div key={index} className="border rounded p-3 mb-3">
                                             <Form.Group className="mb-3">
-                                                <Form.Label>Název léku</Form.Label>
+                                                <RequiredLabel>Název léku</RequiredLabel>
                                                 <Form.Control
                                                     type="text"
                                                     name="name"
@@ -473,11 +483,13 @@ const ExaminationForm = ({
                                                         handleMedicationChange(index, e)
                                                     }
                                                     placeholder="Např. Paracetamol"
+                                                    required
+                                                    maxLength={200}
                                                 />
                                             </Form.Group>
 
                                             <Form.Group className="mb-3">
-                                                <Form.Label>Dávkování</Form.Label>
+                                                <RequiredLabel>Dávkování</RequiredLabel>
                                                 <Form.Control
                                                     type="text"
                                                     name="dosage"
@@ -486,11 +498,13 @@ const ExaminationForm = ({
                                                         handleMedicationChange(index, e)
                                                     }
                                                     placeholder="Např. 1 tableta"
+                                                    required
+                                                    maxLength={50}
                                                 />
                                             </Form.Group>
 
                                             <Form.Group className="mb-3">
-                                                <Form.Label>Frekvence</Form.Label>
+                                                <RequiredLabel>Frekvence</RequiredLabel>
                                                 <Form.Control
                                                     type="text"
                                                     name="frequency"
@@ -499,11 +513,13 @@ const ExaminationForm = ({
                                                         handleMedicationChange(index, e)
                                                     }
                                                     placeholder="Např. 3x denně"
+                                                    required
+                                                    maxLength={50}
                                                 />
                                             </Form.Group>
 
                                             <Form.Group className="mb-3">
-                                                <Form.Label>Délka užívání</Form.Label>
+                                                <RequiredLabel>Délka užívání</RequiredLabel>
                                                 <Form.Control
                                                     type="text"
                                                     name="duration"
@@ -512,6 +528,8 @@ const ExaminationForm = ({
                                                         handleMedicationChange(index, e)
                                                     }
                                                     placeholder="Např. 7 dní"
+                                                    required
+                                                    maxLength={100}
                                                 />
                                             </Form.Group>
                                             {prescriptionData.medications.length > 1 && (
@@ -551,6 +569,7 @@ const ExaminationForm = ({
                                                 }))
                                             }
                                             placeholder="Doplňující informace k e-receptu"
+                                            maxLength={300}
                                         />
                                     </Form.Group>
                                 </>

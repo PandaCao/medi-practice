@@ -51,6 +51,12 @@ const PrescriptionForm = ({ show, onHide, onSubmit, patient }) => {
         }));
     };
 
+    const RequiredLabel = ({ children }) => (
+        <Form.Label>
+            {children} <span className="text-danger">*</span>
+        </Form.Label>
+    );
+
     const handleSubmit = (e) => {
         e.preventDefault();
         const defaultDoctorId = 'd6574103-a485-4eba-a536-d4dcbb3f2077';
@@ -77,7 +83,7 @@ const PrescriptionForm = ({ show, onHide, onSubmit, patient }) => {
                     {formData.medications.map((medication, index) => (
                         <div key={index} className="border rounded p-3 mb-3">
                             <Form.Group className="mb-3">
-                                <Form.Label>Lék</Form.Label>
+                                <RequiredLabel>Lék</RequiredLabel>
                                 <Form.Control
                                     type="text"
                                     name="name"
@@ -87,10 +93,11 @@ const PrescriptionForm = ({ show, onHide, onSubmit, patient }) => {
                                     }
                                     required
                                     placeholder="např. Paracetamol"
+                                    maxLength={200}
                                 />
                             </Form.Group>
                             <Form.Group className="mb-3">
-                                <Form.Label>Dávkování</Form.Label>
+                                <RequiredLabel>Dávkování</RequiredLabel>
                                 <Form.Control
                                     type="text"
                                     name="dosage"
@@ -100,10 +107,11 @@ const PrescriptionForm = ({ show, onHide, onSubmit, patient }) => {
                                     }
                                     required
                                     placeholder="např. 1 tableta"
+                                    maxLength={50}
                                 />
                             </Form.Group>
                             <Form.Group className="mb-3">
-                                <Form.Label>Frekvence</Form.Label>
+                                <RequiredLabel>Frekvence</RequiredLabel>
                                 <Form.Control
                                     type="text"
                                     name="frequency"
@@ -113,10 +121,11 @@ const PrescriptionForm = ({ show, onHide, onSubmit, patient }) => {
                                     }
                                     required
                                     placeholder="např. 3x denně"
+                                    maxLength={50}
                                 />
                             </Form.Group>
                             <Form.Group className="mb-3">
-                                <Form.Label>Délka užívání</Form.Label>
+                                <RequiredLabel>Délka užívání</RequiredLabel>
                                 <Form.Control
                                     type="text"
                                     name="duration"
@@ -126,6 +135,7 @@ const PrescriptionForm = ({ show, onHide, onSubmit, patient }) => {
                                     }
                                     required
                                     placeholder="např. 7 dní"
+                                    maxLength={100}
                                 />
                             </Form.Group>
                             {formData.medications.length > 1 && (
@@ -157,6 +167,7 @@ const PrescriptionForm = ({ show, onHide, onSubmit, patient }) => {
                             value={formData.notes}
                             onChange={handleNotesChange}
                             placeholder="Doplňující informace k e-receptu"
+                            maxLength={300}
                         />
                     </Form.Group>
                     <div className="d-flex justify-content-end gap-2">

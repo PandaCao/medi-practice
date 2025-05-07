@@ -61,6 +61,7 @@ const PatientFormPage = () => {
                 id: patient.id || patient.user_id || id,
                 first_name: data.firstName,
                 last_name: data.lastName,
+                created_at: formatDate(data.registrationDate),
                 birth_number: data.personalId,
                 date_of_birth: data.birthDate,
                 sex: data.gender,
@@ -80,7 +81,8 @@ const PatientFormPage = () => {
                 },
             };
             await patientApi.updatePatient(payload);
-            navigate(ROUTES.PATIENT_DETAIL.replace(':id', payload.id), { replace: true });
+            // navigate(ROUTES.PATIENT_DETAIL.replace(':id', payload.id), { replace: true });
+            navigate(ROUTES.PATIENT_DETAIL.replace(':id', payload.id));
         } catch (err) {
             setUpdateError(
                 'Nepodařilo se uložit změny: ' +
