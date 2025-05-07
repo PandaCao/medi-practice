@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { Container, Spinner } from 'react-bootstrap';
 import { reservationApi, patientApi } from '../api';
 import ReservationTable from '../components/reservations/ReservationTable';
-import './ReservationsPage.css';
 
 function AppointmentsPage() {
   const [reservations, setReservations] = useState([]);

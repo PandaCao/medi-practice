@@ -1,7 +1,14 @@
 import React from 'react';
 import { Form } from 'react-bootstrap';
 
-function ExaminationTypeSelect({ value, onChange, otherValue, onOtherChange }) {
+function ExaminationTypeSelect({
+    value,
+    onChange,
+    otherValue,
+    onOtherChange,
+    isInvalid,
+    error,
+}) {
     return (
         <Form.Group className="mb-3">
             <Form.Label>Typ vyšetření</Form.Label>
@@ -10,6 +17,7 @@ function ExaminationTypeSelect({ value, onChange, otherValue, onOtherChange }) {
                 value={value}
                 onChange={onChange}
                 required
+                isInvalid={isInvalid}
             >
                 <option value="">Vyberte typ vyšetření</option>
                 <option value="Preventivní prohlídka">
@@ -21,6 +29,9 @@ function ExaminationTypeSelect({ value, onChange, otherValue, onOtherChange }) {
                 <option value="Rentgen">Rentgen</option>
                 <option value="EKG">EKG</option>
             </Form.Select>
+            <Form.Control.Feedback type="invalid">
+                {error}
+            </Form.Control.Feedback>
         </Form.Group>
     );
 }

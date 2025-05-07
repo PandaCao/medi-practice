@@ -29,20 +29,25 @@ function ReservationsPage() {
             setLoading(true);
             setError(null);
             try {
-                const reservationsData = await reservationApi.getReservationsList();
+                const reservationsData =
+                    await reservationApi.getReservationsList();
                 setReservations(reservationsData);
 
                 // Extract unique patient IDs
-                const uniquePatientIds = [...new Set(reservationsData.map(r => r.patient_id))];
+                const uniquePatientIds = [
+                    ...new Set(reservationsData.map((r) => r.patient_id)),
+                ];
 
                 // Fetch patient details in parallel
                 const patientDetailsArray = await Promise.all(
-                    uniquePatientIds.map(id => patientApi.getPatientDetail(id).catch(() => null))
+                    uniquePatientIds.map((id) =>
+                        patientApi.getPatientDetail(id).catch(() => null),
+                    ),
                 );
 
                 // Create map of patient_id to patient details
                 const patientMap = {};
-                patientDetailsArray.forEach(patient => {
+                patientDetailsArray.forEach((patient) => {
                     if (patient) {
                         patientMap[patient.id] = patient;
                     }
@@ -76,15 +81,29 @@ function ReservationsPage() {
     const handleSubmit = async (formData) => {
         try {
             // Prepare payload for API with duration added to start_date for end_date
-            const startDate = formData.reservationDate;
+            const startDate = formData.reservationDate; // This is now the selected time slot
             const durationMinutes = parseInt(formData.duration, 10) || 0;
-            const endDate = new Date(startDate.getTime() + durationMinutes * 60000);
+            const endDate = new Date(
+                startDate.getTime() + durationMinutes * 60000,
+            );
+
+            // Create ISO string that preserves local time
+            const formatDateToISO = (date) => {
+                const year = date.getFullYear();
+                const month = String(date.getMonth() + 1).padStart(2, '0');
+                const day = String(date.getDate()).padStart(2, '0');
+                const hours = String(date.getHours()).padStart(2, '0');
+                const minutes = String(date.getMinutes()).padStart(2, '0');
+                const seconds = String(date.getSeconds()).padStart(2, '0');
+
+                return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}.000Z`;
+            };
 
             const payload = {
                 patient_id: formData.patientId,
                 nurse_id: DEFAULT_NURSE_ID,
-                start_date: startDate.toISOString(),
-                end_date: endDate.toISOString(),
+                start_date: formatDateToISO(startDate),
+                end_date: formatDateToISO(endDate),
                 examination_type: formData.examinationType,
                 notes: formData.notes,
             };
@@ -99,12 +118,16 @@ function ReservationsPage() {
             const reservationsData = await reservationApi.getReservationsList();
             setReservations(reservationsData);
 
-            const uniquePatientIds = [...new Set(reservationsData.map(r => r.patient_id))];
+            const uniquePatientIds = [
+                ...new Set(reservationsData.map((r) => r.patient_id)),
+            ];
             const patientDetailsArray = await Promise.all(
-                uniquePatientIds.map(id => patientApi.getPatientDetail(id).catch(() => null))
+                uniquePatientIds.map((id) =>
+                    patientApi.getPatientDetail(id).catch(() => null),
+                ),
             );
             const patientMap = {};
-            patientDetailsArray.forEach(patient => {
+            patientDetailsArray.forEach((patient) => {
                 if (patient) {
                     patientMap[patient.id] = patient;
                 }
@@ -112,12 +135,7 @@ function ReservationsPage() {
             setPatientsMap(patientMap);
         } catch (error) {
             console.error('Error creating reservation:', error);
-            if (error.response && error.response.data && error.response.data.error) {
-                setModalMessage(`${error.response.data.error === 'Reservation already exists' ? 'Vybraný čas je již obsazen. Zvolte prosím jiný čas.' : error.response.data.error}`);
-            } else {
-                setModalMessage('Rezervace nebyla vytvořená.');
-            }
-            setShowModal(true);
+            throw error;
         }
     };
 
@@ -126,16 +144,24 @@ function ReservationsPage() {
             <Container className="py-4">
                 <div className="d-flex justify-content-between align-items-center mb-4">
                     <h2 className="mb-0">Rezervační systém</h2>
-                    <Button variant="primary" onClick={() => setShowFormModal(true)}>
+                    <Button
+                        variant="primary"
+                        onClick={() => setShowFormModal(true)}
+                    >
                         Přidat rezervaci
                     </Button>
                 </div>
 
                 {loading && <p>Načítání rezervací...</p>}
                 {error && <p className="text-danger">{error}</p>}
-                {!loading && !error && reservations.length === 0 && <p>Žádné rezervace k zobrazení.</p>}
+                {!loading && !error && reservations.length === 0 && (
+                    <p>Žádné rezervace k zobrazení.</p>
+                )}
                 {!loading && !error && reservations.length > 0 && (
-                    <ReservationTable reservations={reservations} patientsMap={patientsMap} />
+                    <ReservationTable
+                        reservations={reservations}
+                        patientsMap={patientsMap}
+                    />
                 )}
             </Container>
 
