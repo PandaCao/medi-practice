@@ -158,9 +158,11 @@ const PatientDetailPage = () => {
         }
     };
 
+    const [editingExamination, setEditingExamination] = useState(null);
+
     const handleEditExamination = (examination) => {
-        // TODO: Implement edit examination functionality
-        console.log('Editing examination:', examination);
+        setEditingExamination(examination);
+        setShowExaminationForm(true);
     };
 
     const handleShowPrescriptionQr = (prescription) => {
@@ -274,9 +276,13 @@ const PatientDetailPage = () => {
 
             <ExaminationForm
                 show={showExaminationForm}
-                onHide={() => setShowExaminationForm(false)}
+                onHide={() => {
+                    setShowExaminationForm(false);
+                    setEditingExamination(null);
+                }}
                 onSubmit={handleExaminationSubmit}
                 patientId={patient.id}
+                examination={editingExamination}
             />
 
             <PrescriptionForm

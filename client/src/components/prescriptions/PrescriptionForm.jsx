@@ -3,16 +3,56 @@ import { Modal, Form, Button } from 'react-bootstrap';
 
 const PrescriptionForm = ({ show, onHide, onSubmit, patient }) => {
     const [formData, setFormData] = useState({
-        medication: '',
-        dosage: '',
-        frequency: '',
-        duration: '',
+        medications: [
+            {
+                name: '',
+                dosage: '',
+                frequency: '',
+                duration: '',
+            },
+        ],
         notes: '',
     });
 
+    const handleMedicationChange = (index, e) => {
+        const { name, value } = e.target;
+        const newMedications = [...formData.medications];
+        newMedications[index] = {
+            ...newMedications[index],
+            [name]: value,
+        };
+        setFormData((prev) => ({
+            ...prev,
+            medications: newMedications,
+        }));
+    };
+
+    const handleAddMedication = () => {
+        setFormData((prev) => ({
+            ...prev,
+            medications: [
+                ...prev.medications,
+                { name: '', dosage: '', frequency: '', duration: '' },
+            ],
+        }));
+    };
+
+    const handleRemoveMedication = (index) => {
+        setFormData((prev) => ({
+            ...prev,
+            medications: prev.medications.filter((_, i) => i !== index),
+        }));
+    };
+
+    const handleNotesChange = (e) => {
+        setFormData((prev) => ({
+            ...prev,
+            notes: e.target.value,
+        }));
+    };
+
     const handleSubmit = (e) => {
         e.preventDefault();
-        // Prepare payload for API
         const defaultDoctorId = 'd6574103-a485-4eba-a536-d4dcbb3f2077';
         const expirationDate = new Date();
         expirationDate.setDate(expirationDate.getDate() + 7); // default 7 days
@@ -20,26 +60,11 @@ const PrescriptionForm = ({ show, onHide, onSubmit, patient }) => {
             patient_id: patient.id,
             doctor_id: defaultDoctorId,
             expiration_date: expirationDate.toISOString(),
-            medications: [
-                {
-                    name: formData.medication,
-                    dosage: formData.dosage,
-                    frequency: formData.frequency,
-                    duration: formData.duration,
-                },
-            ],
+            medications: formData.medications,
             notes: formData.notes,
         };
         onSubmit(prescriptionPayload);
         onHide();
-    };
-
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setFormData((prev) => ({
-            ...prev,
-            [name]: value,
-        }));
     };
 
     return (
@@ -49,50 +74,80 @@ const PrescriptionForm = ({ show, onHide, onSubmit, patient }) => {
             </Modal.Header>
             <Modal.Body>
                 <Form onSubmit={handleSubmit}>
-                    <Form.Group className="mb-3">
-                        <Form.Label>Lék</Form.Label>
-                        <Form.Control
-                            type="text"
-                            name="medication"
-                            value={formData.medication}
-                            onChange={handleChange}
-                            required
-                            placeholder="např. Paracetamol"
-                        />
-                    </Form.Group>
-                    <Form.Group className="mb-3">
-                        <Form.Label>Dávkování</Form.Label>
-                        <Form.Control
-                            type="text"
-                            name="dosage"
-                            value={formData.dosage}
-                            onChange={handleChange}
-                            required
-                            placeholder="např. 1 tableta"
-                        />
-                    </Form.Group>
-                    <Form.Group className="mb-3">
-                        <Form.Label>Frekvence</Form.Label>
-                        <Form.Control
-                            type="text"
-                            name="frequency"
-                            value={formData.frequency}
-                            onChange={handleChange}
-                            required
-                            placeholder="např. 3x denně"
-                        />
-                    </Form.Group>
-                    <Form.Group className="mb-3">
-                        <Form.Label>Délka užívání</Form.Label>
-                        <Form.Control
-                            type="text"
-                            name="duration"
-                            value={formData.duration}
-                            onChange={handleChange}
-                            required
-                            placeholder="např. 7 dní"
-                        />
-                    </Form.Group>
+                    {formData.medications.map((medication, index) => (
+                        <div key={index} className="border rounded p-3 mb-3">
+                            <Form.Group className="mb-3">
+                                <Form.Label>Lék</Form.Label>
+                                <Form.Control
+                                    type="text"
+                                    name="name"
+                                    value={medication.name}
+                                    onChange={(e) =>
+                                        handleMedicationChange(index, e)
+                                    }
+                                    required
+                                    placeholder="např. Paracetamol"
+                                />
+                            </Form.Group>
+                            <Form.Group className="mb-3">
+                                <Form.Label>Dávkování</Form.Label>
+                                <Form.Control
+                                    type="text"
+                                    name="dosage"
+                                    value={medication.dosage}
+                                    onChange={(e) =>
+                                        handleMedicationChange(index, e)
+                                    }
+                                    required
+                                    placeholder="např. 1 tableta"
+                                />
+                            </Form.Group>
+                            <Form.Group className="mb-3">
+                                <Form.Label>Frekvence</Form.Label>
+                                <Form.Control
+                                    type="text"
+                                    name="frequency"
+                                    value={medication.frequency}
+                                    onChange={(e) =>
+                                        handleMedicationChange(index, e)
+                                    }
+                                    required
+                                    placeholder="např. 3x denně"
+                                />
+                            </Form.Group>
+                            <Form.Group className="mb-3">
+                                <Form.Label>Délka užívání</Form.Label>
+                                <Form.Control
+                                    type="text"
+                                    name="duration"
+                                    value={medication.duration}
+                                    onChange={(e) =>
+                                        handleMedicationChange(index, e)
+                                    }
+                                    required
+                                    placeholder="např. 7 dní"
+                                />
+                            </Form.Group>
+                            {formData.medications.length > 1 && (
+                                <Button
+                                    variant="danger"
+                                    onClick={() =>
+                                        handleRemoveMedication(index)
+                                    }
+                                    className="mb-3"
+                                >
+                                    Odebrat lék
+                                </Button>
+                            )}
+                        </div>
+                    ))}
+                    <Button
+                        variant="outline-primary"
+                        onClick={handleAddMedication}
+                        className="mb-3"
+                    >
+                        Přidat další lék
+                    </Button>
                     <Form.Group className="mb-3">
                         <Form.Label>Poznámky</Form.Label>
                         <Form.Control
@@ -100,7 +155,8 @@ const PrescriptionForm = ({ show, onHide, onSubmit, patient }) => {
                             rows={3}
                             name="notes"
                             value={formData.notes}
-                            onChange={handleChange}
+                            onChange={handleNotesChange}
+                            placeholder="Doplňující informace k e-receptu"
                         />
                     </Form.Group>
                     <div className="d-flex justify-content-end gap-2">
