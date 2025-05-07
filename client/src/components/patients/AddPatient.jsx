@@ -247,6 +247,7 @@ const AddPatient = ({ onSaveDraft, onSubmit, onDelete, initialData = {} }) => {
                             onBlur={handleBlur}
                             isInvalid={shouldShowError('registrationDate')}
                             max={new Date().toISOString().split('T')[0]}
+                            placeholder="Vyberte datum"
                         />
                         <Form.Control.Feedback type="invalid">
                             {errors.registrationDate}
@@ -265,6 +266,7 @@ const AddPatient = ({ onSaveDraft, onSubmit, onDelete, initialData = {} }) => {
                             isInvalid={shouldShowError('height')}
                             min={1}
                             max={999}
+                            placeholder="Např. 180"
                         />
                         <Form.Control.Feedback type="invalid">
                             {errors.height}
@@ -283,6 +285,7 @@ const AddPatient = ({ onSaveDraft, onSubmit, onDelete, initialData = {} }) => {
                             isInvalid={shouldShowError('weight')}
                             min={1}
                             max={999}
+                            placeholder="Např. 75"
                         />
                         <Form.Control.Feedback type="invalid">
                             {errors.weight}
@@ -304,6 +307,7 @@ const AddPatient = ({ onSaveDraft, onSubmit, onDelete, initialData = {} }) => {
                             onBlur={handleBlur}
                             isInvalid={shouldShowError('email')}
                             maxLength={100}
+                            placeholder="např. pacient@email.cz"
                         />
                         <Form.Control.Feedback type="invalid">
                             {errors.email}

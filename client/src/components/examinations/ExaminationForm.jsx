@@ -308,6 +308,7 @@ const ExaminationForm = ({
                             name="anamnesis"
                             value={formData.anamnesis}
                             onChange={handleChange}
+                            placeholder="Popište anamnézu pacienta"
                         />
                     </Form.Group>
 
@@ -378,6 +379,7 @@ const ExaminationForm = ({
                             name="lab_results"
                             value={formData.lab_results}
                             onChange={handleChange}
+                            placeholder="Zadejte laboratorní výsledky"
                         />
                     </Form.Group>
 
@@ -389,6 +391,7 @@ const ExaminationForm = ({
                             name="objective_findings"
                             value={formData.objective_findings}
                             onChange={handleChange}
+                            placeholder="Popište objektivní nález"
                         />
                     </Form.Group>
 
@@ -400,6 +403,7 @@ const ExaminationForm = ({
                             name="conclusions"
                             value={formData.conclusions}
                             onChange={handleChange}
+                            placeholder="Zadejte závěry vyšetření"
                         />
                     </Form.Group>
 
@@ -411,6 +415,7 @@ const ExaminationForm = ({
                             name="recommendations"
                             value={formData.recommendations}
                             onChange={handleChange}
+                            placeholder="Zadejte doporučení pro pacienta"
                         />
                     </Form.Group>
 
