@@ -80,7 +80,7 @@ const PatientFormPage = () => {
                 },
             };
             const response = await patientApi.updatePatient(payload);
-            navigate(ROUTES.PATIENT_DETAIL.replace(':id', payload.id));
+            navigate(ROUTES.PATIENT_DETAIL.replace(':id', payload.id), { replace: true });
         } catch (err) {
             setUpdateError(
                 'Nepodařilo se uložit změny: ' +
