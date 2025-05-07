@@ -17,6 +17,9 @@ function DateTimePickerField({ selected, onChange }) {
                 timeFormat="HH:mm"
                 className="form-control"
                 required
+                minDate={new Date()}
+                minTime={new Date()}
+                maxTime={new Date().setHours(23, 59)}
             />
         </Form.Group>
     );

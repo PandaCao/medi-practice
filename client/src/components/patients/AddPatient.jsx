@@ -410,14 +410,6 @@ const AddPatient = ({ onSaveDraft, onSubmit, onDelete, initialData = {} }) => {
                         Smazat
                     </Button>
                 )}
-                {onSaveDraft && (
-                    <Button
-                        variant="warning"
-                        onClick={() => onSaveDraft(formData)}
-                    >
-                        Uložit jako koncept
-                    </Button>
-                )}
                 <Button
                     variant="outline-secondary"
                     onClick={() => navigate(-1)}

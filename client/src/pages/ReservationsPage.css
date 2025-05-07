@@ -1,0 +1,53 @@
+.table-modern {
+  border-collapse: separate;
+  border-spacing: 0 12px;
+  width: 100%;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 15px;
+  color: #444;
+  background-color: transparent;
+}
+
+.table-modern thead tr {
+  background-color: #0056b3;
+  color: white;
+  text-align: left;
+  border-radius: 10px;
+}
+
+.table-modern thead th {
+  padding: 14px 18px;
+  border: none;
+}
+
+.table-modern tbody tr {
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.table-modern tbody tr:hover {
+  background-color: #e6f0ff;
+  box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+}
+
+.table-modern tbody td {
+  padding: 14px 18px;
+  border: none;
+  vertical-align: middle;
+}
+
+.table-modern tbody tr td:first-child {
+  font-weight: 700;
+  color: #003d80;
+}
+
+.table-modern tbody tr td a {
+  color: #003d80;
+  text-decoration: none;
+}
+
+.table-modern tbody tr td a:hover {
+  text-decoration: underline;
+}

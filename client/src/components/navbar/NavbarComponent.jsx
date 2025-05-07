@@ -14,9 +14,16 @@ const NavbarComponent = ({ toggleSidebar, pageTitle }) => {
     const currentRoute = getRouteByPath(location.pathname);
 
     const handleBack = () => {
-        // If on patient detail page, go to dashboard instead of history.back()
+        // If on patient detail page, try to navigate back to previous page if known
         if (location.pathname.match(/^\/patient\/[^/]+$/)) {
-            navigate('/');
+            // Check if navigation state has fromPage
+            const fromPage = location.state?.fromPage;
+            if (fromPage) {
+                navigate(fromPage);
+            } else {
+                // Fallback to dashboard
+                navigate('/');
+            }
         } else {
             navigate(-1);
         }

@@ -104,7 +104,12 @@ const PatientDetailPage = () => {
     const handleDelete = () => {
         // TODO: Implement delete functionality with API
         setShowDeleteModal(false);
-        navigate(ROUTES.PATIENTS);
+        // Navigate back to previous page if available, else to patients list
+        if (window.history.length > 1) {
+            navigate(-1);
+        } else {
+            navigate(ROUTES.PATIENTS);
+        }
     };
 
     const handleUpdate = () => {
