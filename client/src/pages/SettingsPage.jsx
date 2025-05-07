@@ -1,6 +1,13 @@
 import React, { useState } from 'react';
 import { Container, Card, Form, Button, Alert } from 'react-bootstrap';
-import { BsGear, BsBell, BsDisplay, BsShield } from 'react-icons/bs';
+import {
+    BsGear,
+    BsBell,
+    BsDisplay,
+    BsShield,
+    BsInfoCircle,
+} from 'react-icons/bs';
+import { APP_VERSION } from '../config';
 
 function SettingsPage() {
     const [notifications, setNotifications] = useState({
@@ -191,6 +198,23 @@ function SettingsPage() {
                             />
                         </Form.Group>
                     </Form>
+                </Card.Body>
+            </Card>
+
+            <Card className="mb-4">
+                <Card.Header className="d-flex align-items-center">
+                    <BsInfoCircle className="me-2" />
+                    <h5 className="mb-0">O aplikaci</h5>
+                </Card.Header>
+                <Card.Body>
+                    <div className="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 className="mb-1">Verze aplikace</h6>
+                            <p className="text-muted mb-0">
+                                Verze {APP_VERSION}
+                            </p>
+                        </div>
+                    </div>
                 </Card.Body>
             </Card>
 
