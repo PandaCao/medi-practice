@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Table, Spinner } from 'react-bootstrap';
+import { Container, Spinner } from 'react-bootstrap';
 import { reservationApi, patientApi } from '../api';
-import { Link } from 'react-router-dom';
 import ReservationTable from '../components/reservations/ReservationTable';
 import './ReservationsPage.css';
 

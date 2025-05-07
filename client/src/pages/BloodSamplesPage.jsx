@@ -1,5 +1,5 @@
 import React from 'react';
-import { Container, Card, Alert } from 'react-bootstrap';
+import { Container, Alert } from 'react-bootstrap';
 import { BsInfoCircle } from 'react-icons/bs';
 
 function BloodSamplesPage() {

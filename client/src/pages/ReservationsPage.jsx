@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Table, Button, Modal } from 'react-bootstrap';
+import { Container, Button, Modal } from 'react-bootstrap';
 import ReservationForm from '../components/reservations/ReservationForm';
 import ReservationTable from '../components/reservations/ReservationTable';
 import { reservationApi, patientApi } from '../api';
-import { Link } from 'react-router-dom';
 
 const DEFAULT_NURSE_ID = 'f842a3be-b7c7-4c69-ad9a-74a2cd94db3c';
 
