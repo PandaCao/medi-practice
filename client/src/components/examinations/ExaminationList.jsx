@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { Button, Card } from 'react-bootstrap';
+import { Button, Card, Accordion } from 'react-bootstrap';
 import { BsPencil, BsPlus, BsFileMedical, BsChevronDown } from 'react-icons/bs';
 import { PERMISSIONS } from '../../config/permissions';
 import PermissionGuard from '../common/PermissionGuard';
@@ -79,111 +79,80 @@ const ExaminationItem = ({ examination, onEdit }) => {
                     <BsPencil size={18} />
                 </Button>
             </Card.Header>
-            <Card.Body>
-                {diagnoses.length > 0 && (
-                    <div className="mb-3">
-                        <h6 className="text-primary mb-2">Diagnózy</h6>
-                        {diagnoses.map((diagnosis, index) => (
-                            <div
-                                key={index}
-                                className="mb-2 ps-3 border-start border-primary"
-                            >
-                                <div className="fw-bold">{diagnosis.code}</div>
-                                <div className="text-muted small">
-                                    {diagnosis.description}
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                )}
+            <Accordion>
+                <Accordion.Item eventKey="0">
+                    <Accordion.Header>Detail vyšetření</Accordion.Header>
+                    <Accordion.Body>
+                        {diagnoses.length > 0 ? (
+                            <>
+                                <h6 className="text-primary">Diagnózy</h6>
+                                <ul className="list-unstyled ps-3 border-start border-primary">
+                                    {diagnoses.map((diagnosis, index) => (
+                                        <li key={index} className="mb-2">
+                                            <strong>{diagnosis.code}</strong>: {diagnosis.description}
+                                        </li>
+                                    ))}
+                                </ul>
+                            </>
+                        ) : (
+                            <p className="text-muted">Žádné diagnózy</p>
+                        )}
 
-                <div className="row g-3">
-                    <div className="col-md-6">
-                        <div className="mb-3">
-                            <h6 className="text-primary mb-2">Anamnéza</h6>
-                            <p className="mb-0 text-muted">
-                                {examination.anamnesis || 'Neuvedeno'}
-                            </p>
-                        </div>
-                        <div className="mb-3">
-                            <h6 className="text-primary mb-2">
-                                Objektivní nález
-                            </h6>
-                            <p className="mb-0 text-muted">
-                                {examination.objective_findings || 'Neuvedeno'}
-                            </p>
-                        </div>
-                        <div className="mb-3">
-                            <h6 className="text-primary mb-2">
-                                Laboratorní výsledky
-                            </h6>
-                            <p className="mb-0 text-muted">
-                                {examination.lab_results || 'Neuvedeno'}
-                            </p>
-                        </div>
-                    </div>
-                    <div className="col-md-6">
-                        <div className="mb-3">
-                            <h6 className="text-primary mb-2">Medikace</h6>
-                            <p className="mb-0 text-muted">
-                                {examination.medication || 'Neuvedeno'}
-                            </p>
-                        </div>
-                        <div className="mb-3">
-                            <h6 className="text-primary mb-2">
-                                Předepsaná medikace
-                            </h6>
-                            <p className="mb-0 text-muted">
-                                {examination.prescribed_medication ||
-                                    'Neuvedeno'}
-                            </p>
-                        </div>
-                        <div className="mb-3">
-                            <h6 className="text-primary mb-2">Doporučení</h6>
-                            <p className="mb-0 text-muted">
-                                {examination.recommendations || 'Neuvedeno'}
-                            </p>
-                        </div>
+                        <h6 className="text-primary mt-3">Anamnéza</h6>
+                        <p className="text-muted">{examination.anamnesis || 'Neuvedeno'}</p>
+
+                        <h6 className="text-primary mt-3">Objektivní nález</h6>
+                        <p className="text-muted">{examination.objective_findings || 'Neuvedeno'}</p>
+
+                        <h6 className="text-primary mt-3">Laboratorní výsledky</h6>
+                        <p className="text-muted">{examination.lab_results || 'Neuvedeno'}</p>
+
+                        <h6 className="text-primary mt-3">Medikace</h6>
+                        <p className="text-muted">{examination.medication || 'Neuvedeno'}</p>
+
+                        <h6 className="text-primary mt-3">Předepsaná medikace</h6>
+                        <p className="text-muted">{examination.prescribed_medication || 'Neuvedeno'}</p>
+
+                        <h6 className="text-primary mt-3">Doporučení</h6>
+                        <p className="text-muted">{examination.recommendations || 'Neuvedeno'}</p>
+
                         {examination.conclusions && (
-                            <div className="mb-3">
-                                <h6 className="text-primary mb-2">Závěry</h6>
-                                <p className="mb-0 text-muted">
-                                    {examination.conclusions}
-                                </p>
+                            <>
+                                <h6 className="text-primary mt-3">Závěry</h6>
+                                <p className="text-muted">{examination.conclusions}</p>
+                            </>
+                        )}
+                    </Accordion.Body>
+                </Accordion.Item>
+            </Accordion>
+            <div className="p-3">
+                <div className="d-flex justify-content-between align-items-center">
+                    <div>
+                        <div className="text-muted small mb-1">Lékař</div>
+                        <div className="fw-bold">MUDr. Jan Suk</div>
+                    </div>
+                    <div className="d-flex gap-3">
+                        {examination.stamp && (
+                            <div>
+                                <div className="text-muted small mb-1">
+                                    Razítko
+                                </div>
+                                <StampPreview text={examination.stamp} />
+                            </div>
+                        )}
+                        {examination.doctors_signature && (
+                            <div>
+                                <div className="text-muted small mb-1">
+                                    Podpis
+                                </div>
+                                <SignaturePreview
+                                    text={examination.doctors_signature}
+                                />
                             </div>
                         )}
                     </div>
                 </div>
-
-                <div className="border-top mt-4 pt-3">
-                    <div className="d-flex justify-content-between align-items-center">
-                        <div>
-                            <div className="text-muted small mb-1">Lékař</div>
-                            <div className="fw-bold">MUDr. Jan Suk</div>
-                        </div>
-                        <div className="d-flex gap-3">
-                            {examination.stamp && (
-                                <div>
-                                    <div className="text-muted small mb-1">
-                                        Razítko
-                                    </div>
-                                    <StampPreview text={examination.stamp} />
-                                </div>
-                            )}
-                            {examination.doctors_signature && (
-                                <div>
-                                    <div className="text-muted small mb-1">
-                                        Podpis
-                                    </div>
-                                    <SignaturePreview
-                                        text={examination.doctors_signature}
-                                    />
-                                </div>
-                            )}
-                        </div>
-                    </div>
-                </div>
-            </Card.Body>
+            </div>
         </Card>
     );
 };
