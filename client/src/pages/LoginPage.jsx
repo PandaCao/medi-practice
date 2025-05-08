@@ -3,23 +3,33 @@ import { Form, Button, Card, Alert } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import logo from '../assets/logo.svg';
+import LoadingSpinner from '../components/common/LoadingSpinner';
 
 const LoginPage = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate();
     const { login } = useAuth();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setIsLoading(true);
+        setError('');
         try {
             await login(username, password);
             navigate('/');
         } catch (err) {
             setError('Nesprávné přihlašovací údaje');
+        } finally {
+            setIsLoading(false);
         }
     };
+
+    if (isLoading) {
+        return <LoadingSpinner message="Přihlašování..." />;
+    }
 
     return (
         <div className="min-vh-100 d-flex align-items-center justify-content-center bg-light">
@@ -66,6 +76,7 @@ const LoginPage = () => {
                             type="submit"
                             variant="primary"
                             className="w-100 mb-3"
+                            disabled={isLoading}
                         >
                             Přihlásit se
                         </Button>

@@ -6,11 +6,12 @@ import InputGroup from 'react-bootstrap/InputGroup';
 import { BsSearch } from 'react-icons/bs';
 import PatientList from '../components/patients/PatientList';
 import Button from 'react-bootstrap/Button';
-import { Container, Row, Col, Spinner } from 'react-bootstrap';
+import { Container, Row, Col } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { useDebounce } from '../hooks/useDebounce';
 import { ROUTES } from '../config/routes';
 import { patientApi } from '../api';
+import LoadingSpinner from '../components/common/LoadingSpinner';
 
 const PatientsPage = () => {
     // Stavy pro hledání, stránkování a výsledky
@@ -111,11 +112,6 @@ const PatientsPage = () => {
                                 value={searchQuery}
                                 onChange={handleSearch}
                             />
-                            {isSearching && (
-                                <InputGroup.Text className="bg-light border-0">
-                                    <Spinner animation="border" size="sm" />
-                                </InputGroup.Text>
-                            )}
                         </InputGroup>
                     </Col>
                     <Col
@@ -136,15 +132,18 @@ const PatientsPage = () => {
                 </div>
             )}
 
-            <PatientList
-                patients={patients}
-                totalPages={totalPages}
-                currentPage={currentPage}
-                onPageChange={setCurrentPage}
-                isLoading={isSearching}
-                onPatientClick={handlePatientClick}
-                searchQuery={searchQuery}
-            />
+            {isSearching ? (
+                <LoadingSpinner message="Vyhledávání pacientů..." />
+            ) : (
+                <PatientList
+                    patients={patients}
+                    totalPages={totalPages}
+                    currentPage={currentPage}
+                    onPageChange={setCurrentPage}
+                    onPatientClick={handlePatientClick}
+                    searchQuery={searchQuery}
+                />
+            )}
         </div>
     );
 };

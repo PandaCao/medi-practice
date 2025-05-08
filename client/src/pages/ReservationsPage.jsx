@@ -3,6 +3,7 @@ import { Container, Button, Modal } from 'react-bootstrap';
 import ReservationForm from '../components/reservations/ReservationForm';
 import ReservationTable from '../components/reservations/ReservationTable';
 import { reservationApi, patientApi } from '../api';
+import LoadingSpinner from '../components/common/LoadingSpinner';
 
 const DEFAULT_NURSE_ID = 'f842a3be-b7c7-4c69-ad9a-74a2cd94db3c';
 
@@ -152,7 +153,7 @@ function ReservationsPage() {
                     </Button>
                 </div>
 
-                {loading && <p>Načítání rezervací...</p>}
+                {loading && <LoadingSpinner showServerWakeupMessage={true} />}
                 {error && <p className="text-danger">{error}</p>}
                 {!loading && !error && reservations.length === 0 && (
                     <p>Žádné rezervace k zobrazení.</p>

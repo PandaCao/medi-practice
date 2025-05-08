@@ -1,14 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Table, Button, Stack, Spinner, Card } from 'react-bootstrap';
-import {
-    BsEnvelope,
-    BsTelephone,
-    BsPeople,
-    BsSearch,
-} from 'react-icons/bs';
+import { Table, Button, Stack, Card } from 'react-bootstrap';
+import { BsEnvelope, BsTelephone, BsPeople, BsSearch } from 'react-icons/bs';
 import { useNavigate } from 'react-router-dom';
 import { ROUTES } from '../../config/routes';
 import { getInsuranceCompanyName } from '../../config/constants';
+import LoadingSpinner from '../common/LoadingSpinner';
 
 const PatientList = ({
     patients,
@@ -44,18 +40,7 @@ const PatientList = ({
     };
 
     if (isLoading && patientList.length === 0) {
-        return (
-            <div className="text-center p-5">
-                <Spinner animation="border" role="status" className="mb-3">
-                    <span className="visually-hidden">Načítání...</span>
-                </Spinner>
-                <h4 className="text-muted">Načítání dat</h4>
-                <p className="text-muted">
-                    Server se může probouzet z režimu spánku. Prosím počkejte
-                    přibližně 50 sekund.
-                </p>
-            </div>
-        );
+        return <LoadingSpinner showServerWakeupMessage={true} />;
     }
 
     if (!isLoading && patientList.length === 0) {

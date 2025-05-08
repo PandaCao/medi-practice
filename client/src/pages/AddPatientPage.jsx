@@ -3,13 +3,16 @@ import AddPatient from '../components/patients/AddPatient';
 import { useNavigate } from 'react-router-dom';
 import { ROUTES } from '../config/routes';
 import { addPatient } from '../api/patientApi';
+import LoadingSpinner from '../components/common/LoadingSpinner';
 
 function AddPatientPage() {
     const [showModal, setShowModal] = useState(false);
     const [modalMessage, setModalMessage] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate();
 
     const handleSubmit = async (formData) => {
+        setIsLoading(true);
         try {
             // Formátování data registrace na YYYY-MM-DD
             const formatDate = (dateString) => {
@@ -43,37 +46,23 @@ function AddPatientPage() {
                 weight: formData.weight ? parseInt(formData.weight) : null,
             };
 
-            console.log(
-                'Sending patient data to server:',
-                JSON.stringify(newPatient, null, 2),
-            );
-
-            // Voláme API pro přidání pacienta
             await addPatient(newPatient);
-            console.log('Pacient byl úspěšně přidán:', newPatient);
-
-            // Po úspěšném uložení přesměrujeme na seznam pacientů
-            navigate(ROUTES.PATIENTS);
+            setModalMessage('Pacient byl úspěšně přidán!');
+            setShowModal(true);
+            setTimeout(() => {
+                navigate(ROUTES.PATIENTS);
+            }, 2000);
         } catch (error) {
-            if (error.response && error.response.status === 500) {
-                if (
-                    error.response.data &&
-                    error.response.data.error ===
-                        'duplicate key value violates unique constraint "patient_card_birth_number_key"'
-                ) {
-                    setModalMessage(
-                        'Tento pacient již existuje. Pacienta nelze přidat.',
-                    );
-                    setShowModal(true);
-                } else {
-                    setModalMessage(
-                        'Došlo k chybě při ukládání pacienta. Zkontrolujte prosím vstupní data.',
-                    );
-                    setShowModal(true);
-                }
-            }
+            setModalMessage('Chyba při přidávání pacienta: ' + error.message);
+            setShowModal(true);
+        } finally {
+            setIsLoading(false);
         }
     };
+
+    if (isLoading) {
+        return <LoadingSpinner message="Ukládání pacienta..." />;
+    }
 
     return (
         <>

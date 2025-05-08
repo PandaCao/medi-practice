@@ -1,7 +1,7 @@
 // pages/PatientDetailPage.jsx
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Row, Col, Modal, Spinner, Button } from 'react-bootstrap';
+import { Row, Col, Modal, Button } from 'react-bootstrap';
 import { ROUTES } from '../config/routes';
 import { patientApi } from '../api';
 import { getPatientExaminations } from '../api/examinationApi';
@@ -13,6 +13,7 @@ import ExaminationList from '../components/examinations/ExaminationList';
 import PrescriptionList from '../components/prescriptions/PrescriptionList';
 import { usePermissions } from '../hooks/usePermissions';
 import { PERMISSIONS } from '../config/permissions';
+import LoadingSpinner from '../components/common/LoadingSpinner';
 
 const PatientDetailPage = () => {
     const { id } = useParams();
@@ -175,13 +176,7 @@ const PatientDetailPage = () => {
     };
 
     if (isLoading) {
-        return (
-            <div className="text-center p-5">
-                <Spinner animation="border" role="status">
-                    <span className="visually-hidden">Načítání...</span>
-                </Spinner>
-            </div>
-        );
+        return <LoadingSpinner showServerWakeupMessage={true} />;
     }
 
     if (error) {
