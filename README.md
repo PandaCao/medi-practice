@@ -46,7 +46,7 @@ The goal of MediPractise is to simplify, clarify, and accelerate the complete or
 | `GET`   | `/api/v1/patientCards/:id/prescriptions`      | Retrieve all prescriptions by patient id |
 | `PATCH` | `/api/v1/patientCards/`                       | Update patient card                      |
 
-`POST /api/v1/patientCards/add`
+`POST /api/v1/patientCards/`
 
     curl -X POST --location "http://localhost:5000/api/v1/patientCards/add" \
     -H "Content-Type: application/json" \
@@ -94,7 +94,7 @@ The goal of MediPractise is to simplify, clarify, and accelerate the complete or
 | `POST`  | `/api/v1/examinationRecords/`     | Create examination record |
 | `PATCH` | `/api/v1/examinationRecords/`     | Update examination record |
 
-`POST /api/v1/examinationRecords/add`
+`POST /api/v1/examinationRecords/`
 
     curl -X POST --location "http://localhost:5000/api/v1/examinationRecords/add" \
     -H "Content-Type: application/json" \
@@ -120,6 +120,7 @@ The goal of MediPractise is to simplify, clarify, and accelerate the complete or
     curl -X PATCH --location "http://localhost:5000/api/v1/examinationRecords/" \
     -H "Content-Type: application/json" \
     -d '{
+    "id": "5efe6f7b-8abc-464e-939b-ab24df0be489",
     "patient_id": "1e804add-d0c8-4126-bfc3-296828cd6396",
     "doctor_id": "fb28cef4-02a5-4573-8a4c-d0eb21f0e6b1",
     "anamnesis": "Lung cancer stage 2",
@@ -129,7 +130,7 @@ The goal of MediPractise is to simplify, clarify, and accelerate the complete or
     "objective_findings": "Cancer",
     "conclusions": "",
     "recommendations": "Chemotherapy",
-    "prescribed_medication": "MEDXY-1000",
+    "prescribed_medication": "MEDXY-1500",
     "new_diagnosis": "",
     "place": "MediPractise",
     "stamp": "xxx",
@@ -152,15 +153,15 @@ The goal of MediPractise is to simplify, clarify, and accelerate the complete or
     "doctor_id": "d6574103-a485-4eba-a536-d4dcbb3f2077",
     "medications": [
         {
-            "itemName":"Item1",
+            "itemName":"Ritalin 30x10MG",
             "count": 1
         },
         {
-            "itemName":"Item1",
+            "itemName":"Trenbolone Acetate 200mg",
             "count": 1
         }
     ],
-    "notes": "muze byt prazdny"
+    "notes": "K uklidneni ADHD"
     }'
 
 
@@ -181,8 +182,8 @@ The goal of MediPractise is to simplify, clarify, and accelerate the complete or
     -d '{
     "patient_id": "4e0094c8-b725-4e67-bd2c-54da22777a6e",
     "nurse_id": "f842a3be-b7c7-4c69-ad9a-74a2cd94db3c",
-    "examination_type": "afadawd",
-    "notes": "adadwad",
+    "examination_type": "Rentgen",
+    "notes": "Uraz v prave noze - bolest nad kolenem",
     "start_date": "2025-04-26 14:30:00.000000",
     "end_date": "2025-04-26 14:31:00.000000"
     }'
@@ -196,5 +197,5 @@ The goal of MediPractise is to simplify, clarify, and accelerate the complete or
     curl -X DELETE --location "http://localhost:5000/api/v1/reservation/" \
     -H "Content-Type: application/json" \
     -d '{
-    "reservation_id": "3e2df7aa-bb65-41d4-871e-f9c5a4cc1b9d"
+    "id": "3e2df7aa-bb65-41d4-871e-f9c5a4cc1b9d"
     }'

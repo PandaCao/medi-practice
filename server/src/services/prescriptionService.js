@@ -1,21 +1,14 @@
-import { getAllRowsById, insertRow } from '../config/supabaseClient.js';
-import supabaseClient from '../config/supabaseClient.js';
-
-const TABLE = 'prescriptions';
+import * as prescriptionModel from '../models/prescriptionModel.js';
 
 export async function addPrescription(payload) {
-    return insertRow(TABLE, payload);
+    return await prescriptionModel.addPrescription(payload);
 }
 
 export async function getPrescriptionById(payload) {
-    return getAllRowsById(TABLE, payload);
+    return await prescriptionModel.getPrescriptionById(payload);
 }
 
-export async function getPrescriptionsByPatientId(id) {
-    const { data, error } = await supabaseClient
-        .from(TABLE)
-        .select()
-        .eq('patient_id', id);
-    if (error) throw error;
-    return data;
+export async function getPrescriptionsByPatientId(payload) {
+    return await prescriptionModel.getPrescriptionsByPatientId(payload);
 }
+
