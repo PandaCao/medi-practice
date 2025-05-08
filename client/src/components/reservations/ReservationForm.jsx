@@ -207,6 +207,8 @@ function ReservationForm({ formData, onSubmit, onChange, onDateChange }) {
                     name="notes"
                     value={formData.notes}
                     onChange={onChange}
+                    maxLength={500}
+                    placeholder="Maximálně 500 znaků"
                 />
             </Form.Group>
 
