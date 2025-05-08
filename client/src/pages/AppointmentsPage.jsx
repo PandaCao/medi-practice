@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Container } from 'react-bootstrap';
+import { Container, Alert } from 'react-bootstrap';
 import { reservationApi, patientApi } from '../api';
 import ReservationTable from '../components/reservations/ReservationTable';
 import LoadingSpinner from '../components/common/LoadingSpinner';
@@ -70,7 +70,12 @@ function AppointmentsPage() {
             {loading && <LoadingSpinner showServerWakeupMessage={true} />}
             {error && <p className="text-danger">{error}</p>}
             {!loading && !error && reservations.length === 0 && (
-                <p>Žádné dnešní rezervace k zobrazení.</p>
+                <Alert variant="info" className="mb-0">
+                    <p className="text-muted mb-0">
+                        Pro dnešek nemáte naplánované žádné schůzky. Všechny
+                        vaše budoucí schůzky se zobrazí zde.
+                    </p>
+                </Alert>
             )}
             {!loading && !error && reservations.length > 0 && (
                 <ReservationTable

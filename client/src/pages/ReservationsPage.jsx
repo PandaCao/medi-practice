@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Button, Modal } from 'react-bootstrap';
+import { Container, Button, Modal, Alert } from 'react-bootstrap';
 import ReservationForm from '../components/reservations/ReservationForm';
 import ReservationTable from '../components/reservations/ReservationTable';
 import { reservationApi, patientApi } from '../api';
@@ -156,7 +156,15 @@ function ReservationsPage() {
                 {loading && <LoadingSpinner showServerWakeupMessage={true} />}
                 {error && <p className="text-danger">{error}</p>}
                 {!loading && !error && reservations.length === 0 && (
-                    <p>Žádné rezervace k zobrazení.</p>
+                    <Alert variant="info" className="text-center py-4">
+                        <i className="bi bi-calendar-plus fs-1 mb-3 d-block"></i>
+                        <h4>Žádné rezervace</h4>
+                        <p className="text-muted mb-3">
+                            Zatím nemáte žádné zarezervované schůzky. Můžete
+                            přidat novou rezervaci kliknutím na tlačítko "Přidat
+                            rezervaci" v pravém horním rohu.
+                        </p>
+                    </Alert>
                 )}
                 {!loading && !error && reservations.length > 0 && (
                     <ReservationTable
