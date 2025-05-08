@@ -109,6 +109,7 @@ function ReservationForm({ formData, onSubmit, onChange, onDateChange }) {
             </Form.Group>
 
             <ExaminationTypeSelect
+                label={<RequiredLabel>Typ vyšetření</RequiredLabel>}
                 value={formData.examinationType}
                 onChange={(e) => {
                     onChange(e);
@@ -126,7 +127,7 @@ function ReservationForm({ formData, onSubmit, onChange, onDateChange }) {
             />
 
             <Form.Group className="mb-3">
-                <Form.Label>Datum rezervace</Form.Label>
+                <RequiredLabel>Datum rezervace</RequiredLabel>
                 <Form.Control
                     type="date"
                     name="reservationDate"
@@ -153,7 +154,7 @@ function ReservationForm({ formData, onSubmit, onChange, onDateChange }) {
 
             {formData.reservationDate && (
                 <Form.Group className="mb-3">
-                    <Form.Label>Délka vyšetření (minuty)</Form.Label>
+                    <RequiredLabel>Délka vyšetření (minuty)</RequiredLabel>
                     <Form.Select
                         name="duration"
                         value={formData.duration || ''}

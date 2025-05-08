@@ -8,10 +8,11 @@ function ExaminationTypeSelect({
     onOtherChange,
     isInvalid,
     error,
+    label,
 }) {
     return (
         <Form.Group className="mb-3">
-            <Form.Label>Typ vyšetření</Form.Label>
+            {label || <Form.Label>Typ vyšetření</Form.Label>}
             <Form.Select
                 name="examinationType"
                 value={value}
