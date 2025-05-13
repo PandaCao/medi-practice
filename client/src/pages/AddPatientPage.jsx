@@ -65,7 +65,7 @@ function AddPatientPage() {
     }
 
     return (
-        <>
+        <div className="flex-grow-1 d-flex flex-column">
             <AddPatient onSubmit={handleSubmit} />
 
             {showModal && (
@@ -91,7 +91,7 @@ function AddPatientPage() {
                     </div>
                 </div>
             )}
-        </>
+        </div>
     );
 }
 

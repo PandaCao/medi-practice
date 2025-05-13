@@ -141,8 +141,8 @@ function ReservationsPage() {
     };
 
     return (
-        <>
-            <Container className="py-4">
+        <div className="flex-grow-1 d-flex flex-column">
+            <Container fluid className="py-4 flex-grow-1 d-flex flex-column">
                 <div className="d-flex justify-content-between align-items-center mb-4">
                     <h2 className="mb-0">Rezervační systém</h2>
                     <Button
@@ -203,7 +203,7 @@ function ReservationsPage() {
                     </button>
                 </Modal.Footer>
             </Modal>
-        </>
+        </div>
     );
 }
 

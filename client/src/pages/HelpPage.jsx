@@ -10,7 +10,8 @@ import {
 
 function HelpPage() {
     return (
-        <Container className="py-4">
+        <div className="flex-grow-1 d-flex flex-column">
+            <Container fluid className="py-4 flex-grow-1 d-flex flex-column">
             <div className="d-flex align-items-center mb-4">
                 <BsQuestionCircle size={24} className="text-primary me-2" />
                 <h2 className="mb-0">Nápověda</h2>
@@ -106,6 +107,7 @@ function HelpPage() {
                 </Card.Body>
             </Card>
         </Container>
+        </div>
     );
 }
 

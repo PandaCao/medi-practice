@@ -65,7 +65,8 @@ function AppointmentsPage() {
     }, []);
 
     return (
-        <Container className="py-4">
+        <div className="flex-grow-1 d-flex flex-column">
+            <Container fluid className="py-4 flex-grow-1 d-flex flex-column">
             <h2 className="mb-4">Dnešní schůzky</h2>
             {loading && <LoadingSpinner showServerWakeupMessage={true} />}
             {error && <p className="text-danger">{error}</p>}
@@ -84,6 +85,7 @@ function AppointmentsPage() {
                 />
             )}
         </Container>
+        </div>
     );
 }
 

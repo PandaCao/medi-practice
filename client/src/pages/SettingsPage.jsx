@@ -45,7 +45,8 @@ function SettingsPage() {
     };
 
     return (
-        <Container className="py-4">
+        <div className="flex-grow-1 d-flex flex-column">
+            <Container fluid className="py-4 flex-grow-1 d-flex flex-column">
             <div className="d-flex align-items-center mb-4">
                 <BsGear size={24} className="text-primary me-2" />
                 <h2 className="mb-0">Nastavení</h2>
@@ -224,6 +225,7 @@ function SettingsPage() {
                 </Button>
             </div>
         </Container>
+        </div>
     );
 }
 

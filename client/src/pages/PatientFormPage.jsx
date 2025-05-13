@@ -92,7 +92,7 @@ const PatientFormPage = () => {
     };
 
     return (
-        <div>
+        <div className="flex-grow-1 d-flex flex-column">
             {updateError && (
                 <div className="alert alert-danger" role="alert">
                     {updateError}

@@ -43,7 +43,7 @@ const Layout = () => {
                         marginTop: '72px',
                     }}
                 >
-                    <div className="m-1 p-3 bg-white rounded border">
+                    <div className="m-1 p-3 bg-white rounded border h-100 d-flex flex-column">
                         <Outlet />
                     </div>
                 </Container>

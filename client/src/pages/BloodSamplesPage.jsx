@@ -3,7 +3,8 @@ import { Container, Alert } from 'react-bootstrap';
 
 function BloodSamplesPage() {
     return (
-        <Container className="py-4">
+        <div className="flex-grow-1 d-flex flex-column">
+            <Container fluid className="py-4 flex-grow-1 d-flex flex-column">
             <h2 className="mb-4">Odběry</h2>
             <Alert variant="info" className="d-flex align-items-center">
                 <div>
@@ -17,6 +18,7 @@ function BloodSamplesPage() {
                 </div>
             </Alert>
         </Container>
+        </div>
     );
 }
 

@@ -216,7 +216,7 @@ const PatientDetailPage = () => {
     }
 
     return (
-        <>
+        <div className="flex-grow-1 d-flex flex-column">
             <PatientDetailCard
                 patient={patient}
                 onUpdate={handleUpdate}
@@ -312,7 +312,7 @@ const PatientDetailPage = () => {
                     )}
                 </Modal.Body>
             </Modal>
-        </>
+        </div>
     );
 };
 
