@@ -132,18 +132,22 @@ const PatientsPage = () => {
                 </div>
             )}
 
-            {isSearching ? (
-                <LoadingSpinner message="Vyhledávání pacientů..." />
-            ) : (
-                <PatientList
-                    patients={patients}
-                    totalPages={totalPages}
-                    currentPage={currentPage}
-                    onPageChange={setCurrentPage}
-                    onPatientClick={handlePatientClick}
-                    searchQuery={searchQuery}
-                />
-            )}
+            {/* Loading state rozlišený podle toho, zda je aktivní vyhledávání */}
+{isSearching ? (
+    <LoadingSpinner
+        message={searchQuery ? "Vyhledávání pacientů..." : "Načítání pacientů..."}
+        showServerWakeupMessage={true}
+    />
+) : (
+    <PatientList
+        patients={patients}
+        totalPages={totalPages}
+        currentPage={currentPage}
+        onPageChange={setCurrentPage}
+        onPatientClick={handlePatientClick}
+        searchQuery={searchQuery}
+    />
+)}
         </div>
     );
 };

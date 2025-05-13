@@ -36,7 +36,7 @@ const LoadingSpinner = ({
                             Server se probouzí z režimu úsporného provozu.
                             <br />
                             <small className="text-muted">
-                                Toto může trvat až 30 sekund.
+                                Toto může trvat až 50 sekund.
                             </small>
                         </span>
                     </div>
