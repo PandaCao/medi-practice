@@ -1,18 +1,19 @@
 import React, { useState } from 'react';
 import { Modal, Form, Button } from 'react-bootstrap';
 
+const defaultFormData = {
+    medications: [
+        {
+            name: '',
+            dosage: '',
+            frequency: '',
+            duration: '',
+        },
+    ],
+    notes: '',
+};
+
 const PrescriptionForm = ({ show, onHide, onSubmit, patient }) => {
-    const defaultFormData = {
-        medications: [
-            {
-                name: '',
-                dosage: '',
-                frequency: '',
-                duration: '',
-            },
-        ],
-        notes: '',
-    };
     const [formData, setFormData] = useState(defaultFormData);
 
     // Reset formuláře při otevření modalu
