@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Modal, Form, Button } from 'react-bootstrap';
 
 const PrescriptionForm = ({ show, onHide, onSubmit, patient }) => {
-    const [formData, setFormData] = useState({
+    const defaultFormData = {
         medications: [
             {
                 name: '',
@@ -12,7 +12,15 @@ const PrescriptionForm = ({ show, onHide, onSubmit, patient }) => {
             },
         ],
         notes: '',
-    });
+    };
+    const [formData, setFormData] = useState(defaultFormData);
+
+    // Reset formuláře při otevření modalu
+    React.useEffect(() => {
+        if (show) {
+            setFormData(defaultFormData);
+        }
+    }, [show]);
 
     const handleMedicationChange = (index, e) => {
         const { name, value } = e.target;
