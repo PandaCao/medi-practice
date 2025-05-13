@@ -75,7 +75,7 @@ const SignaturePreview = ({ text, onClick }) => (
                 {text}
             </div>
         ) : (
-            <div className="text-muted">Klikněte pro přidání podpisu</div>
+            <div className="text-muted">Klikněte pro přidání podpisu. Podpis je povinný.</div>
         )}
     </div>
 );
@@ -102,7 +102,7 @@ const ExaminationForm = ({
         prescribed_medication: '',
         new_diagnosis: '',
         place: 'medipractise_praha',
-        stamp: '',
+        stamp: 'MediPractise Praha',
         doctors_signature: '',
     });
 
@@ -143,7 +143,7 @@ const ExaminationForm = ({
                         examination.prescribed_medication || '',
                     new_diagnosis: examination.new_diagnosis || '',
                     place: examination.place || 'medipractise_praha',
-                    stamp: examination.stamp || '',
+                    stamp: examination.stamp || 'MediPractise Praha',
                     doctors_signature: examination.doctors_signature || '',
                 });
 
@@ -179,7 +179,7 @@ const ExaminationForm = ({
                     prescribed_medication: '',
                     new_diagnosis: '',
                     place: 'medipractise_praha',
-                    stamp: '',
+                    stamp: 'MediPractise Praha',
                     doctors_signature: '',
                 });
                 setDiagnoses([{ code: '', description: '' }]);
@@ -297,7 +297,7 @@ const ExaminationForm = ({
         }
     };
 
-    const handlePlaceChange = (e) => {
+    const handlePlaceChange = async (e) => {
         const placeId = e.target.value;
         setFormData((prev) => ({
             ...prev,
@@ -331,7 +331,7 @@ const ExaminationForm = ({
             <Form onSubmit={handleSubmit}>
                 <Modal.Body>
                     <Form.Group className="mb-3">
-                        <Form.Label>Anamnéza</Form.Label>
+                        <RequiredLabel>Anamnéza</RequiredLabel>
                         <Form.Control
                             as="textarea"
                             rows={3}
@@ -433,7 +433,7 @@ const ExaminationForm = ({
                     </Form.Group>
 
                     <Form.Group className="mb-3">
-                        <Form.Label>Závěry</Form.Label>
+                        <RequiredLabel>Závěry</RequiredLabel>
                         <Form.Control
                             as="textarea"
                             rows={2}
@@ -681,7 +681,7 @@ const ExaminationForm = ({
                 </Modal.Header>
                 <Modal.Body>
                     <Form.Group>
-                        <Form.Label>Text razítka</Form.Label>
+                        <RequiredLabel>Text razítka</RequiredLabel>
                         <Form.Control
                             type="text"
                             value={formData.stamp}
@@ -725,7 +725,7 @@ const ExaminationForm = ({
                 </Modal.Header>
                 <Modal.Body>
                     <Form.Group>
-                        <Form.Label>Podpis lékaře</Form.Label>
+                        <RequiredLabel>Podpis lékaře</RequiredLabel>
                         <Form.Control
                             type="text"
                             value={formData.doctors_signature}
