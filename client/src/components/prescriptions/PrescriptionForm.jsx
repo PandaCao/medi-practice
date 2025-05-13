@@ -102,7 +102,7 @@ const PrescriptionForm = ({ show, onHide, onSubmit, patient }) => {
                                     }
                                     required
                                     placeholder="např. Paracetamol"
-                                    maxLength={200}
+                                    maxLength={50}
                                 />
                             </Form.Group>
                             <Form.Group className="mb-3">
@@ -144,7 +144,7 @@ const PrescriptionForm = ({ show, onHide, onSubmit, patient }) => {
                                     }
                                     required
                                     placeholder="např. 7 dní"
-                                    maxLength={100}
+                                    maxLength={50}
                                 />
                             </Form.Group>
                             {formData.medications.length > 1 && (
