@@ -195,7 +195,7 @@ const AddPatient = ({ onSaveDraft, onSubmit, onDelete, initialData = {} }) => {
                 </Col>
             </Row>
 
-            {/* Rodné číslo */}
+            {/* Rodné číslo a pojišťovna */}
             <Row className="mb-3">
                 <Col md={6}>
                     <Form.Group>
@@ -210,10 +210,6 @@ const AddPatient = ({ onSaveDraft, onSubmit, onDelete, initialData = {} }) => {
                         />
                     </Form.Group>
                 </Col>
-            </Row>
-
-            {/* Zdravotní pojišťovna */}
-            <Row className="mb-3">
                 <Col md={6}>
                     <Form.Group>
                         <RequiredLabel>Zdravotní pojišťovna</RequiredLabel>
