@@ -22,8 +22,8 @@ import { PERMISSIONS } from './permissions';
 export const ROUTES = {
     PATIENTS: '/',
     PATIENT_ADD: '/patient/add',
-    PATIENT_DETAIL: '/patient/:id', // ✅ Detail pacienta (dashboard)
-    PATIENT_EDIT: '/patient/:id/edit', // ✅ Formulář pro úpravu
+    PATIENT_DETAIL: '/patient/:id',
+    PATIENT_EDIT: '/patient/:id/edit',
     BLOOD_SAMPLES: '/blood-samples',
     RESERVATIONS: '/reservations',
     APPOINTMENTS: '/appointments',
@@ -52,7 +52,7 @@ export const routes = [
         requiredPermission: PERMISSIONS.PATIENT_CREATE,
     },
     {
-        path: ROUTES.PATIENT_DETAIL, // ✅ Zobrazení detailu pacienta
+        path: ROUTES.PATIENT_DETAIL,
         component: PatientDetailPage,
         name: 'Detail pacienta',
         showInSidebar: false,
@@ -60,7 +60,7 @@ export const routes = [
         requiredPermission: PERMISSIONS.PATIENT_VIEW,
     },
     {
-        path: ROUTES.PATIENT_EDIT, // ✅ Editace pacienta
+        path: ROUTES.PATIENT_EDIT,
         component: PatientFormPage,
         name: 'Editace pacienta',
         showInSidebar: false,
