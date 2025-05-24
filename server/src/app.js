@@ -17,6 +17,9 @@ export const log = winston.createLogger({
 app.use(
     cors({
         origin: ['http://localhost:3000', 'https://medipractise.onrender.com'],
+        credentials: true,
+        allowedHeaders: ['Content-Type', 'Authorization'],
+        exposedHeaders: ['Authorization'],
     }),
 );
 
