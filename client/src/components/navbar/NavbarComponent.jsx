@@ -62,7 +62,7 @@ const NavbarComponent = ({ toggleSidebar, pageTitle }) => {
                 <BsList size={24} />
             </Button>
             <Navbar.Brand className="d-flex align-items-center">
-                {currentRoute && !currentRoute.isMainRoute && (
+                {currentRoute && !currentRoute.showInSidebar && (
                     <Button
                         variant="link"
                         className="text-dark p-0 me-3"

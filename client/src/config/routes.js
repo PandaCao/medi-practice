@@ -39,7 +39,6 @@ export const routes = [
         name: 'Karty pacientů',
         icon: BsPeople,
         showInSidebar: true,
-        isMainRoute: true,
         position: 'top',
         requiredPermission: PERMISSIONS.PATIENT_VIEW,
     },
@@ -48,7 +47,6 @@ export const routes = [
         component: AddPatientPage,
         name: 'Přidat pacienta',
         showInSidebar: false,
-        isMainRoute: false,
         requiredPermission: PERMISSIONS.PATIENT_CREATE,
     },
     {
@@ -56,7 +54,6 @@ export const routes = [
         component: PatientDetailPage,
         name: 'Detail pacienta',
         showInSidebar: false,
-        isMainRoute: false,
         requiredPermission: PERMISSIONS.PATIENT_VIEW,
     },
     {
@@ -64,7 +61,6 @@ export const routes = [
         component: PatientFormPage,
         name: 'Editace pacienta',
         showInSidebar: false,
-        isMainRoute: false,
         requiredPermission: PERMISSIONS.PATIENT_EDIT,
     },
     {
@@ -73,7 +69,6 @@ export const routes = [
         name: 'Odběry',
         icon: BsGrid,
         showInSidebar: true,
-        isMainRoute: true,
         position: 'top',
         requiredPermission: PERMISSIONS.EXAMINATION_VIEW,
     },
@@ -83,7 +78,6 @@ export const routes = [
         name: 'Rezervační systém',
         icon: BsCalendar,
         showInSidebar: true,
-        isMainRoute: true,
         position: 'top',
         requiredPermission: PERMISSIONS.RESERVATION_VIEW,
     },
@@ -93,7 +87,6 @@ export const routes = [
         name: 'Dnešní schůzky',
         icon: BsClock,
         showInSidebar: true,
-        isMainRoute: true,
         position: 'top',
         requiredPermission: PERMISSIONS.APPOINTMENT_VIEW,
     },
@@ -103,7 +96,6 @@ export const routes = [
         name: 'Pomoc',
         icon: BsQuestionCircle,
         showInSidebar: true,
-        isMainRoute: true,
         position: 'bottom',
     },
     {
@@ -112,7 +104,6 @@ export const routes = [
         name: 'Nastavení',
         icon: BsGear,
         showInSidebar: true,
-        isMainRoute: true,
         position: 'bottom',
     },
 ];
