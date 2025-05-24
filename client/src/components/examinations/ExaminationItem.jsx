@@ -113,7 +113,11 @@ const ExaminationItem = ({ examination, onEdit }) => {
                 <div className="d-flex justify-content-between align-items-center">
                     <div>
                         <div className="text-muted small mb-1">Lékař</div>
-                        <div className="fw-bold">MUDr. Jan Suk</div>
+                        <div className="fw-bold">
+                            {examination.doctor.prefix}{' '}
+                            {examination.doctor.first_name}{' '}
+                            {examination.doctor.last_name}
+                        </div>
                     </div>
                     <div className="d-flex gap-3">
                         {examination.stamp && (
