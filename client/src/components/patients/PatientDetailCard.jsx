@@ -162,27 +162,31 @@ const PatientDetailCard = ({
                             }
                         />
                         <div className="fw-bold text-primary mt-3 mb-2">
-                            Adresa
-                        </div>
-                        <div className="mb-1">
-                            <span className="text-muted">
-                                {patient.address ? (
-                                    <>
-                                        {patient.address.street && (
-                                            <>{patient.address.street}, </>
-                                        )}
-                                        {patient.address.city && (
-                                            <>{patient.address.city}, </>
-                                        )}
-                                        {patient.address.zip && (
-                                            <>{patient.address.zip}</>
-                                        )}
-                                    </>
-                                ) : (
-                                    <EmptyFieldMessage />
-                                )}
-                            </span>
-                        </div>
+    Adresa
+</div>
+<div className="mb-1">
+    <span className="text-muted">
+        {(!patient.address ||
+            (typeof patient.address === 'object' &&
+                !patient.address.street &&
+                !patient.address.city &&
+                !patient.address.zip)) ? (
+            <EmptyFieldMessage />
+        ) : (
+            <>
+                {patient.address.street && (
+                    <>{patient.address.street}, </>
+                )}
+                {patient.address.city && (
+                    <>{patient.address.city}, </>
+                )}
+                {patient.address.zip && (
+                    <>{patient.address.zip}</>
+                )}
+            </>
+        )}
+    </span>
+</div>
                     </div>
                 </div>
             </div>
