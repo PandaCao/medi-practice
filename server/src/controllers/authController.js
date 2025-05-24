@@ -51,7 +51,7 @@ export const login = async (req, res) => {
     first_name: user.first_name,
     last_name: user.last_name,
     specialization: user.specialization,
-    contact_info: user.contact_info
+    prefix: user.prefix
   };
 
   // Create JWT
@@ -91,7 +91,7 @@ export const getMe = async (req, res) => {
       first_name: user.first_name,
       last_name: user.last_name,
       specialization: user.specialization,
-      contact_info: user.contact_info
+      prefix: user.prefix
     };
     return res.json({ user: userInfo });
   } catch (err) {
