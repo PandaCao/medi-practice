@@ -62,7 +62,7 @@ export const login = async (req, res) => {
 
 // Middleware to extract user from JWT
 export const getMe = async (req, res) => {
-  const authHeader = req.headers['authorization'];
+  const authHeader = req.headers['authorization'] || req.headers['x-authorization'];
   if (!authHeader) return res.status(401).json({ message: 'No token provided.' });
   const token = authHeader.split(' ')[1];
   try {
