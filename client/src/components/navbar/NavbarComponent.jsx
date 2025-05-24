@@ -4,6 +4,7 @@ import { BsList, BsArrowLeft } from 'react-icons/bs';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { getRouteByPath } from '../../config/routes';
+import { getInitials } from '../../tools/userHelper';
 import './Navbar.css';
 
 const NavbarComponent = ({ toggleSidebar, pageTitle }) => {
@@ -34,12 +35,11 @@ const NavbarComponent = ({ toggleSidebar, pageTitle }) => {
         navigate('/login');
     };
 
-    // Funkce pro získání profilového obrázku podle role uživatele
     const getProfileImage = () => {
-        if (user?.role === 'doctor') {
-            return 'https://placehold.co/40/4a90e2/ffffff?text=JS';
-        }
-        return 'https://placehold.co/40/e24a90/ffffff?text=MN';
+        const initials = getInitials(user) || '??';
+        // Barvu můžeš měnit podle role, nebo nechat jednu univerzální
+        const bgColor = user?.role === 'doctor' ? '4a90e2' : 'e24a90';
+        return `https://placehold.co/40/${bgColor}/ffffff?text=${initials}`;
     };
 
     return (
