@@ -1,4 +1,7 @@
-import supabase, { insertRow, updateRowById } from '../config/supabaseClient.js';
+import supabase, {
+    insertRow,
+    updateRowById,
+} from '../config/supabaseClient.js';
 
 const TABLE = 'examination_record';
 
@@ -13,8 +16,8 @@ export async function updateExamination(payload) {
 export async function getAllExaminationsByPatientId(id) {
     const { data, error } = await supabase
         .from(TABLE)
-        .select()
-        .eq('patient_id', id)
+        .select(`*, doctor:doctor_id (prefix, first_name, last_name)`)
+        .eq('patient_id', id);
     if (error) throw error;
     return data;
 }
