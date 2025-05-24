@@ -3,7 +3,7 @@ import { Button } from 'react-bootstrap';
 import { BsPlus, BsChevronDown } from 'react-icons/bs';
 import { PERMISSIONS } from '../../config/permissions';
 import PermissionGuard from '../common/PermissionGuard';
-import ExaminationItem from './ExamintationItem';
+import ExaminationItem from './ExaminationItem';
 
 const ITEMS_PER_PAGE = 3;
 
