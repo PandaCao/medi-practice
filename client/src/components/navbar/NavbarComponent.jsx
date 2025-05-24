@@ -84,10 +84,12 @@ const NavbarComponent = ({ toggleSidebar, pageTitle }) => {
                     />
                     <div>
                         <div className="fw-bold">
-                            {user ? `${user.first_name} ${user.last_name}` : ''}
+                            {user
+                                ? `${user.prefix} ${user.first_name} ${user.last_name}`
+                                : 'Nepřihlášený uživatel'}
                         </div>
                         <small className="text-muted d-none d-sm-block">
-                            {user?.role}
+                            {user?.specialization || 'Nepřihlášený uživatel'}
                         </small>
                     </div>
                     <Button
