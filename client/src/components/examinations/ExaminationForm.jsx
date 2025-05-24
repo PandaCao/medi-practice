@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Modal, Form, Button } from 'react-bootstrap';
-import { BsPlus, BsTrash } from 'react-icons/bs';
 import { addExamination, updateExamination } from '../../api/examinationApi';
 import { addPrescription } from '../../api/prescriptionApi';
 import { PLACES } from '../../config/constants';
 import StampPreview from '../common/StampPreview';
 import SignaturePreview from '../common/SignaturePreview';
+import DiagnosesFormSection from './DiagnosesFormSection';
+import PrescriptionFormSection from './PrescriptionFormSection';
 import { getUserId } from '../../tools/userHelper';
 
 const ExaminationForm = ({
@@ -48,7 +49,7 @@ const ExaminationForm = ({
     });
 
     const [diagnoses, setDiagnoses] = useState([]);
-    const [showStampModal, setShowStampModal] = useState(false);
+    const [setShowStampModal] = useState(false);
     const [showSignatureModal, setShowSignatureModal] = useState(false);
 
     useEffect(() => {
@@ -194,7 +195,9 @@ const ExaminationForm = ({
             if (
                 createPrescription &&
                 prescriptionData.medications.length > 0 &&
-                prescriptionData.medications.some((med) => med.name.trim() !== '')
+                prescriptionData.medications.some(
+                    (med) => med.name.trim() !== '',
+                )
             ) {
                 const medicationNames = prescriptionData.medications
                     .filter((med) => med.name.trim() !== '')
@@ -209,7 +212,7 @@ const ExaminationForm = ({
                 await addExamination(updatedFormData);
             }
 
-            // If prescription is enabled and there's prescribed medication, create e-prescription
+            // Pokud vytváříme e-recept a jsou zadány léky, vytvoříme e-recept
             if (
                 createPrescription &&
                 prescriptionData.medications.length > 0 &&
@@ -218,7 +221,7 @@ const ExaminationForm = ({
                 )
             ) {
                 const expirationDate = new Date();
-                expirationDate.setDate(expirationDate.getDate() + 7); // default 7 days
+                expirationDate.setDate(expirationDate.getDate() + 7); // 7 dní
 
                 const prescriptionPayload = {
                     patient_id: patientId,
@@ -244,7 +247,6 @@ const ExaminationForm = ({
         setFormData((prev) => ({
             ...prev,
             place: placeId,
-            // stamp is visual only, set according to place name
             stamp: PLACES.find((p) => p.id === placeId)?.name || '',
         }));
     };
@@ -286,67 +288,13 @@ const ExaminationForm = ({
                         />
                     </Form.Group>
 
-                    <div className="mb-4">
-                        <div className="d-flex justify-content-between align-items-center mb-2">
-                            <Form.Label>Diagnózy</Form.Label>
-                            <Button
-                                variant="outline-primary"
-                                size="sm"
-                                onClick={handleAddDiagnosis}
-                                className="d-inline-flex align-items-center gap-2"
-                            >
-                                <BsPlus />
-                                Přidat diagnózu
-                            </Button>
-                        </div>
-                        {diagnoses.map((diagnosis, index) => (
-                            <div
-                                key={index}
-                                className="mb-3 position-relative border rounded p-3"
-                            >
-                                {index > 0 && (
-                                    <Button
-                                        variant="link"
-                                        className="position-absolute end-0 top-0 text-danger p-0"
-                                        onClick={() =>
-                                            handleRemoveDiagnosis(index)
-                                        }
-                                    >
-                                        <BsTrash />
-                                    </Button>
-                                )}
-                                <Form.Group className="mb-3">
-                                    <RequiredLabel>Kód diagnózy</RequiredLabel>
-                                    <Form.Control
-                                        type="text"
-                                        name="code"
-                                        value={diagnosis.code}
-                                        onChange={(e) =>
-                                            handleDiagnosisChange(index, e)
-                                        }
-                                        placeholder="Např. DIABETES MELLITUS 2. TYPU (E11.9)"
-                                        required
-                                        maxLength={100}
-                                    />
-                                </Form.Group>
-
-                                <Form.Group className="mb-3">
-                                    <Form.Label>Popis</Form.Label>
-                                    <Form.Control
-                                        as="textarea"
-                                        rows={2}
-                                        name="description"
-                                        value={diagnosis.description}
-                                        onChange={(e) =>
-                                            handleDiagnosisChange(index, e)
-                                        }
-                                        placeholder="Popis diagnózy a doporučení"
-                                        maxLength={200}
-                                    />
-                                </Form.Group>
-                            </div>
-                        ))}
-                    </div>
+                    <DiagnosesFormSection
+                        diagnoses={diagnoses}
+                        handleAddDiagnosis={handleAddDiagnosis}
+                        handleDiagnosisChange={handleDiagnosisChange}
+                        handleRemoveDiagnosis={handleRemoveDiagnosis}
+                        RequiredLabel={RequiredLabel}
+                    />
 
                     <Form.Group className="mb-3">
                         <Form.Label>Laboratorní výsledky</Form.Label>
@@ -401,165 +349,17 @@ const ExaminationForm = ({
                         />
                     </Form.Group>
 
-                    {!examination && (
-                        <div className="border-top pt-4 mb-4">
-                            <div className="d-flex justify-content-between align-items-center mb-3">
-                                <h6 className="mb-0 text-primary">
-                                    Elektronický recept
-                                </h6>
-                                <Form.Check
-                                    type="switch"
-                                    id="create-prescription"
-                                    label="Vytvořit e-recept"
-                                    checked={createPrescription}
-                                    onChange={(e) =>
-                                        setCreatePrescription(e.target.checked)
-                                    }
-                                    className="fw-bold"
-                                />
-                            </div>
-
-                            {createPrescription && (
-                                <>
-                                    {prescriptionData.medications.map(
-                                        (medication, index) => (
-                                            <div
-                                                key={index}
-                                                className="border rounded p-3 mb-3"
-                                            >
-                                                <Form.Group className="mb-3">
-                                                    <RequiredLabel>
-                                                        Název léku
-                                                    </RequiredLabel>
-                                                    <Form.Control
-                                                        type="text"
-                                                        name="name"
-                                                        value={medication.name}
-                                                        onChange={(e) =>
-                                                            handleMedicationChange(
-                                                                index,
-                                                                e,
-                                                            )
-                                                        }
-                                                        placeholder="Např. Paracetamol"
-                                                        required
-                                                        maxLength={200}
-                                                    />
-                                                </Form.Group>
-
-                                                <Form.Group className="mb-3">
-                                                    <RequiredLabel>
-                                                        Dávkování
-                                                    </RequiredLabel>
-                                                    <Form.Control
-                                                        type="text"
-                                                        name="dosage"
-                                                        value={
-                                                            medication.dosage
-                                                        }
-                                                        onChange={(e) =>
-                                                            handleMedicationChange(
-                                                                index,
-                                                                e,
-                                                            )
-                                                        }
-                                                        placeholder="Např. 1 tableta"
-                                                        required
-                                                        maxLength={50}
-                                                    />
-                                                </Form.Group>
-
-                                                <Form.Group className="mb-3">
-                                                    <RequiredLabel>
-                                                        Frekvence
-                                                    </RequiredLabel>
-                                                    <Form.Control
-                                                        type="text"
-                                                        name="frequency"
-                                                        value={
-                                                            medication.frequency
-                                                        }
-                                                        onChange={(e) =>
-                                                            handleMedicationChange(
-                                                                index,
-                                                                e,
-                                                            )
-                                                        }
-                                                        placeholder="Např. 3x denně"
-                                                        required
-                                                        maxLength={50}
-                                                    />
-                                                </Form.Group>
-
-                                                <Form.Group className="mb-3">
-                                                    <RequiredLabel>
-                                                        Délka užívání
-                                                    </RequiredLabel>
-                                                    <Form.Control
-                                                        type="text"
-                                                        name="duration"
-                                                        value={
-                                                            medication.duration
-                                                        }
-                                                        onChange={(e) =>
-                                                            handleMedicationChange(
-                                                                index,
-                                                                e,
-                                                            )
-                                                        }
-                                                        placeholder="Např. 7 dní"
-                                                        required
-                                                        maxLength={100}
-                                                    />
-                                                </Form.Group>
-                                                {prescriptionData.medications
-                                                    .length > 1 && (
-                                                    <Button
-                                                        variant="danger"
-                                                        onClick={() =>
-                                                            handleRemoveMedication(
-                                                                index,
-                                                            )
-                                                        }
-                                                        className="mb-3"
-                                                    >
-                                                        Odebrat lék
-                                                    </Button>
-                                                )}
-                                            </div>
-                                        ),
-                                    )}
-                                    <Button
-                                        variant="outline-primary"
-                                        onClick={handleAddMedication}
-                                        className="mb-3"
-                                    >
-                                        Přidat další lék
-                                    </Button>
-
-                                    <Form.Group className="mb-3">
-                                        <Form.Label>
-                                            Poznámky k e-receptu
-                                        </Form.Label>
-                                        <Form.Control
-                                            as="textarea"
-                                            rows={2}
-                                            name="notes"
-                                            value={prescriptionData.notes}
-                                            onChange={(e) =>
-                                                setPrescriptionData((prev) => ({
-                                                    ...prev,
-                                                    notes: e.target.value,
-                                                }))
-                                            }
-                                            placeholder="Doplňující informace k e-receptu"
-                                            maxLength={300}
-                                        />
-                                    </Form.Group>
-                                </>
-                            )}
-                        </div>
-                    )}
+                    <PrescriptionFormSection
+                        createPrescription={createPrescription}
+                        setCreatePrescription={setCreatePrescription}
+                        prescriptionData={prescriptionData}
+                        setPrescriptionData={setPrescriptionData}
+                        handleMedicationChange={handleMedicationChange}
+                        handleAddMedication={handleAddMedication}
+                        handleRemoveMedication={handleRemoveMedication}
+                        RequiredLabel={RequiredLabel}
+                        examination={examination}
+                    />
 
                     <Form.Group className="mb-3">
                         <RequiredLabel>Místo vyšetření</RequiredLabel>
@@ -611,50 +411,6 @@ const ExaminationForm = ({
                     </Button>
                 </Modal.Footer>
             </Form>
-
-            {/* Modal pro úpravu razítka */}
-            <Modal
-                show={showStampModal}
-                onHide={() => setShowStampModal(false)}
-                centered
-            >
-                <Modal.Header closeButton>
-                    <Modal.Title>Elektronické razítko</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    <Form.Group>
-                        <RequiredLabel>Text razítka</RequiredLabel>
-                        <Form.Control
-                            type="text"
-                            value={formData.stamp}
-                            onChange={(e) =>
-                                setFormData((prev) => ({
-                                    ...prev,
-                                    stamp: e.target.value,
-                                }))
-                            }
-                            placeholder="Např. MediPractise Praha"
-                        />
-                    </Form.Group>
-                    <div className="mt-3">
-                        <StampPreview text={formData.stamp} />
-                    </div>
-                </Modal.Body>
-                <Modal.Footer>
-                    <Button
-                        variant="secondary"
-                        onClick={() => setShowStampModal(false)}
-                    >
-                        Zrušit
-                    </Button>
-                    <Button
-                        variant="primary"
-                        onClick={() => setShowStampModal(false)}
-                    >
-                        Uložit
-                    </Button>
-                </Modal.Footer>
-            </Modal>
 
             {/* Modal pro úpravu podpisu */}
             <Modal
