@@ -5,10 +5,15 @@ import { routes } from './config/routes';
 import LoginPage from './pages/LoginPage';
 import { useAuth } from './context/AuthContext';
 import { usePermissions } from './hooks/usePermissions';
+import LoadingSpinner from './components/common/LoadingSpinner';
 
 const ProtectedRoute = ({ children, requiredPermission }) => {
-    const { user } = useAuth();
+    const { user, loading } = useAuth();
     const { hasPermission } = usePermissions();
+
+    if (loading) {
+        return LoadingSpinner;
+    }
 
     if (!user) {
         return <Navigate to="/login" />;
