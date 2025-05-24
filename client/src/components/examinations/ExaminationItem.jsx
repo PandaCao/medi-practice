@@ -81,18 +81,6 @@ const ExaminationItem = ({ examination, onEdit }) => {
                             {examination.lab_results || 'Neuvedeno'}
                         </p>
 
-                        <h6 className="text-primary mt-3">Medikace</h6>
-                        <p className="text-muted">
-                            {examination.medication || 'Neuvedeno'}
-                        </p>
-
-                        <h6 className="text-primary mt-3">
-                            Předepsaná medikace
-                        </h6>
-                        <p className="text-muted">
-                            {examination.prescribed_medication || 'Neuvedeno'}
-                        </p>
-
                         <h6 className="text-primary mt-3">Doporučení</h6>
                         <p className="text-muted">
                             {examination.recommendations || 'Neuvedeno'}
