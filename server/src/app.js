@@ -30,6 +30,11 @@ app.use('/api/v1/examinationRecords', examinationRecordRoutes);
 app.use('/api/v1/reservation', reservationRoutes);
 app.use('/api/v1/prescription', prescriptionRoutes);
 
+app.use((req, res, next) => {
+    console.log('HEADERS:', req.headers);
+    next();
+});
+
 app.listen(port, () => {
     console.log(`Server running on port ${port}`);
     console.log(listEndpoints(app));
