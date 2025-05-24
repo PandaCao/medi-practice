@@ -22,7 +22,6 @@ const PatientDetailPage = () => {
     const [patient, setPatient] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
-    const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [showExaminationForm, setShowExaminationForm] = useState(false);
     const [showPrescriptionForm, setShowPrescriptionForm] = useState(false);
     const [examinations, setExaminations] = useState([]);
@@ -101,17 +100,6 @@ const PatientDetailPage = () => {
 
         fetchPatientDetail();
     }, [id]);
-
-    const handleDelete = () => {
-        // TODO: Implement delete functionality with API
-        setShowDeleteModal(false);
-        // Navigate back to previous page if available, else to patients list
-        if (window.history.length > 1) {
-            navigate(-1);
-        } else {
-            navigate(ROUTES.PATIENTS);
-        }
-    };
 
     const handleUpdate = () => {
         navigate(`/patient/${patient.id}/edit`, {
@@ -220,7 +208,6 @@ const PatientDetailPage = () => {
             <PatientDetailCard
                 patient={patient}
                 onUpdate={handleUpdate}
-                onDelete={() => setShowDeleteModal(true)}
                 onERecept={() => setShowPrescriptionForm(true)}
                 showEReceptButton={hasPermission(
                     PERMISSIONS.PRESCRIPTION_CREATE,
@@ -249,31 +236,6 @@ const PatientDetailPage = () => {
                 </Col>
             </Row>
 
-            {/* Modals */}
-            <Modal
-                show={showDeleteModal}
-                onHide={() => setShowDeleteModal(false)}
-            >
-                <Modal.Header closeButton>
-                    <Modal.Title>Smazat pacienta</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    Opravdu chcete smazat pacienta {patient.name}? Tato akce je
-                    nevratná.
-                </Modal.Body>
-                <Modal.Footer>
-                    <Button
-                        variant="secondary"
-                        onClick={() => setShowDeleteModal(false)}
-                    >
-                        Zrušit
-                    </Button>
-                    <Button variant="danger" onClick={handleDelete}>
-                        Smazat
-                    </Button>
-                </Modal.Footer>
-            </Modal>
-
             <ExaminationForm
                 show={showExaminationForm}
                 onHide={() => {
@@ -292,6 +254,7 @@ const PatientDetailPage = () => {
                 patient={patient}
             />
 
+            {/* QR kód e-receptu */}
             <Modal
                 show={showPrescriptionQr.show}
                 onHide={() => setShowPrescriptionQr({ show: false, qr: null })}
