@@ -29,7 +29,7 @@ export const login = async (username, password) => {
 export const getMe = async (token) => {
   try {
     const response = await api.get(USER_ENDPOINTS.ME, {
-      headers: { Authorization: 'Bearer ' + token },
+      headers: { 'x-authorization': 'Bearer ' + token },
     });
     return response.data; // { user }
   } catch (error) {

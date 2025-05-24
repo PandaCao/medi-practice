@@ -3,7 +3,6 @@ import { Form, Button, Card, Alert } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import logo from '../assets/logo.svg';
-import LoadingSpinner from '../components/common/LoadingSpinner';
 
 const LoginPage = () => {
     const [username, setUsername] = useState('');
@@ -27,10 +26,6 @@ const LoginPage = () => {
         }
     };
 
-    if (isLoading) {
-        return <LoadingSpinner message="Přihlašování..." />;
-    }
-
     return (
         <div className="min-vh-100 d-flex align-items-center justify-content-center bg-light">
             <Card className="shadow-sm" style={{ width: '400px' }}>
@@ -50,39 +45,38 @@ const LoginPage = () => {
                             {error}
                         </Alert>
                     )}
-
                     <Form onSubmit={handleSubmit}>
                         <Form.Group className="mb-3">
                             <Form.Label>Uživatelské jméno</Form.Label>
                             <Form.Control
                                 type="text"
                                 value={username}
-                                onChange={(e) => setUsername(e.target.value)}
+                                onChange={e => setUsername(e.target.value)}
                                 required
+                                disabled={isLoading}
                             />
                         </Form.Group>
-
-                        <Form.Group className="mb-3">
+                        <Form.Group className="mb-4">
                             <Form.Label>Heslo</Form.Label>
                             <Form.Control
                                 type="password"
                                 value={password}
-                                onChange={(e) => setPassword(e.target.value)}
+                                onChange={e => setPassword(e.target.value)}
                                 required
+                                disabled={isLoading}
                             />
                         </Form.Group>
-
-                        <Button
-                            type="submit"
-                            variant="primary"
-                            className="w-100 mb-3"
-                            disabled={isLoading}
-                        >
-                            Přihlásit se
-                        </Button>
+                        {isLoading ? (
+                            <div className="d-flex flex-column align-items-center mb-2">
+                                <span className="spinner-border text-primary" role="status" />
+                                <div className="mt-2 text-muted">Přihlašování…</div>
+                            </div>
+                        ) : (
+                            <Button type="submit" variant="primary" className="w-100">Přihlásit se</Button>
+                        )}
                     </Form>
 
-                    <div className="text-center">
+                    <div className="text-center mt-4">
                         <div className="text-muted small mb-2">
                             Testovací účty:
                         </div>
@@ -90,17 +84,13 @@ const LoginPage = () => {
                             <div>
                                 <div className="fw-bold">Doktor</div>
                                 <div className="small text-muted">
-                                    Uživatel: doktor
-                                    <br />
-                                    Heslo: doktor
+                                    Uživatel: doktor<br />Heslo: doktor
                                 </div>
                             </div>
                             <div>
                                 <div className="fw-bold">Sestra</div>
                                 <div className="small text-muted">
-                                    Uživatel: sestra
-                                    <br />
-                                    Heslo: sestra
+                                    Uživatel: sestra<br />Heslo: sestra
                                 </div>
                             </div>
                         </div>

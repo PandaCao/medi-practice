@@ -83,9 +83,11 @@ const NavbarComponent = ({ toggleSidebar, pageTitle }) => {
                         className="me-2 d-none d-sm-block"
                     />
                     <div>
-                        <div className="fw-bold">{user?.name}</div>
+                        <div className="fw-bold">
+                            {user ? `${user.first_name} ${user.last_name}` : ''}
+                        </div>
                         <small className="text-muted d-none d-sm-block">
-                            {user?.title}
+                            {user?.role}
                         </small>
                     </div>
                     <Button
