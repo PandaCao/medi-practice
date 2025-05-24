@@ -1,19 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import {
-    Form,
-    Button,
-    Row,
-    Col,
-} from 'react-bootstrap';
+import { Form, Button, Row, Col } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
-import {
-    validateForm,
-    parsePersonalId,
-} from '../../tools/AddPatientValidation';
+import { validateForm } from '../../tools/AddPatientValidation';
+import { parsePersonalId } from '../../tools/parsePersonalId';
 import { INSURANCE_COMPANIES_LIST } from '../../config/constants';
 import PersonalIdInput from './PersonalIdInput';
 
-const AddPatient = ({ onSaveDraft, onSubmit, onDelete, initialData = {} }) => {
+const AddPatient = ({ onSubmit, initialData = {} }) => {
     const navigate = useNavigate();
     const [formData, setFormData] = useState({
         firstName: initialData.firstName || '',
@@ -405,11 +398,7 @@ const AddPatient = ({ onSaveDraft, onSubmit, onDelete, initialData = {} }) => {
 
             {/* Akční tlačítka */}
             <div className="d-flex justify-content-end gap-2 mt-4">
-                {onDelete && (
-                    <Button variant="outline-danger" onClick={onDelete}>
-                        Smazat
-                    </Button>
-                )}
+                
                 <Button
                     variant="outline-secondary"
                     onClick={() => navigate(-1)}
