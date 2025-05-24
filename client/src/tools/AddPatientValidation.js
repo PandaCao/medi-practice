@@ -31,7 +31,7 @@ const isValidPersonalId = (personalId) => {
     if (!personalId) return false;
 
     // Formát RRMMDD/XXXX nebo RRMMDDXXXX
-    const regex = /^\d{6}[\/]?\d{3,4}$/;
+    const regex = /^\d{6}[/]?\d{3,4}$/;
     return regex.test(personalId);
 };
 

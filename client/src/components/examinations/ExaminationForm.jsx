@@ -6,14 +6,14 @@ import { addPrescription } from '../../api/prescriptionApi';
 import { PLACES } from '../../config/constants';
 import StampPreview from '../common/StampPreview';
 import SignaturePreview from '../common/SignaturePreview';
-import { getDoctorId } from '../../tools/userHelper';
+import { getUserId } from '../../tools/userHelper';
 
 const ExaminationForm = ({
     show,
     onHide,
     onSubmit,
     patientId,
-    doctorId = getDoctorId(),
+    doctorId = getUserId(),
     examination = null,
 }) => {
     const [formData, setFormData] = useState({

@@ -20,14 +20,9 @@ export function getUserRole() {
     return user ? user.role : null;
 }
 
-export function getDoctorId() {
+export function getUserId() {
     const user = getUser();
-    return user && user.role === 'doctor' ? user.id : null;
-}
-
-export function getNurseId() {
-    const user = getUser();
-    return user && user.role === 'nurse' ? user.id : null;
+    return user ? user.id : null;
 }
 
 export function hasPermission(permission) {

@@ -3,8 +3,10 @@ import { Form, Button, Card, Alert } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import logo from '../assets/logo.svg';
+import TestAccounts from '../components/login/TestAccounts';
 
 const LoginPage = () => {
+    const [showTestAccounts, setShowTestAccounts] = useState(false);
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
@@ -51,7 +53,7 @@ const LoginPage = () => {
                             <Form.Control
                                 type="text"
                                 value={username}
-                                onChange={e => setUsername(e.target.value)}
+                                onChange={(e) => setUsername(e.target.value)}
                                 required
                                 disabled={isLoading}
                             />
@@ -61,40 +63,47 @@ const LoginPage = () => {
                             <Form.Control
                                 type="password"
                                 value={password}
-                                onChange={e => setPassword(e.target.value)}
+                                onChange={(e) => setPassword(e.target.value)}
                                 required
                                 disabled={isLoading}
                             />
                         </Form.Group>
                         {isLoading ? (
                             <div className="d-flex flex-column align-items-center mb-2">
-                                <span className="spinner-border text-primary" role="status" />
-                                <div className="mt-2 text-muted">Přihlašování…</div>
+                                <span
+                                    className="spinner-border text-primary"
+                                    role="status"
+                                />
+                                <div className="mt-2 text-muted">
+                                    Přihlašování…
+                                </div>
                             </div>
                         ) : (
-                            <Button type="submit" variant="primary" className="w-100">Přihlásit se</Button>
+                            <Button
+                                type="submit"
+                                variant="primary"
+                                className="w-100"
+                            >
+                                Přihlásit se
+                            </Button>
                         )}
                     </Form>
 
-                    <div className="text-center mt-4">
-                        <div className="text-muted small mb-2">
-                            Testovací účty:
+                    {/* Testovací účty – zobrazí se až po kliknutí na tlačítko */}
+                    {showTestAccounts ? (
+                        <TestAccounts
+                            onHide={() => setShowTestAccounts(false)}
+                        />
+                    ) : (
+                        <div className="text-center mt-4">
+                            <button
+                                className="btn btn-outline-secondary btn-sm"
+                                onClick={() => setShowTestAccounts(true)}
+                            >
+                                Zobrazit testovací účty
+                            </button>
                         </div>
-                        <div className="d-flex justify-content-center gap-4">
-                            <div>
-                                <div className="fw-bold">Doktor</div>
-                                <div className="small text-muted">
-                                    Uživatel: doktor<br />Heslo: doktor
-                                </div>
-                            </div>
-                            <div>
-                                <div className="fw-bold">Sestra</div>
-                                <div className="small text-muted">
-                                    Uživatel: sestra<br />Heslo: sestra
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    )}
                 </Card.Body>
             </Card>
         </div>

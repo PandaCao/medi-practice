@@ -4,8 +4,7 @@ import ReservationForm from '../components/reservations/ReservationForm';
 import ReservationTable from '../components/reservations/ReservationTable';
 import { reservationApi, patientApi } from '../api';
 import LoadingSpinner from '../components/common/LoadingSpinner';
-
-const DEFAULT_NURSE_ID = 'f842a3be-b7c7-4c69-ad9a-74a2cd94db3c';
+import { getUserId } from '../tools/userHelper';
 
 function ReservationsPage() {
     const [formData, setFormData] = useState({
@@ -102,7 +101,7 @@ function ReservationsPage() {
 
             const payload = {
                 patient_id: formData.patientId,
-                nurse_id: DEFAULT_NURSE_ID,
+                nurse_id: getUserId(),
                 start_date: formatDateToISO(startDate),
                 end_date: formatDateToISO(endDate),
                 examination_type: formData.examinationType,
