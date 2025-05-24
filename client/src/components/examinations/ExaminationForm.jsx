@@ -189,10 +189,24 @@ const ExaminationForm = ({
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
+            // Pokud vytváříme e-recept a jsou zadány léky, nastav prescribed_medication
+            let updatedFormData = { ...formData };
+            if (
+                createPrescription &&
+                prescriptionData.medications.length > 0 &&
+                prescriptionData.medications.some((med) => med.name.trim() !== '')
+            ) {
+                const medicationNames = prescriptionData.medications
+                    .filter((med) => med.name.trim() !== '')
+                    .map((med) => med.name.trim())
+                    .join(', ');
+                updatedFormData.prescribed_medication = medicationNames;
+            }
+
             if (examination) {
-                await updateExamination(formData);
+                await updateExamination(updatedFormData);
             } else {
-                await addExamination(formData);
+                await addExamination(updatedFormData);
             }
 
             // If prescription is enabled and there's prescribed medication, create e-prescription
