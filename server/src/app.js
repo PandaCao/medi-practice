@@ -21,7 +21,7 @@ app.use(
 );
 
 app.use(express.json());
-app.use('/api/auth', authRoutes);
+app.use('/api/v1/auth', authRoutes);
 app.use('/api/v1/patientCards', patientRoutes);
 app.use('/api/v1/examinationRecords', examinationRecordRoutes);
 app.use('/api/v1/reservation', reservationRoutes);
