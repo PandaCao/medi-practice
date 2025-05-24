@@ -1,8 +1,8 @@
 // config/routes.js
 import PatientsPage from '../pages/PatientsPage';
 import AddPatientPage from '../pages/AddPatientPage';
-import PatientDetailPage from '../pages/PatientDetailPage'; // ✅ Pridaný nový detail pacienta
-import PatientFormPage from '../pages/PatientFormPage'; // ✅ Editacní formulář
+import PatientDetailPage from '../pages/PatientDetailPage';
+import PatientFormPage from '../pages/PatientFormPage';
 import BloodSamplesPage from '../pages/BloodSamplesPage';
 import ReservationsPage from '../pages/ReservationsPage';
 import AppointmentsPage from '../pages/AppointmentsPage';

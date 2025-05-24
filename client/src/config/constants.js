@@ -20,3 +20,11 @@ export const INSURANCE_COMPANIES_LIST = Object.entries(INSURANCE_COMPANIES).map(
         name: `${code} - ${name}`,
     }),
 );
+
+// Seznam míst pro vyšetření
+export const PLACES = [
+    { id: 'medipractise_praha', name: 'MediPractise Praha' },
+    { id: 'medipractise_brno', name: 'MediPractise Brno' },
+    { id: 'medipractise_ostrava', name: 'MediPractise Ostrava' },
+    { id: 'medipractise_plzen', name: 'MediPractise Plzeň' },
+];

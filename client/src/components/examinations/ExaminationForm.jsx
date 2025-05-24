@@ -3,89 +3,17 @@ import { Modal, Form, Button } from 'react-bootstrap';
 import { BsPlus, BsTrash } from 'react-icons/bs';
 import { addExamination, updateExamination } from '../../api/examinationApi';
 import { addPrescription } from '../../api/prescriptionApi';
-
-const PLACES = [
-    { id: 'medipractise_praha', name: 'MediPractise Praha' },
-    { id: 'medipractise_brno', name: 'MediPractise Brno' },
-    { id: 'medipractise_ostrava', name: 'MediPractise Ostrava' },
-    { id: 'medipractise_plzen', name: 'MediPractise Plzeň' },
-];
-
-const StampPreview = ({ text, onClick }) => (
-    <div
-        onClick={onClick}
-        className="border rounded p-2 text-center cursor-pointer hover-bg-light"
-        style={{
-            minHeight: '100px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            cursor: 'pointer',
-            backgroundColor: '#f8f9fa',
-            border: '2px dashed #dee2e6',
-            transition: 'all 0.2s ease-in-out',
-        }}
-    >
-        {text ? (
-            <div
-                style={{
-                    fontFamily: 'Arial, sans-serif',
-                    fontSize: '1.2rem',
-                    color: '#dc3545',
-                    transform: 'rotate(-5deg)',
-                    border: '2px solid #dc3545',
-                    padding: '10px 20px',
-                    borderRadius: '5px',
-                    backgroundColor: 'rgba(255, 255, 255, 0.9)',
-                }}
-            >
-                {text}
-            </div>
-        ) : (
-            <div className="text-muted">Klikněte pro přidání razítka</div>
-        )}
-    </div>
-);
-
-const SignaturePreview = ({ text, onClick }) => (
-    <div
-        onClick={onClick}
-        className="border rounded p-2 text-center cursor-pointer hover-bg-light"
-        style={{
-            minHeight: '100px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            cursor: 'pointer',
-            backgroundColor: '#f8f9fa',
-            border: '2px dashed #dee2e6',
-            transition: 'all 0.2s ease-in-out',
-        }}
-    >
-        {text ? (
-            <div
-                style={{
-                    fontFamily: 'Brush Script MT, cursive',
-                    fontSize: '1.5rem',
-                    color: '#000',
-                    borderBottom: '2px solid #000',
-                    padding: '0 20px',
-                }}
-            >
-                {text}
-            </div>
-        ) : (
-            <div className="text-muted">Klikněte pro přidání podpisu. Podpis je povinný.</div>
-        )}
-    </div>
-);
+import { PLACES } from '../../config/constants';
+import StampPreview from '../common/StampPreview';
+import SignaturePreview from '../common/SignaturePreview';
+import { getDoctorId } from '../../tools/userHelper';
 
 const ExaminationForm = ({
     show,
     onHide,
     onSubmit,
     patientId,
-    doctorId = 'd6574103-a485-4eba-a536-d4dcbb3f2077', // Default doctor ID until we have authentication
+    doctorId = getDoctorId(),
     examination = null,
 }) => {
     const [formData, setFormData] = useState({
